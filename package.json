@@ -1,0 +1,18 @@
+{
+  "name": "oriun-api",
+  "version": "0.1.0",
+  "description": "### How to setup: --- ### How to run: ---",
+  "author": "oriun",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.3",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
