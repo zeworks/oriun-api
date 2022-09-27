@@ -14,7 +14,8 @@
     "@swc/jest": "^0.2.20"
   },
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --watchAll",
+    "build": "tsc"
   },
   "dependencies": {
     "ts-node": "^10.9.1",
