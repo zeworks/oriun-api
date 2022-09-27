@@ -38,7 +38,6 @@ describe('[USE CASE] Get All Permissions', () => {
     })
 
     const data = await getPermissions();
-
     expect(data.length).toBeGreaterThan(0);
     expect(data[1].status).toBe(false);
     expect(data[1].name).toBe("permission two");
