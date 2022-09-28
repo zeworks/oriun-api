@@ -10,7 +10,6 @@ describe('[USE CASE] Get Permission', () => {
   const createPermission: CreatePermissionUseCase = (input) => {
     const data = {
       ...input,
-      id: uuid(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
@@ -32,12 +31,14 @@ describe('[USE CASE] Get Permission', () => {
   it('Should get permission by id with success', async () => {
     await createPermission({
       name: "permission one",
+      id: uuid(),
       key: "create_permission",
       status: true,
     })
 
     const secondPermission = await createPermission({
       name: "permission second",
+      id: uuid(),
       key: "create_permission",
       status: true,
     })

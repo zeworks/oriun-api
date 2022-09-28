@@ -7,7 +7,6 @@ describe('[USE CASE] Update Permission', () => {
   const create: CreatePermissionUseCase = input => {
     return Promise.resolve({
       ...input,
-      id: uuid(),
       createdAt: new Date().toISOString()
     })
   }
@@ -25,6 +24,7 @@ describe('[USE CASE] Update Permission', () => {
   it('Should update permission with success', async () => {
     const permission = await create({
       name: "my permission",
+      id: uuid(),
       key: "create_permission",
       status: true
     })

@@ -10,10 +10,10 @@ describe('[USE CASE] Get All Permissions', () => {
   const createPermission: CreatePermissionUseCase = async (input) => {
     const data = {
       ...input,
-      id: uuid(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
+
 
     permissions.push(data);
     return Promise.resolve(data)
@@ -27,15 +27,18 @@ describe('[USE CASE] Get All Permissions', () => {
     await createPermission({
       name: "permission one",
       key: "create_permission",
+      id: uuid(),
       status: true,
     })
     await createPermission({
       name: "permission two",
       status: false,
+      id: uuid(),
       key: "create_permission",
     })
     await createPermission({
       name: "permission three",
+      id: uuid(),
       key: "create_permission",
       status: true,
     })

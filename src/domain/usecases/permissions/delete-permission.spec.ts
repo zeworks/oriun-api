@@ -9,10 +9,7 @@ describe('[USE CASE] Delete Permission', () => {
   let permission: PermissionsEntity | null;
 
   const createPermission: CreatePermissionUseCase = async (input) => {
-    return Promise.resolve({
-      ...input,
-      id: v4()
-    })
+    return Promise.resolve(input)
   }
 
   const updatePermission: UpdatePermissionUseCase = async (input) => {
@@ -38,6 +35,7 @@ describe('[USE CASE] Delete Permission', () => {
     permission = await createPermission({
       name: "my permission",
       key: "create_permission",
+      id: v4(),
       status: true
     });
 
@@ -52,6 +50,7 @@ describe('[USE CASE] Delete Permission', () => {
   it('Should not delete permission if invalid id', async () => {
     permission = await createPermission({
       name: "my permission",
+      id: v4(),
       key: "create_permission",
       status: true
     });

@@ -2,7 +2,14 @@ import { CreatePermissionUseCase } from "./create-permission";
 import {v4 as uuid} from "uuid"
 
 describe('[USE CASE] Create Permission', () => {
+  let permissions: any[] = [];
+
   const create: CreatePermissionUseCase = async (input) => {
+
+    if (permissions.find(p => p.key === input.key))
+      throw new Error("permission already exists")
+    
+    permissions.push(input);
 
     if (!input.name)
       throw new Error("name missing");
@@ -12,7 +19,6 @@ describe('[USE CASE] Create Permission', () => {
     
     return Promise.resolve({
       ...input,
-      id: uuid(),
       createdAt: new Date().toISOString(),
     })
   }
@@ -21,6 +27,7 @@ describe('[USE CASE] Create Permission', () => {
     const data = await create({
       name: "Create Permission",
       status: true,
+      id: uuid(),
       key: "create_permission",
       parent: "permission"
     });
@@ -35,7 +42,8 @@ describe('[USE CASE] Create Permission', () => {
       await create({
         name: "",
         status: true,
-        key: "create_permission",
+        id: uuid(),
+        key: "create_permission_1",
         parent: "permission"
       })
     } catch (error) {
@@ -48,7 +56,8 @@ describe('[USE CASE] Create Permission', () => {
       await create({
         name: "name",
         status: undefined as any,
-        key: "create_permission",
+        id: uuid(),
+        key: "create_permission_2",
         parent: "permission"
       })
     } catch (error) {

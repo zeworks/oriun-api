@@ -4,6 +4,7 @@ export type CreatePermissionUseCase = (input: CreatePermissionUseCase.Params) =>
 
 export namespace CreatePermissionUseCase {
   export type Params = {
+    id: string;
     name: string;
     key: string;
     status: boolean;
