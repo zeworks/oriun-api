@@ -25,6 +25,7 @@ describe('[USE CASE] Update Permission', () => {
   it('Should update permission with success', async () => {
     const permission = await create({
       name: "my permission",
+      key: "create_permission",
       status: true
     })
 

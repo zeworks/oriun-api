@@ -32,11 +32,13 @@ describe('[USE CASE] Get Permission', () => {
   it('Should get permission by id with success', async () => {
     await createPermission({
       name: "permission one",
+      key: "create_permission",
       status: true,
     })
 
     const secondPermission = await createPermission({
       name: "permission second",
+      key: "create_permission",
       status: true,
     })
 

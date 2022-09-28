@@ -6,6 +6,7 @@ export namespace UpdatePermissionUseCase {
   export type Params = {
     id: string;
     name?: string;
+    key?: string;
     status?: boolean;
     parent?: string;
   }
