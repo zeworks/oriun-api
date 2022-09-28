@@ -1,6 +1,6 @@
 # Oriun API
 
-[![CI](https://github.com/zeworks/oriun-api/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/zeworks/oriun-api/actions/workflows/build.yml)
+[![CI](https://github.com/zeworks/oriun-api/actions/workflows/on-push-master.yml/badge.svg?branch=master)](https://github.com/zeworks/oriun-api/actions/workflows/on-push-master.yml)
 
 ### How to setup:
 ---
