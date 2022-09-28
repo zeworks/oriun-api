@@ -37,6 +37,7 @@ describe('[USE CASE] Delete Permission', () => {
   it('Should delete permission with success', async () => {
     permission = await createPermission({
       name: "my permission",
+      key: "create_permission",
       status: true
     });
 
@@ -51,6 +52,7 @@ describe('[USE CASE] Delete Permission', () => {
   it('Should not delete permission if invalid id', async () => {
     permission = await createPermission({
       name: "my permission",
+      key: "create_permission",
       status: true
     });
 

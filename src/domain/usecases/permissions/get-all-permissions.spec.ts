@@ -26,14 +26,17 @@ describe('[USE CASE] Get All Permissions', () => {
   it('Should get all permissions', async () => {
     await createPermission({
       name: "permission one",
+      key: "create_permission",
       status: true,
     })
     await createPermission({
       name: "permission two",
       status: false,
+      key: "create_permission",
     })
     await createPermission({
       name: "permission three",
+      key: "create_permission",
       status: true,
     })
 

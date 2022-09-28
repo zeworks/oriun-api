@@ -21,6 +21,7 @@ describe('[USE CASE] Create Permission', () => {
     const data = await create({
       name: "Create Permission",
       status: true,
+      key: "create_permission",
       parent: "permission"
     });
 
@@ -34,6 +35,7 @@ describe('[USE CASE] Create Permission', () => {
       await create({
         name: "",
         status: true,
+        key: "create_permission",
         parent: "permission"
       })
     } catch (error) {
@@ -46,6 +48,7 @@ describe('[USE CASE] Create Permission', () => {
       await create({
         name: "name",
         status: undefined as any,
+        key: "create_permission",
         parent: "permission"
       })
     } catch (error) {
