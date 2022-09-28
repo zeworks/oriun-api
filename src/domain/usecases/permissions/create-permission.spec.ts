@@ -10,6 +10,9 @@ describe('[USE CASE] Create Permission', () => {
       throw new Error("permission already exists")
     
     permissions.push(input);
+    
+    if (!input.key)
+      throw new Error("key missing");
 
     if (!input.name)
       throw new Error("name missing");
