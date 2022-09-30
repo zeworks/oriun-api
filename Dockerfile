@@ -1,15 +1,25 @@
 FROM node:alpine
 WORKDIR /app
 
-# Install dependencies
-COPY ["package.json", "package-lock.json", "./"]
-RUN npm install
+# COPY package.json and package-lock.json files
+COPY package*.json ./
 
-# Copy folders
+# generated prisma files
+COPY prisma ./prisma/
+
+# COPY ENV variable
+COPY .env ./
+
+# COPY tsconfig.json file
+COPY tsconfig.json ./
+
+# COPY
 COPY . .
 
+RUN npm install
 RUN npx prisma generate
-# Run and expose the server on port 3000
+
+# Run and expose the server on port 5001
 EXPOSE 4000
 
 # A command to start the server
