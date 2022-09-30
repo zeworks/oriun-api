@@ -17,6 +17,7 @@
   },
   "scripts": {
     "dev": "tsnd --respawn --transpile-only src/main/server.ts",
+    "start": "ts-node src/main/server.ts",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "build": "tsc"
