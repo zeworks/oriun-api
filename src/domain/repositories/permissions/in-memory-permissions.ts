@@ -1,9 +1,9 @@
-import { PermissionsEntity } from "../entities/permissions";
-import { CreatePermissionUseCase } from "../usecases/permissions/create-permission";
-import { DeletePermissionUseCase } from "../usecases/permissions/delete-permission";
-import { GetAllPermissionsUseCase } from "../usecases/permissions/get-all-permissions";
-import { GetPermissionByIdUseCase } from "../usecases/permissions/get-permission";
-import { UpdatePermissionUseCase } from "../usecases/permissions/update-permission";
+import { PermissionsEntity } from "../../entities/permissions";
+import { CreatePermissionUseCase } from "../../usecases/permissions/create-permission";
+import { DeletePermissionUseCase } from "../../usecases/permissions/delete-permission";
+import { GetAllPermissionsUseCase } from "../../usecases/permissions/get-all-permissions";
+import { GetPermissionByIdUseCase } from "../../usecases/permissions/get-permission";
+import { UpdatePermissionUseCase } from "../../usecases/permissions/update-permission";
 import { PermissionsRepository } from "./permissions";
 
 export class InMemoryPermissionsRepository implements PermissionsRepository {
