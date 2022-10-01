@@ -6,6 +6,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@swc/core": "^1.2.151",
     "@swc/jest": "^0.2.20",
     "@types/jest": "^29.0.3",
@@ -21,7 +22,7 @@
     "start:server": "NODE_ENV=production ts-node src/main/server.ts",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "build": "tsc"
+    "build": "rimraf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@graphql-tools/schema": "^9.0.4",
@@ -29,10 +30,17 @@
     "apollo-server": "^3.10.2",
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
+    "module-alias": "^2.2.2",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }

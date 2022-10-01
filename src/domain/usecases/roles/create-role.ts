@@ -1,7 +1,11 @@
 import { PermissionsEntity } from "../../entities/permissions";
 import { RolesEntity } from "../../entities/roles";
 
-export type CreateRoleUseCase = (input: CreateRoleUseCase.Params) => Promise<CreateRoleUseCase.Result>;
+export type CreateRoleUseCaseFunction = (input: CreateRoleUseCase.Params) => Promise<CreateRoleUseCase.Result>;
+
+export interface CreateRoleUseCase {
+  create: CreateRoleUseCaseFunction
+}
 
 export namespace CreateRoleUseCase {
   export type Params = {
