@@ -23,7 +23,7 @@ describe('[REPOSITORIES] Create Role', () => {
     }
     await createRole.create(role);
     const repoData = roleRepository.roles[roleRepository.roles.length - 1];
-    expect(role.name).toBe(repoData.name)
+    expect(repoData?.name).toBe(role?.name)
   })
 
   it("Should not role with duplicated key", async () => {

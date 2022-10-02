@@ -12,8 +12,8 @@ export namespace CreateRoleUseCase {
     id: string;
     key: string;
     name: string;
-    status?: boolean;
-    permissions?: PermissionsEntity[]; // TODO: for now...
+    status: boolean;
+    permissions?: PermissionsEntity[] | null;
   }
 
   export type Result = RolesEntity | null;

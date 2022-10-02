@@ -5,7 +5,7 @@ import { CreateRoleRepository } from "./create-role-repository";
 
 export class InMemoryRolesRepository implements CreateRoleRepository, CheckRoleByKeyRepository {
   roles: RolesEntity[] = [];
-  
+
   create = async (params: CreateRoleUseCase.Params): Promise<CreateRoleUseCase.Result> => {
     this.roles.push(params);
     return this.roles[this.roles.length - 1];
