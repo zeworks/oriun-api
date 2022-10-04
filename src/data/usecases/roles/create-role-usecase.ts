@@ -17,7 +17,10 @@ export class DbCreateRole implements CreateRoleUseCase {
       if (keyExists)
         throw new KeyInUseError(input.key);
       
-      const role = await this.createRoleRepository.create(input)
+      const role = await this.createRoleRepository.create({
+        ...input,
+        status: input.status ?? true
+      })
       return role;
     } catch (error: any) {
       throw new Error(error)
