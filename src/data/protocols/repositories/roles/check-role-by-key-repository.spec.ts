@@ -25,7 +25,7 @@ describe("[REPOSITORIES] Check Role By Key", () => {
     })
 
     if (role) {
-      const keyExists = await checkRoleByKeyRepository.checkByKey({ key: "asdasd" });
+      const keyExists = await checkRoleByKeyRepository.checkByKey("asdasd");
       expect(keyExists).toBeFalsy()
     }
   })
@@ -41,7 +41,7 @@ describe("[REPOSITORIES] Check Role By Key", () => {
     })
 
     if (role) {
-      const result = await checkRoleByKeyRepository.checkByKey({ key: role?.key });
+      const result = await checkRoleByKeyRepository.checkByKey(role.key);
       expect(result).toBeTruthy();
     }
   })

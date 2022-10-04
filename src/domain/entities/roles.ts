@@ -4,6 +4,6 @@ import { PermissionsEntity } from "./permissions";
 export type RolesEntity = BaseEntity & {
   name: string;
   key: string;
-  status: boolean;
+  status?: boolean;
   permissions?: PermissionsEntity[] | null;
 }

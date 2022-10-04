@@ -1,11 +1,27 @@
 import { gql } from "apollo-server";
 
 export default gql`
-  type Query {
-    helloWorld: HelloWorld
+  type Role {
+    id: String!
+    name: String!
+    key: String!
+    status: Boolean
+    createdAt: DateTime!
+    permissions: [Permission]
   }
 
-  type HelloWorld {
+  input CreateRoleInput {
+    name: String!
+    key: String!
+    status: Boolean
+    permissions: [PermissionInput]
+  }
+
+  input PermissionInput {
     id: String!
+  }
+
+  type Mutation {
+    createRole(data: CreateRoleInput): Role
   }
 `;

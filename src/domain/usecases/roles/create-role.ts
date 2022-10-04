@@ -12,7 +12,7 @@ export namespace CreateRoleUseCase {
     id: string;
     key: string;
     name: string;
-    status: boolean;
+    status?: boolean;
     permissions?: PermissionsEntity[] | null;
   }
 

@@ -6,7 +6,7 @@ export class DbCheckRoleByKey implements CheckRoleByKeyUseCase {
     private readonly checkRoleByKeyRepository: CheckRoleByKeyRepository
   ) { }
 
-  checkByKey: CheckRoleByKeyUseCaseFunction = async (input) => {
-    return this.checkRoleByKeyRepository.checkByKey(input.key);
+  checkByKey: CheckRoleByKeyUseCaseFunction = async (key) => {
+    return this.checkRoleByKeyRepository.checkByKey(key);
   }
 }

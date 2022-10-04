@@ -21,8 +21,8 @@ export default {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.ts',
-    '!<rootDir>/src/main/**'
+    '<rootDir>/dist/**/*.[t|j]s?(x)',
+    '!<rootDir>/dist/main/**'
   ],
 
   // The directory where Jest should output its coverage files
@@ -97,7 +97,7 @@ export default {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     // '@/tests/(.*)': '<rootDir>/tests/$1',
-    '@/(.*)': '<rootDir>/src/$1'
+    '@/(.*)': '<rootDir>/dist/$1'
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -135,7 +135,7 @@ export default {
 
   // A list of paths to directories that Jest should use to search for files in
   roots: [
-    "<rootDir>/src"
+    "<rootDir>/dist"
   ],
 
   // Allows you to use a custom runner instead of Jest's default test runner
@@ -164,7 +164,7 @@ export default {
 
   // The glob patterns Jest uses to detect test files
   testMatch: [
-    "**/?(*.)+(spec|test).[t]s?(x)"
+    "**/?(*.)+(spec|test).[t|j]s?(x)"
   ],
 
 

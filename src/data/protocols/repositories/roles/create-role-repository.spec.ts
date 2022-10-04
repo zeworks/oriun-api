@@ -35,7 +35,7 @@ describe('[REPOSITORIES] Create Role', () => {
       status: faker.datatype.boolean()
     }
     await createRole.create(role);
-    const promise = await createRole.create(role);
-    expect(promise).toBe(null)
+    const promise = createRole.create(role);
+    expect(promise).rejects.toThrow("key key_name in use")
   })
 })
