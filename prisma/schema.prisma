@@ -31,4 +31,21 @@ model Roles {
   updatedAt DateTime? @updatedAt
 
   permissions Permissions[]
+  Users       Users?
+}
+
+model Users {
+  id                   String  @id
+  username             String  @unique @db.VarChar(150)
+  email                String  @unique @db.VarChar(150)
+  password             String? @db.VarChar(150)
+  status               Boolean @default(false)
+  firstName            String  @db.VarChar(250)
+  lastName             String? @db.VarChar(250)
+  picture              String? @db.LongText()
+  identificationNumber String? @db.VarChar(250)
+  accessToken          String? @db.LongText()
+
+  role   Roles?  @relation(fields: [roleId], references: [id])
+  roleId String? @unique
 }

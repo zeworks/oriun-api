@@ -9,6 +9,6 @@ export namespace LoadAccountByEmailUseCase {
   export type Result = {
     id: string;
     email: string;
-    password: string;
-  } | undefined
+    password?: string | null;
+  } | null
 }

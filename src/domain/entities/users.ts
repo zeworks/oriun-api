@@ -11,9 +11,9 @@ type UsersProfileEntity = {
 export type UsersEntity = BaseEntity & {
   username: string;
   email: string;
-  password: string;
   profile: UsersProfileEntity;
   status?: boolean;
   role?: RolesEntity;
   accessToken?: string;
+  identificationNumber?: string;
 }

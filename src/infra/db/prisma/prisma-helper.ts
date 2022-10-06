@@ -5,6 +5,7 @@ const db = new PrismaClient();
 interface Collection {
   permissions: typeof db.permissions,
   roles: typeof db.roles,
+  users: typeof db.users,
 }
 
 export const PrismaHelper = {
