@@ -1,4 +1,3 @@
-import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase";
 import { UuidAdapter } from "@/infra/cryptography/uuid";
 import { CreateRoleController } from "@/presentation/controllerrs/roles/create-role-controller";
 import { Controller } from "@/presentation/protocols/controller";
