@@ -1,15 +1,32 @@
 import { UsersEntity } from "@/domain/entities/users";
 import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
+import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { CreateAccountRepository } from "./create-account-repository";
 import { LoadAccountByEmailRepository } from "./load-account-by-email-repository";
+import { LoadAccountByUsernameRepository } from "./load-account-by-username-repository";
+import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "./update-token-repository";
 
-export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository {
+export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository {
 
   users: any[] = [];
 
   loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-    return this.users.find(user => user.email === email);
+    const user = this.users.find(user => user.email === email);
+
+    if (!user)
+      throw new Error("user invalid");
+    
+    return user;
+  }
+
+  loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
+    const user = this.users.find(user => user.username === username);
+
+    if (!user)
+      throw new Error("user invalid");
+
+    return user;
   }
 
   create: CreateAccountUseCaseFunction = async (input) => {
@@ -34,5 +51,15 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
         status: true
       } : null
     };
+  }
+
+  updateToken: UpdateTokenRepositoryFunction = (userId, token) => {
+    const user = this.users.find(u => u.id === userId);
+
+    Object.assign(user, {
+      accessToken: token
+    });
+
+    return user;
   }
 }

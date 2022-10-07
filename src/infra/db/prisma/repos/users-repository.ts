@@ -7,11 +7,13 @@ import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-
 import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { PrismaHelper } from "../prisma-helper";
 
-export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository {
 
+export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository {
+  
   private collection = PrismaHelper.getCollection("users");
 
   create: CreateAccountUseCaseFunction = async (input) => {
+
     const result = await this.collection.create({
       data: {
         email: input.email,
@@ -54,41 +56,24 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
         },
         role: result.role
       }
-    
+
     return null
 
   };
   loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-    const result = await this.collection.findFirst({
+    return await this.collection.findFirst({
       where: {
         email
       }
     })
-
-    if (result)
-      return {
-        id: result?.id!,
-        email: result?.email!,
-        password: result?.password
-      }
-    
-    return null
   }
 
   loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
-    const result = await this.collection.findFirst({
+    return await this.collection.findFirst({
       where: {
         username
       }
     })
-
-    if (result)
-      return {
-        id: result?.id!,
-        username: result.username
-      }
-
-    return null
   }
 
   updateToken: UpdateTokenRepositoryFunction = async (user_id, token) => {
@@ -100,12 +85,12 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
         id: user_id
       }
     })
-    
+
     if (result?.accessToken)
       return {
         accessToken: result.accessToken
       }
-    
+
     return null
   }
 }
