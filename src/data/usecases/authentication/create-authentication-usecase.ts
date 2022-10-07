@@ -1,15 +1,14 @@
-import { Encrypter } from "@/data/protocols/cryptography/encrypter";
 import { HashComparer } from "@/data/protocols/cryptography/hash-comparer";
 import { LoadAccountByEmailRepository } from "@/data/protocols/repositories/users/load-account-by-email-repository";
-import { UpdateTokenRepository } from "@/data/protocols/repositories/users/update-token-repository";
 import { CreateAuthenticationUseCase, CreateAuthenticationUseCaseFunction } from "@/domain/usecases/authentication/create-authentication";
+import { DbUpdateAuthenticationToken } from "./update-authentication-token-usecase";
 
 export class DbCreateAuthentication implements CreateAuthenticationUseCase {
 
   constructor(
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly updateAccessTokenRepository: UpdateTokenRepository
+    private readonly updateAccessToken: DbUpdateAuthenticationToken
   ){}
 
   authenticate: CreateAuthenticationUseCaseFunction = async (input) => {
@@ -19,7 +18,12 @@ export class DbCreateAuthentication implements CreateAuthenticationUseCase {
         const isValid = await this.hashComparer.compare(input.password, account.password);
 
         if (isValid) {
-          await this.updateAccessTokenRepository.updateToken()
+          const result = await this.updateAccessToken.updateToken(account.id)
+          
+          if (result?.accessToken)
+            return {
+              accessToken: result.accessToken
+            }
         }
       }
 

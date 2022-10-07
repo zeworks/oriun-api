@@ -8,11 +8,15 @@ export class DbLoadAccountByEmail implements LoadAccountByEmailUseCase {
   ) { }
 
   loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-    const result = await this.usersRepository.loadByEmail(email);
-
-    if (result)
-      return result;
-
+    try {
+      const result = await this.usersRepository.loadByEmail(email);
+      console.log(result);
+      
+      if (result)
+        return result;
+    } catch (error) {
+      throw error;
+    }
     return null;
   }
 }

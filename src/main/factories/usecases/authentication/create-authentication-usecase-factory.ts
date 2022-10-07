@@ -1,7 +1,15 @@
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
+import { DbUpdateAuthenticationToken } from "@/data/usecases/authentication/update-authentication-token-usecase"
+import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
+import { JwtAdapter } from "@/infra/cryptography/jwt-adapter"
+import { UsersRepository } from "@/infra/db/prisma/repos/users-repository"
 import { makeLoadAccountByEmail } from "../users/load-account-by-email-usecase-factory"
 
-export const makeCreateAuthenticationUseCase = () => {
-  const encrypter = new 
-  return new DbCreateAuthentication(makeLoadAccountByEmail(), )
+export const makeDbCreateAuthenticationUseCase = () => {
+  const salt = 12
+  const bcryptAdapter = new BcryptAdapter(salt);
+  const encryptAdapter = new JwtAdapter(process.env.JWT_SECRET || "@oriun_")
+  const usersRepository = new UsersRepository();
+  const updateAccessToken = new DbUpdateAuthenticationToken(encryptAdapter, usersRepository)
+  return new DbCreateAuthentication(makeLoadAccountByEmail(), bcryptAdapter, updateAccessToken)
 }

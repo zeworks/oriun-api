@@ -1,5 +1,4 @@
 import { Encrypter } from "@/data/protocols/cryptography/encrypter";
-import { Hasher } from "@/data/protocols/cryptography/hasher";
 import { UpdateAuthenticationTokenUseCase, UpdateAuthenticationTokenUseCaseFunction } from "@/domain/usecases/authentication/update-authentication-token";
 import { UsersRepository } from "@/infra/db/prisma/repos/users-repository";
 

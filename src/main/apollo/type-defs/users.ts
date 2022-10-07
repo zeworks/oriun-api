@@ -32,7 +32,7 @@ export default gql`
     role: String
   }
 
-  type Mutation {
+  extend type Mutation {
     createAccount(input: CreateAccount): User
   }
 `
