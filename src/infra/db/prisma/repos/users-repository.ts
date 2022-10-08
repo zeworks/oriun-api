@@ -10,11 +10,9 @@ import { PrismaHelper } from "../prisma-helper";
 
 export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository {
   
-  private collection = PrismaHelper.getCollection("users");
-
   create: CreateAccountUseCaseFunction = async (input) => {
-
-    const result = await this.collection.create({
+    
+    const result = await PrismaHelper.getCollection("users").create({
       data: {
         email: input.email,
         id: input.id,
@@ -61,7 +59,7 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
 
   };
   loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-    return await this.collection.findFirst({
+    return await PrismaHelper.getCollection("users").findFirst({
       where: {
         email
       }
@@ -69,7 +67,7 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
   }
 
   loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
-    return await this.collection.findFirst({
+    return await PrismaHelper.getCollection("users").findFirst({
       where: {
         username
       }
@@ -77,7 +75,7 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
   }
 
   updateToken: UpdateTokenRepositoryFunction = async (user_id, token) => {
-    const result = await this.collection.update({
+    const result = await PrismaHelper.getCollection("users").update({
       data: {
         accessToken: token
       },

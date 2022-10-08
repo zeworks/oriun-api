@@ -1,5 +1,5 @@
 import { UuidAdapter } from "@/infra/cryptography/uuid";
-import { CreateRoleController } from "@/presentation/controllerrs/roles/create-role-controller";
+import { CreateRoleController } from "@/presentation/controllers/roles/create-role-controller";
 import { Controller } from "@/presentation/protocols/controller";
 import { makeDbCreateRoleUseCase } from "../../usecases/roles/create-role-usecase-factory";
 import { makeCreateRoleValidation } from "./create-role-validation-factory";
