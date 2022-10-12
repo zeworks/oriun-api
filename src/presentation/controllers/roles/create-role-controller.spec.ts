@@ -29,7 +29,6 @@ describe('[CONTROLLER] Create Role', () => {
     expect(data.data.key).toBe("role_key")
   })
 
-  // TODO: test case if duplicated key, throws error
   it('Should throw an error if duplicated key', async () => {
       await makeCreateRoleController().execute({
         data: {
