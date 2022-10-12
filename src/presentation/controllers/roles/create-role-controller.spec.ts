@@ -1,3 +1,4 @@
+import { KeyInUseError } from "@/data/errors/key-in-use-error";
 import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/roles-repository-memory";
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase";
 import { UuidAdapter } from "@/infra/cryptography/uuid"
@@ -30,7 +31,6 @@ describe('[CONTROLLER] Create Role', () => {
 
   // TODO: test case if duplicated key, throws error
   it('Should throw an error if duplicated key', async () => {
-    try {
       await makeCreateRoleController().execute({
         data: {
           key: "role_key",
@@ -39,16 +39,12 @@ describe('[CONTROLLER] Create Role', () => {
         }
       });
 
-      await makeCreateRoleController().execute({
+      expect(makeCreateRoleController().execute({
         data: {
           key: "role_key",
           name: "nome role",
           status: false
         }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
+      })).rejects.toThrow(new KeyInUseError())
   })
 })
