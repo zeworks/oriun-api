@@ -16,24 +16,21 @@ export class DbCreateAuthentication implements CreateAuthenticationUseCase {
     try {
       const account = await this.loadAccountByEmailRepository.loadByEmail(input.email);
 
-      if (!account)
+      if (!account || !account.status)
         throw new UserInvalidError()
       
       if (account && account.password) {
         const isValid = await this.hashComparer.compare(input.password, account.password);
-
+        
         if (!isValid)
           throw new UserInvalidError()
-
-        const result = await this.updateAccessToken.updateToken(account.id)
-        if (result?.accessToken)
-          return {
-            accessToken: result.accessToken
-          }
+        
+        return await this.updateAccessToken.updateToken(account.id)
       }
+
       return null;
     } catch (error: any) {
-      throw new Error(error)
+      throw error
     }
   }
 }

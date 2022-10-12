@@ -23,11 +23,11 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
         status: input.status,
         picture: input.profile.picture,
         identificationNumber: input.identificationNumber,
-        role: {
+        role: input.role ? {
           connect: {
             id: input.role
           }
-        }
+        } : undefined
       },
       include: {
         role: {

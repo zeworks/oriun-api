@@ -31,7 +31,7 @@ model Roles {
   updatedAt DateTime? @updatedAt
 
   permissions Permissions[]
-  Users       Users?
+  users       Users[]
 }
 
 model Users {
@@ -47,5 +47,5 @@ model Users {
   accessToken          String? @db.LongText()
 
   role   Roles?  @relation(fields: [roleId], references: [id])
-  roleId String? @unique
+  roleId String?
 }

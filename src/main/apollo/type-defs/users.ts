@@ -27,6 +27,7 @@ export default gql`
     username: String!
     email: String!
     status: Boolean
+    password: String
     identificationNumber: String
     profile: UserProfileInput
     role: String

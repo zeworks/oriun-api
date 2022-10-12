@@ -13,19 +13,11 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
 
   loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
     const user = this.users.find(user => user.email === email);
-
-    if (!user)
-      throw new Error("user invalid");
-    
     return user;
   }
 
   loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
     const user = this.users.find(user => user.username === username);
-
-    if (!user)
-      throw new Error("user invalid");
-
     return user;
   }
 
@@ -38,6 +30,7 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
       email: data.email,
       username: data.username,
       status: data.status,
+      password: data.password,
       identificationNumber: data.identificationNumber,
       profile: {
         firstName: data.profile.firstName,

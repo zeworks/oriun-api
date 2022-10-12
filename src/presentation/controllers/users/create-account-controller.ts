@@ -13,7 +13,7 @@ export class CreateAccountController implements Controller {
   // TODO: only admin users can create roles
   async execute(request: CreateAccountController.RequestInput, context?: any): Promise<HttpResponse<CreateAccountController.Result>> {
     const errors = this.validation.validate(request.input);
-
+    
     if (errors)
       return badRequest(errors);
     

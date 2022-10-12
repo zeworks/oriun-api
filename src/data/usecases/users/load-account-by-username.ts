@@ -7,12 +7,7 @@ export class DbLoadAccountByUsername implements LoadAccountByUsernameUseCase {
     private readonly usersRepository: UsersRepository
   ) {}
 
-  loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
-    const result = await this.usersRepository.loadByUsername(username);
-
-    if (result)
-      return result;
-    
-    return null;
+  loadByUsername: LoadAccountByUsernameUseCaseFunction = (username) => {
+    return this.usersRepository.loadByUsername(username);
   }
 }

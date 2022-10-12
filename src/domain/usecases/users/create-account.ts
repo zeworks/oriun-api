@@ -29,6 +29,7 @@ export namespace CreateAccountUseCase {
     status?: boolean;
     identificationNumber?: string | null;
     role?: RolesEntity | null;
+    password?: string | null;
     profile: {
       firstName: string;
       lastName?: string | null;

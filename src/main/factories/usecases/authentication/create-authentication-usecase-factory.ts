@@ -1,3 +1,4 @@
+import { DEFAULT_JWT_SECRET } from "@/data/constants"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
 import { DbUpdateAuthenticationToken } from "@/data/usecases/authentication/update-authentication-token-usecase"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
@@ -8,7 +9,7 @@ import { makeLoadAccountByEmail } from "../users/load-account-by-email-usecase-f
 export const makeDbCreateAuthenticationUseCase = () => {
   const salt = 12
   const bcryptAdapter = new BcryptAdapter(salt);
-  const encryptAdapter = new JwtAdapter(process.env.JWT_SECRET || "@oriun_")
+  const encryptAdapter = new JwtAdapter(DEFAULT_JWT_SECRET)
   const usersRepository = new UsersRepository();
   const updateAccessToken = new DbUpdateAuthenticationToken(encryptAdapter, usersRepository)
   return new DbCreateAuthentication(makeLoadAccountByEmail(), bcryptAdapter, updateAccessToken)
