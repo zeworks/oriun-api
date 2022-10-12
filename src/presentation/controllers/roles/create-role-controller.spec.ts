@@ -44,6 +44,6 @@ describe('[CONTROLLER] Create Role', () => {
           name: "nome role",
           status: false
         }
-      })).rejects.toThrow(new KeyInUseError())
+      })).rejects.toThrow(new KeyInUseError("role_key"))
   })
 })
