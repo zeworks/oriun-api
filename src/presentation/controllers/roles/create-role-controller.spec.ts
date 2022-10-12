@@ -32,18 +32,20 @@ describe('[CONTROLLER] Create Role', () => {
   it('Should throw an error if duplicated key', async () => {
       await makeCreateRoleController().execute({
         data: {
-          key: "role_key",
+          key: "role_key_1",
           name: "nome role",
           status: false
         }
       });
+    
+    const result = await makeCreateRoleController().execute({
+      data: {
+        key: "role_key_1",
+        name: "nome role",
+        status: false
+      }
+    })
 
-      expect(makeCreateRoleController().execute({
-        data: {
-          key: "role_key",
-          name: "nome role",
-          status: false
-        }
-      })).rejects.toThrow(new KeyInUseError("role_key"))
+    expect(result.data).toEqual(new KeyInUseError("role_key_1"))
   })
 })
