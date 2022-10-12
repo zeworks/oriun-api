@@ -1,4 +1,5 @@
-import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/repository-memory";
+import { KeyInUseError } from "@/data/errors/key-in-use-error";
+import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/roles-repository-memory";
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase";
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateRoleValidation } from "@/main/factories/controllers/roles/create-role-validation-factory";
@@ -26,5 +27,25 @@ describe('[CONTROLLER] Create Role', () => {
     expect(data.data.name).toBe("nome role");
     expect(data.data.status).toBe(false);
     expect(data.data.key).toBe("role_key")
+  })
+
+  it('Should throw an error if duplicated key', async () => {
+      await makeCreateRoleController().execute({
+        data: {
+          key: "role_key_1",
+          name: "nome role",
+          status: false
+        }
+      });
+    
+    const result = await makeCreateRoleController().execute({
+      data: {
+        key: "role_key_1",
+        name: "nome role",
+        status: false
+      }
+    })
+
+    expect(result.data).toEqual(new KeyInUseError("role_key_1"))
   })
 })

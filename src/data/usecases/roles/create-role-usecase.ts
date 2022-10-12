@@ -23,7 +23,7 @@ export class DbCreateRole implements CreateRoleUseCase {
       })
       return role;
     } catch (error: any) {
-      throw new Error(error)
+      throw error
     }
   }
 }

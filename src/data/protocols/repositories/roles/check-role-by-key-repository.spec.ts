@@ -1,7 +1,7 @@
 import { DbCheckRoleByKey } from "@/data/usecases/roles/check-role-by-key-usecase"
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase";
 import { faker } from "@faker-js/faker";
-import { InMemoryRolesRepository } from "./repository-memory"
+import { InMemoryRolesRepository } from "./roles-repository-memory"
 
 const rolesRepository = new InMemoryRolesRepository();
 

@@ -1,4 +1,4 @@
-import { CreateRoleUseCase, CreateRoleUseCaseFunction } from "@/domain/usecases/roles/create-role";
+import { CreateRoleUseCase } from "@/domain/usecases/roles/create-role";
 
 export interface CreateRoleRepository {
   create: (params: CreateRoleRepository.Params) => Promise<CreateRoleRepository.Result>
