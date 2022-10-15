@@ -1,3 +1,4 @@
+import { test, expect } from "vitest"
 import { DbCheckRoleByKey } from "@/data/usecases/roles/check-role-by-key-usecase"
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase";
 import { faker } from "@faker-js/faker";
@@ -13,36 +14,34 @@ const makeCheckRoleByKeyRepository = () => {
   }
 }
 
-describe("[REPOSITORIES] Check Role By Key", () => {
-  it('Should return false if key does not exists', async () => {
-    const { checkRoleByKeyRepository } = makeCheckRoleByKeyRepository();
-    const createRoleRepository = new DbCreateRole(rolesRepository, rolesRepository);
-    const role = await createRoleRepository.create({
-      id: faker.datatype.uuid(),
-      key: faker.word.adjective(5),
-      name: faker.name.firstName(),
-      status: faker.datatype.boolean()
-    })
-
-    if (role) {
-      const keyExists = await checkRoleByKeyRepository.checkByKey("asdasd");
-      expect(keyExists).toBeFalsy()
-    }
+test("Should return false if key does not exists", async () => {
+  const { checkRoleByKeyRepository } = makeCheckRoleByKeyRepository();
+  const createRoleRepository = new DbCreateRole(rolesRepository, rolesRepository);
+  const role = await createRoleRepository.create({
+    id: faker.datatype.uuid(),
+    key: faker.word.adjective(5),
+    name: faker.name.firstName(),
+    status: faker.datatype.boolean()
   })
 
-  it('Should return true if key already exists', async () => {
-    const { checkRoleByKeyRepository } = makeCheckRoleByKeyRepository();
-    const createRoleRepository = new DbCreateRole(rolesRepository, rolesRepository);
-    const role = await createRoleRepository.create({
-      id: faker.datatype.uuid(),
-      key: faker.word.adjective(5),
-      name: faker.name.firstName(),
-      status: faker.datatype.boolean()
-    })
+  if (role) {
+    const keyExists = await checkRoleByKeyRepository.checkByKey("asdasd");
+    expect(keyExists).toBeFalsy()
+  }
+})
 
-    if (role) {
-      const result = await checkRoleByKeyRepository.checkByKey(role.key);
-      expect(result).toBeTruthy();
-    }
+test('Should return true if key already exists', async () => {
+  const { checkRoleByKeyRepository } = makeCheckRoleByKeyRepository();
+  const createRoleRepository = new DbCreateRole(rolesRepository, rolesRepository);
+  const role = await createRoleRepository.create({
+    id: faker.datatype.uuid(),
+    key: faker.word.adjective(5),
+    name: faker.name.firstName(),
+    status: faker.datatype.boolean()
   })
+
+  if (role) {
+    const result = await checkRoleByKeyRepository.checkByKey(role.key);
+    expect(result).toBeTruthy();
+  }
 })
