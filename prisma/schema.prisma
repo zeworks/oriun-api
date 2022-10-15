@@ -35,17 +35,32 @@ model Roles {
 }
 
 model Users {
-  id                   String  @id
-  username             String  @unique @db.VarChar(150)
-  email                String  @unique @db.VarChar(150)
-  password             String? @db.VarChar(150)
-  status               Boolean @default(false)
-  firstName            String  @db.VarChar(250)
-  lastName             String? @db.VarChar(250)
-  picture              String? @db.LongText()
-  identificationNumber String? @db.VarChar(250)
-  accessToken          String? @db.LongText()
+  id                   String    @id
+  username             String    @unique @db.VarChar(150)
+  email                String    @unique @db.VarChar(150)
+  password             String?   @db.VarChar(150)
+  status               Boolean   @default(false)
+  firstName            String    @db.VarChar(250)
+  lastName             String?   @db.VarChar(250)
+  picture              String?   @db.LongText()
+  identificationNumber String?   @db.VarChar(250)
+  accessToken          String?   @db.LongText()
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime? @updatedAt
 
   role   Roles?  @relation(fields: [roleId], references: [id])
   roleId String?
+
+  department   Departments? @relation(fields: [departmentId], references: [id])
+  departmentId String?
+}
+
+model Departments {
+  id        String    @id
+  name      String    @db.VarChar(250)
+  status    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  Users     Users[]
 }

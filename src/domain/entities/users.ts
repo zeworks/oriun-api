@@ -1,4 +1,5 @@
 import { BaseEntity } from "./base";
+import { DepartmentsEntity } from "./departments";
 import { RolesEntity } from "./roles";
 
 type UsersProfileEntity = {
@@ -16,4 +17,5 @@ export type UsersEntity = BaseEntity & {
   role?: RolesEntity;
   accessToken?: string;
   identificationNumber?: string;
+  department?: DepartmentsEntity;
 }
