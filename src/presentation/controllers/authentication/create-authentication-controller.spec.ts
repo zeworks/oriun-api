@@ -12,6 +12,7 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateAuthenticationValidation } from "@/main/factories/controllers/authentication/create-authentication-controller-validation"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
 import { v4 } from "uuid"
+import { expect, test } from "vitest"
 import { CreateAccountController } from "../users/create-account-controller"
 import { CreateAuthenticationController } from "./create-authentication-controller"
 
@@ -38,90 +39,88 @@ const makeCreateAccountController = () => {
   )
 }
 
-describe('[Controller] Create Authentication Controller', () => {
-  it('Should create authentication with success', async () => {
+test('Should create authentication with success', async () => {
 
-    const user = await makeCreateAccountController().execute({
-      input: {
-        id: v4(),
-        email: "johndoe@mail.com",
-        username: "johndoe",
-        password: "usernovo",
-        status: true,
-        profile: {
-          firstName: "John"
-        }
+  const user = await makeCreateAccountController().execute({
+    input: {
+      id: v4(),
+      email: "johndoe@mail.com",
+      username: "johndoe",
+      password: "usernovo",
+      status: true,
+      profile: {
+        firstName: "John"
       }
-    });
-
-    const { execute: createAuthentication } = new CreateAuthenticationController(
-      makeCreateAuthenticationValidation(),
-      makeDbCreateAuthenticationUseCase()
-    );
-
-    if (user.data) {
-       const auth = await createAuthentication({
-         email: user.data?.email,
-         password: "usernovo"
-       })
-
-      expect(auth.data?.accessToken).not.toBe(undefined)
     }
-  })
+  });
 
-  it('Should not create authentication if user is not active (status as false)', async () => {
+  const { execute: createAuthentication } = new CreateAuthenticationController(
+    makeCreateAuthenticationValidation(),
+    makeDbCreateAuthenticationUseCase()
+  );
 
-    const user = await makeCreateAccountController().execute({
-      input: {
-        id: v4(),
-        email: "johndo2e@mail.com",
-        username: "johndoe2",
-        password: "usernovo",
-        profile: {
-          firstName: "John"
-        }
+  if (user.data) {
+    const auth = await createAuthentication({
+      email: user.data?.email,
+      password: "usernovo"
+    })
+
+    expect(auth.data?.accessToken).not.toBe(undefined)
+  }
+})
+
+test('Should not create authentication if user is not active (status as false)', async () => {
+
+  const user = await makeCreateAccountController().execute({
+    input: {
+      id: v4(),
+      email: "johndo2e@mail.com",
+      username: "johndoe2",
+      password: "usernovo",
+      profile: {
+        firstName: "John"
       }
-    });
-
-    const { execute: createAuthentication } = new CreateAuthenticationController(
-      makeCreateAuthenticationValidation(),
-      makeDbCreateAuthenticationUseCase()
-    );
-
-    if (user.data) {
-        const auth = await createAuthentication({
-          email: user.data?.email,
-          password: "usernovo"
-        })
-      expect(auth.data).toEqual(new UserInvalidError())
     }
-  })
+  });
 
-  it('Should not create authentication if user password is invalid', async () => {
+  const { execute: createAuthentication } = new CreateAuthenticationController(
+    makeCreateAuthenticationValidation(),
+    makeDbCreateAuthenticationUseCase()
+  );
 
-    const user = await makeCreateAccountController().execute({
-      input: {
-        id: v4(),
-        email: "johndo2e2q@mail.com",
-        username: "johndoe2 22",
-        password: "usernovo",
-        profile: {
-          firstName: "John"
-        }
+  if (user.data) {
+    const auth = await createAuthentication({
+      email: user.data?.email,
+      password: "usernovo"
+    })
+    expect(auth.data).toEqual(new UserInvalidError())
+  }
+})
+
+test('Should not create authentication if user password is invalid', async () => {
+
+  const user = await makeCreateAccountController().execute({
+    input: {
+      id: v4(),
+      email: "johndo2e2q@mail.com",
+      username: "johndoe2 22",
+      password: "usernovo",
+      profile: {
+        firstName: "John"
       }
-    });
-
-    const { execute: createAuthentication } = new CreateAuthenticationController(
-      makeCreateAuthenticationValidation(),
-      makeDbCreateAuthenticationUseCase()
-    );
-
-    if (user.data?.email) {
-      const auth = await createAuthentication({
-        email: user.data?.email,
-        password: "usernovoq"
-      })
-      expect(auth.data).toEqual(new UserInvalidError())
     }
-  })
+  });
+
+  const { execute: createAuthentication } = new CreateAuthenticationController(
+    makeCreateAuthenticationValidation(),
+    makeDbCreateAuthenticationUseCase()
+  );
+
+  if (user.data?.email) {
+    const auth = await createAuthentication({
+      email: user.data?.email,
+      password: "usernovoq"
+    })
+    expect(auth.data).toEqual(new UserInvalidError())
+  }
 })

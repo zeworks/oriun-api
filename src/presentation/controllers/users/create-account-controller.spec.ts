@@ -1,3 +1,4 @@
+import { expect, test } from "vitest"
 import { EmailInUseError } from "@/data/errors/email-in-use-error"
 import { UsernameInUseError } from "@/data/errors/username-in-use-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
@@ -11,8 +12,7 @@ import { v4 } from "uuid"
 import { CreateAccountController } from "./create-account-controller"
 
 
-describe('[CONTROLLER] Create Account', () => {
-  it('Should create account with success', async () => {
+  test('Should create account with success', async () => {
 
     const usersRepository = new InMemoryUsersRepository();
     const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -38,7 +38,7 @@ describe('[CONTROLLER] Create Account', () => {
     expect(account.data?.email).toEqual("johndoe@mail.com");
   })
 
-  it('Should not create account if email exists', async () => {
+  test('Should not create account if email exists', async () => {
 
     const usersRepository = new InMemoryUsersRepository();
     const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -73,7 +73,7 @@ describe('[CONTROLLER] Create Account', () => {
     expect(account.statusCode).toEqual(500)
   })
 
-  it('Should not create account if username exists', async () => {
+  test('Should not create account if username exists', async () => {
 
     const usersRepository = new InMemoryUsersRepository();
     const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -107,4 +107,3 @@ describe('[CONTROLLER] Create Account', () => {
     expect(account.data).toEqual(new UsernameInUseError())
     expect(account.statusCode).toEqual(500)
   })
-})
