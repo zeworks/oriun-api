@@ -19,7 +19,8 @@
     "dev": "tsc -w",
     "dev:server": "NODE_ENV=development tsnd --respawn --transpile-only dist/main/server.js",
     "start:server": "NODE_ENV=production ts-node src/main/server.ts",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
     "build": "rimraf dist && tsc -p tsconfig.build.json"
   },
   "dependencies": {
