@@ -34,6 +34,6 @@ export default gql`
   }
 
   extend type Mutation {
-    createAccount(input: CreateAccount): User
+    createAccount(input: CreateAccount): User @hasRole(role: "ADMIN")
   }
 `

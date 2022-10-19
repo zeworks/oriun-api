@@ -1,15 +1,31 @@
 import { CheckRoleByKeyRepository } from "@/data/protocols/repositories/roles/check-role-by-key-respository";
 import { CreateRoleRepository } from "@/data/protocols/repositories/roles/create-role-repository";
+import { LoadRoleByKeyRepository } from "@/data/protocols/repositories/roles/load-role-by-key-repository";
 import { CreateRoleUseCase } from "@/domain/usecases/roles/create-role";
+import { LoadRoleByKeyUseCaseFunction } from "@/domain/usecases/roles/load-role-by-key";
 import { PrismaHelper } from "../prisma-helper";
 
-export class RolesRepository implements CreateRoleRepository, CheckRoleByKeyRepository {
+export class RolesRepository implements CreateRoleRepository, CheckRoleByKeyRepository, LoadRoleByKeyRepository {
   checkByKey = async (key: string): Promise<boolean> => {
     return !!await PrismaHelper.getCollection("roles").findFirst({
       where: {
         key
       }
     })
+  }
+
+  loadByKey: LoadRoleByKeyUseCaseFunction = async key => {
+    const result = await PrismaHelper.getCollection("roles").findFirst({
+      where: {
+        key
+      },
+      include: {
+        permissions: true,
+        users: true
+      }
+    })
+
+    return result;
   }
 
   create = async (params: CreateRoleUseCase.Params): Promise<CreateRoleUseCase.Result> => {

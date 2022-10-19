@@ -15,7 +15,7 @@ export class CreateRoleController implements Controller<CreateRoleController.Req
   // TODO: only admin users can create roles
   execute = async (request?: CreateRoleController.Request, context?: any): Promise<HttpResponse<CreateRoleController.Result>> => {
     try {
-      const validationError = this.validation.validate(request?.data);
+      const validationError = this.validation.validate(request);
 
       if (validationError)
         return badRequest(validationError);
@@ -23,7 +23,7 @@ export class CreateRoleController implements Controller<CreateRoleController.Req
       const id = await this.uuidAdapter.generate();
       
       const result = await this.createRole.create({
-        ...request?.data!,
+        ...request!,
         id
       });
 
@@ -36,11 +36,9 @@ export class CreateRoleController implements Controller<CreateRoleController.Req
 
 export namespace CreateRoleController {
   export type Request = {
-    data: {
-      name: string;
-      key: string;
-      status?: boolean;
-    }
+    name: string;
+    key: string;
+    status?: boolean;
   }
 
   export type Result = CreateRoleUseCase.Result;

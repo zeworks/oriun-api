@@ -1,21 +1,23 @@
 import { CreateAccountRepository } from "@/data/protocols/repositories/users/create-account-repository";
 import { LoadAccountByEmailRepository } from "@/data/protocols/repositories/users/load-account-by-email-repository";
+import { LoadAccountByTokenRepository } from "@/data/protocols/repositories/users/load-account-by-token-repository";
 import { LoadAccountByUsernameRepository } from "@/data/protocols/repositories/users/load-account-by-username-repository";
 import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "@/data/protocols/repositories/users/update-token-repository";
 import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
+import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
 import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { PrismaHelper } from "../prisma-helper";
 
 
-export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository {
+export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository, LoadAccountByTokenRepository {
   
   create: CreateAccountUseCaseFunction = async (input) => {
     
     const result = await PrismaHelper.getCollection("users").create({
       data: {
         email: input.email,
-        id: input.id,
+        id: input.id!,
         firstName: input.profile.firstName,
         password: input.password,
         username: input.username,
@@ -89,6 +91,33 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
         accessToken: result.accessToken
       }
 
+    return null
+  }
+
+  loadToken: LoadAccountByTokenUseCaseFunction = async (token, role) => {
+    const account = await PrismaHelper.getCollection("users").findFirst({
+      where: {
+        accessToken: token,
+        AND: {
+          roleId: role
+        }
+      },
+      include: {
+        department: true,
+        role: true
+      }
+    })
+
+    if (account)
+      return {
+        ...account,
+        profile: {
+          firstName: account?.firstName,
+          lastName: account?.lastName,
+          picture: account?.picture,
+        }
+      }
+    
     return null
   }
 }

@@ -1,13 +1,15 @@
 import { UsersEntity } from "@/domain/entities/users";
 import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
+import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
 import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { CreateAccountRepository } from "./create-account-repository";
 import { LoadAccountByEmailRepository } from "./load-account-by-email-repository";
+import { LoadAccountByTokenRepository } from "./load-account-by-token-repository";
 import { LoadAccountByUsernameRepository } from "./load-account-by-username-repository";
 import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "./update-token-repository";
 
-export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository {
+export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository, LoadAccountByTokenRepository {
 
   users: any[] = [];
 
@@ -24,9 +26,9 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
   create: CreateAccountUseCaseFunction = async (input) => {
     const data = input;
     this.users.push(data);
-    
+
     return {
-      id: data.id,
+      id: data.id!,
       email: data.email,
       username: data.username,
       status: data.status,
@@ -54,5 +56,9 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
     });
 
     return user;
+  }
+
+  loadToken: LoadAccountByTokenUseCaseFunction = (token, role) => {
+    return this.users.find(u => u.accessToken === token && u.role === role);
   }
 }

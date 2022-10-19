@@ -22,6 +22,6 @@ export default gql`
   }
 
   type Mutation {
-    createRole(data: CreateRoleInput): Role
+    createRole(data: CreateRoleInput): Role @hasRole(role: "ADMIN")
   }
 `;

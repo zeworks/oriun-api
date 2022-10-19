@@ -12,4 +12,7 @@ That's cool for companies that needs to have a full report of there departments.
 - run `npm install`;
 - run `npm run start`;
 
+### Docs:
+- Read the [docs](./docs/docs.md)
+
 Notes: Make sure you have the NodeJS installed `>=16`;

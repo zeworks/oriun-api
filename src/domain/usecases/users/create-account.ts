@@ -8,7 +8,7 @@ export interface CreateAccountUseCase {
 
 export namespace CreateAccountUseCase {
   export type Params = {
-    id: string;
+    id?: string;
     username: string;
     email: string;
     status?: boolean;
