@@ -6,6 +6,7 @@ interface Collection {
   permissions: typeof db.permissions,
   roles: typeof db.roles,
   users: typeof db.users,
+  departments: typeof db.departments,
 }
 
 export const PrismaHelper = {

@@ -1,4 +1,3 @@
-import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase";
 import { CreateAuthenticationUseCase } from "@/domain/usecases/authentication/create-authentication";
 import { badRequest, ok, serverError } from "@/presentation/helpers/http";
 import { Controller } from "@/presentation/protocols/controller";
@@ -8,7 +7,7 @@ import { Validation } from "@/presentation/protocols/validation";
 export class CreateAuthenticationController implements Controller {
   constructor(
     private readonly validation: Validation,
-    private readonly createAuthentication: DbCreateAuthentication
+    private readonly createAuthentication: CreateAuthenticationUseCase
   ) {}
 
   execute = async (request?: CreateAuthenticationController.Params, context?: any): Promise<HttpResponse<CreateAuthenticationController.Result>> => {

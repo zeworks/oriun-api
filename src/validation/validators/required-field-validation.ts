@@ -6,8 +6,12 @@ export class RequiredFieldValidation implements Validation {
 
   // @ts-ignore
   validate(input: any): Error {
-    if (!input[this.fieldName]) {
-      return new MissingParamError(this.fieldName)
+    if (typeof input[this.fieldName] === "boolean") {
+      if (input[this.fieldName] === undefined)
+        return new MissingParamError(this.fieldName)
+    } else {
+      if (!input[this.fieldName])
+        return new MissingParamError(this.fieldName)
     }
   }
 }

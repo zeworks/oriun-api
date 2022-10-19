@@ -40,6 +40,9 @@ export async function createApolloServer() {
     cache: "bounded",
     introspection: process.env.NODE_ENV === "development",
     context: ({ req }) => ({ req }),
+    formatError: (error) => ({
+      message: error.message
+    }),
     plugins: [
       process.env.NODE_ENV === "production" ? ApolloServerPluginLandingPageDisabled() : {},
       {
