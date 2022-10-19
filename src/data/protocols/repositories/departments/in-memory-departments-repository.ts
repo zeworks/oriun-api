@@ -57,15 +57,10 @@ export class InMemoryDepartmentsRepository implements CreateDepartmentRepository
   }
 
   delete: DeleteDepartmentUseCaseFunction = async (id) => {
-    const department = this.departments.find(d => d.id === id);
+    const departmentFound = this.departments.find(d => d.id === id);
     
-    if (department) {
-      // updates db
-      Object.assign(department, {
-        ...department,
-        status: false,
-        updatedAt: new Date()
-      })
+    if (departmentFound) {
+      this.departments = this.departments.filter(s => s.id !== departmentFound.id);
 
       return true;
     }
