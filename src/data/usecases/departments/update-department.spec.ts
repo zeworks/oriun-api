@@ -19,7 +19,7 @@ test("Should update department name with success", async () => {
     status: true
   })
 
-  const data = await new DbUpdateDepartment(departmentsRepository, departmentsRepository).update({
+  const data = await new DbUpdateDepartment(departmentsRepository, departmentsRepository, departmentsRepository).update({
     id: department?.id!,
     name: "Department Name Updated"
   })
@@ -32,7 +32,7 @@ test("Should update department name with success", async () => {
 test("Should throw an error if trying to update an invalid department", async () => {
   const departmentsRepository = new InMemoryDepartmentsRepository()
 
-  expect(new DbUpdateDepartment(departmentsRepository, departmentsRepository).update({
+  expect(new DbUpdateDepartment(departmentsRepository, departmentsRepository, departmentsRepository).update({
     id: "123",
     name: "Department Name Updated"
   })).rejects.toThrow(new Error("department id invalid"))

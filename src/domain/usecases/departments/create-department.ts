@@ -4,7 +4,7 @@ export interface CreateDepartmentUseCase {
 
 export namespace CreateDepartmentUseCase {
   export type Params = {
-    id: string;
+    id?: string;
     name: string;
     status: boolean;
   }

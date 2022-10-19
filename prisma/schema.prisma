@@ -57,10 +57,10 @@ model Users {
 
 model Departments {
   id        String    @id
-  name      String    @db.VarChar(250)
+  name      String    @unique @db.VarChar(250)
   status    Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  Users     Users[]
+  users     Users[]
 }

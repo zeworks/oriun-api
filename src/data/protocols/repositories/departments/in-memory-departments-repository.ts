@@ -5,12 +5,13 @@ import { LoadDepartmentByIdUseCaseFunction } from "@/domain/usecases/departments
 import { LoadDepartmentByNameUseCaseFunction } from "@/domain/usecases/departments/load-department-by-name";
 import { LoadDepartmentsUseCaseFunction } from "@/domain/usecases/departments/load-departments";
 import { UpdateDepartmentUseCaseFunction } from "@/domain/usecases/departments/update-department";
+import { v4 } from "uuid";
 import { CreateDepartmentRepository } from "./create-department-repository";
-import { DeleteDepartmentRepository } from "./delete-department";
+import { DeleteDepartmentRepository } from "./delete-department-repository";
 import { LoadDepartmentByIdRepository } from "./load-department-by-id-repository";
 import { LoadDepartmentByNameRepository } from "./load-department-by-name-repository";
 import { LoadDepartmentsRepository } from "./load-departments-repository";
-import { UpdateDepartmentRepository } from "./update-department";
+import { UpdateDepartmentRepository } from "./update-department-repository";
 
 export class InMemoryDepartmentsRepository implements CreateDepartmentRepository, LoadDepartmentByNameRepository, LoadDepartmentByIdRepository, LoadDepartmentsRepository, UpdateDepartmentRepository, DeleteDepartmentRepository {
   private departments: DepartmentsEntity[] = [];
@@ -18,6 +19,7 @@ export class InMemoryDepartmentsRepository implements CreateDepartmentRepository
   create: CreateDepartmentUseCaseFunction = async (input) => {
     const data: DepartmentsEntity = {
       ...input,
+      id: v4(),
       createdAt: new Date(),
       status: input.status ?? true
     };
@@ -46,7 +48,13 @@ export class InMemoryDepartmentsRepository implements CreateDepartmentRepository
     return null;
   }
 
-  loadDepartments: LoadDepartmentsUseCaseFunction = async () => this.departments;
+  loadDepartments: LoadDepartmentsUseCaseFunction = async (params) => {
+
+    if (params?.status !== undefined)
+      return this.departments.filter(department => department.status === params?.status)
+
+    return this.departments;
+  }
 
   delete: DeleteDepartmentUseCaseFunction = async (id) => {
     const department = this.departments.find(d => d.id === id);

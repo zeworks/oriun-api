@@ -1,4 +1,4 @@
-import { DeleteDepartmentRepository } from "@/data/protocols/repositories/departments/delete-department";
+import { DeleteDepartmentRepository } from "@/data/protocols/repositories/departments/delete-department-repository";
 import { LoadDepartmentByIdRepository } from "@/data/protocols/repositories/departments/load-department-by-id-repository";
 import { DeleteDepartmentUseCase, DeleteDepartmentUseCaseFunction } from "@/domain/usecases/departments/delete-department";
 

@@ -5,7 +5,10 @@ export interface LoadDepartmentsUseCase {
 }
 
 export namespace LoadDepartmentsUseCase {
+  export type Params = {
+    status?: boolean;
+  }
   export type Result = DepartmentsEntity[];
 }
 
-export type LoadDepartmentsUseCaseFunction = () => Promise<LoadDepartmentsUseCase.Result>;
+export type LoadDepartmentsUseCaseFunction = (params?: LoadDepartmentsUseCase.Params) => Promise<LoadDepartmentsUseCase.Result>;

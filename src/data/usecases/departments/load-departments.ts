@@ -7,8 +7,8 @@ export class DbLoadDepartments implements LoadDepartmentsUseCase {
     private readonly loadDepartmentsRepository: LoadDepartmentsRepository
   ) {}
   
-  loadDepartments: LoadDepartmentsUseCaseFunction = async () => {
-    const data = await this.loadDepartmentsRepository.loadDepartments();
+  loadDepartments: LoadDepartmentsUseCaseFunction = async (params) => {
+    const data = await this.loadDepartmentsRepository.loadDepartments(params);
 
     if (data.length)
       return data;
