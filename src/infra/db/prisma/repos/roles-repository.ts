@@ -18,10 +18,6 @@ export class RolesRepository implements CreateRoleRepository, CheckRoleByKeyRepo
     const result = await PrismaHelper.getCollection("roles").findFirst({
       where: {
         key
-      },
-      include: {
-        permissions: true,
-        users: true
       }
     })
 
