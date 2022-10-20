@@ -9,7 +9,7 @@ import { CreateRoleController } from "./create-role-controller"
 
 const rolesRepository = new InMemoryRolesRepository();
 
-const makeCreateRoleController = (): Controller<CreateRoleController.Request> => {
+const makeCreateRoleController = (): Controller => {
   const uuidAdapter = new UuidAdapter();
   const createRoleUseCase = new DbCreateRole(rolesRepository, rolesRepository);
   return new CreateRoleController(uuidAdapter, makeCreateRoleValidation(), createRoleUseCase)
