@@ -1,15 +1,17 @@
 import { UsersEntity } from "@/domain/entities/users";
 import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
+import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id";
 import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
 import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { CreateAccountRepository } from "./create-account-repository";
 import { LoadAccountByEmailRepository } from "./load-account-by-email-repository";
+import { LoadAccountByIdRepository } from "./load-account-by-id-repository";
 import { LoadAccountByTokenRepository } from "./load-account-by-token-repository";
 import { LoadAccountByUsernameRepository } from "./load-account-by-username-repository";
 import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "./update-token-repository";
 
-export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository, LoadAccountByTokenRepository {
+export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
 
   users: any[] = [];
 
@@ -36,7 +38,12 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
         key: `role_key_${input?.role}`,
         name: `Role name ${input?.role}`,
         status: true
-      } : null
+      } : null,
+      department: input?.department ? {
+        id: input?.department,
+        name: `department name ${input?.department}`,
+        status: true
+      } : null,
     };
     this.users.push(data);
 
@@ -48,7 +55,8 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
       password: data.password,
       identificationNumber: data.identificationNumber,
       profile: data.profile,
-      role: data.role
+      role: data.role,
+      department: data.department
     };
   }
 
@@ -64,5 +72,9 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
 
   loadToken: LoadAccountByTokenUseCaseFunction = (token) => {
     return this.users.find(u => u.accessToken === token);
+  }
+
+  loadById: LoadAccountByIdUseCaseFunction = (id) => {
+    return this.users.find(u => u.id === id);
   }
 }

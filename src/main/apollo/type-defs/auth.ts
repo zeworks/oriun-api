@@ -5,6 +5,10 @@ export default gql`
     accessToken: String!
   }
 
+  extend type Query {
+    me: User @auth
+  }
+
   extend type Mutation {
     createAuthentication(email: String, password: String): Authentication
   }
