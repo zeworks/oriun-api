@@ -7,6 +7,6 @@ export type CompaniesEntity = BaseEntity & {
   status?: boolean;
   vatNumber?: string | null;
   identificationNumber?: string | null;
-  fiscalNumber?: string | null;
+  fiscalName?: string | null;
   contacts?: Array<ContactsEntity>;
 }
