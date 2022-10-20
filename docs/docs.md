@@ -21,3 +21,7 @@ This project is made with:
   - [get department by id](../src/domain/usecases/departments/load-department-by-id.ts);
 
 ## 3. Middlewares:
+* Auth Middleware
+
+## 4. Decorators:
+* Acl Resolver
