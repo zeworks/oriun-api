@@ -8,7 +8,8 @@ export async function apolloControllerAdapter<Args = any, Context = any>(control
 
   const requestContext = {
     ...(context || {}),
-    userId: (context as any)?.req?.userId
+    accountId: (context as any)?.req?.accountId,
+    accountRole: (context as any)?.req?.accountRole
   }
 
   const httpResponse = await controller.execute(request, requestContext);

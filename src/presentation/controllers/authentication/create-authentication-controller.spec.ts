@@ -1,8 +1,7 @@
-import { DEFAULT_JWT_SECRET } from "@/data/constants"
+import { DEFAULT_JWT_SECRET } from "@/config/jwt"
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
-import { DbUpdateAuthenticationToken } from "@/data/usecases/authentication/update-authentication-token-usecase"
 import { DbCreateAccount } from "@/data/usecases/users/create-account"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
@@ -22,8 +21,7 @@ const makeDbCreateAuthenticationUseCase = () => {
   const loadByEmail = new DbLoadAccountByEmail(usersRepository);
   const encrypter = new JwtAdapter(DEFAULT_JWT_SECRET);
   const hashComparer = new BcryptAdapter(12);
-  const updateTokenRepository = new DbUpdateAuthenticationToken(encrypter, usersRepository);
-  return new DbCreateAuthentication(loadByEmail, hashComparer, updateTokenRepository)
+  return new DbCreateAuthentication(loadByEmail, hashComparer, encrypter, usersRepository)
 }
 
 const makeCreateAccountController = () => {
@@ -43,7 +41,6 @@ test('Should create authentication with success', async () => {
 
   const user = await makeCreateAccountController().execute({
     input: {
-      id: v4(),
       email: "johndoe@mail.com",
       username: "johndoe",
       password: "usernovo",
@@ -73,7 +70,6 @@ test('Should not create authentication if user is not active (status as false)',
 
   const user = await makeCreateAccountController().execute({
     input: {
-      id: v4(),
       email: "johndo2e@mail.com",
       username: "johndoe2",
       password: "usernovo",
@@ -101,7 +97,6 @@ test('Should not create authentication if user password is invalid', async () =>
 
   const user = await makeCreateAccountController().execute({
     input: {
-      id: v4(),
       email: "johndo2e2q@mail.com",
       username: "johndoe2 22",
       password: "usernovo",

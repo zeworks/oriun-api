@@ -25,9 +25,9 @@ import { CreateAccountController } from "./create-account-controller"
 
     const account = await createAccount.execute({
       input: {
-        id: v4(),
         email: "johndoe@mail.com",
         username: "johndoe",
+        role: "admin",
         profile: {
           firstName: "John"
         }
@@ -49,7 +49,6 @@ import { CreateAccountController } from "./create-account-controller"
 
     await new CreateAccountController(makeCreateAccountValidation(), createAccountUseCase).execute({
       input: {
-        id: v4(),
         email: "johndoe@mail.com",
         username: "johndoe",
         profile: {
@@ -60,7 +59,6 @@ import { CreateAccountController } from "./create-account-controller"
 
     const account = await new CreateAccountController(makeCreateAccountValidation(), createAccountUseCase).execute({
       input: {
-        id: v4(),
         email: "johndoe@mail.com",
         username: "johndoe",
         profile: {
@@ -84,7 +82,6 @@ import { CreateAccountController } from "./create-account-controller"
 
     await new CreateAccountController(makeCreateAccountValidation(), createAccountUseCase).execute({
       input: {
-        id: v4(),
         email: "johndoe@mail.com",
         username: "johndoe",
         profile: {
@@ -95,7 +92,6 @@ import { CreateAccountController } from "./create-account-controller"
 
     const account = await new CreateAccountController(makeCreateAccountValidation(), createAccountUseCase).execute({
       input: {
-        id: v4(),
         email: "johndoe1@mail.com",
         username: "johndoe",
         profile: {

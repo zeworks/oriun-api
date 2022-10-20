@@ -20,13 +20,13 @@ export default gql`
   }
 
   type Query {
-    departments(status: Boolean): [Department]
-    department(id: String!): Department
+    departments(status: Boolean): [Department] @auth
+    department(id: String!): Department @auth
   }
 
   type Mutation {
-    createDepartment(input: CreateDepartmentInput): Department
-    updateDepartment(id: String!, input: UpdateDepartmentInput): Department
-    deleteDepartment(id: String!): Boolean
+    createDepartment(input: CreateDepartmentInput): Department @auth
+    updateDepartment(id: String!, input: UpdateDepartmentInput): Department @auth
+    deleteDepartment(id: String!): Boolean @auth
   }
 `

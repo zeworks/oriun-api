@@ -4,6 +4,7 @@ import resolvers from "./resolvers"
 import typeDefs from "./type-defs"
 import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core/dist/plugin";
 import { GraphQLError } from "graphql";
+import { authDirectiveTransformer } from "./directives/auth-directive";
 
 const handleErrors = (response: any, errors?: readonly GraphQLError[]): void => {
   errors?.forEach(error => {
@@ -26,10 +27,12 @@ const checkError = (error: GraphQLError, errorName: string): boolean => {
 
 export async function createApolloServer() {
   /** generate schema based on typeDefs and resolvers */
-  const schema = makeExecutableSchema({
+  let schema = makeExecutableSchema({
     typeDefs,
     resolvers,
   })
+
+  schema = authDirectiveTransformer(schema);
 
   /**
    * start apollo server

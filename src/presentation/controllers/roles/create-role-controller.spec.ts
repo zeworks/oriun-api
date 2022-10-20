@@ -17,11 +17,9 @@ const makeCreateRoleController = (): Controller<CreateRoleController.Request> =>
 
 test('Should create role with success', async () => {
   const data = await makeCreateRoleController().execute({
-    data: {
-      key: "role_key",
-      name: "nome role",
-      status: false
-    }
+    key: "role_key",
+    name: "nome role",
+    status: false
   });
 
   expect(data.data.name).toBe("nome role");
@@ -31,19 +29,15 @@ test('Should create role with success', async () => {
 
 test('Should throw an error if duplicated key', async () => {
   await makeCreateRoleController().execute({
-    data: {
-      key: "role_key_1",
-      name: "nome role",
-      status: false
-    }
+    key: "role_key_1",
+    name: "nome role",
+    status: false
   });
 
   const result = await makeCreateRoleController().execute({
-    data: {
-      key: "role_key_1",
-      name: "nome role",
-      status: false
-    }
+    key: "role_key_1",
+    name: "nome role",
+    status: false
   })
 
   expect(result.data).toEqual(new KeyInUseError("role_key_1"))
