@@ -10,7 +10,6 @@ export class CreateAccountController implements Controller {
     private readonly createAccount: CreateAccountUseCase
   ) {}
 
-  // TODO: only admin users can create roles
   async execute(request: CreateAccountController.RequestInput, context?: any): Promise<HttpResponse<CreateAccountController.Result>> {
     const errors = this.validation.validate(request.input);
     

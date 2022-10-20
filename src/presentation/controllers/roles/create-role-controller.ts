@@ -12,7 +12,6 @@ export class CreateRoleController implements Controller<CreateRoleController.Req
     private readonly createRole: CreateRoleUseCase
   ){}
   
-  // TODO: only admin users can create roles
   execute = async (request?: CreateRoleController.Request, context?: any): Promise<HttpResponse<CreateRoleController.Result>> => {
     try {
       const validationError = this.validation.validate(request);

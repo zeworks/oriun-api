@@ -7,7 +7,6 @@ type UsersProfileEntity = {
   lastName?: string | null;
   picture?: string | null;
 }
-// TODO: add departments relationship
 // TODO: add contacts relationship
 export type UsersEntity = BaseEntity & {
   username: string;
