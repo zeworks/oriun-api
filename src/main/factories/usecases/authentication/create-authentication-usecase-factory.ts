@@ -1,4 +1,4 @@
-import { DEFAULT_JWT_SECRET } from "@/data/constants"
+import { DEFAULT_JWT_SECRET } from "@/config/jwt"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { JwtAdapter } from "@/infra/cryptography/jwt-adapter"

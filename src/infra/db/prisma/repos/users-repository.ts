@@ -94,17 +94,18 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
     return null
   }
 
-  loadToken: LoadAccountByTokenUseCaseFunction = async (token, role) => {
+  loadToken: LoadAccountByTokenUseCaseFunction = async (token) => {
     const account = await PrismaHelper.getCollection("users").findFirst({
       where: {
         accessToken: token,
-        AND: {
-          roleId: role
-        }
       },
       include: {
         department: true,
-        role: true
+        role: {
+          include: {
+            permissions: true
+          }
+        }
       }
     })
 

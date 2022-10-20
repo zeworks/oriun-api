@@ -1,4 +1,4 @@
-import { DEFAULT_JWT_SECRET } from "@/data/constants"
+import { DEFAULT_JWT_SECRET } from "@/config/jwt"
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"

@@ -24,7 +24,20 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
   }
 
   create: CreateAccountUseCaseFunction = async (input) => {
-    const data = input;
+    const data = {
+      ...input,
+      profile: {
+        firstName: input?.profile?.firstName,
+        lastName: input?.profile?.lastName,
+        picture: input?.profile?.picture
+      },
+      role: input?.role ? {
+        id: input?.role,
+        key: `role_key_${input?.role}`,
+        name: `Role name ${input?.role}`,
+        status: true
+      } : null
+    };
     this.users.push(data);
 
     return {
@@ -34,17 +47,8 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
       status: data.status,
       password: data.password,
       identificationNumber: data.identificationNumber,
-      profile: {
-        firstName: data.profile.firstName,
-        lastName: data.profile.lastName,
-        picture: data.profile.picture
-      },
-      role: data.role ? {
-        id: data.role,
-        key: `role_key_${data.role}`,
-        name: `Role name ${data.role}`,
-        status: true
-      } : null
+      profile: data.profile,
+      role: data.role
     };
   }
 
@@ -58,7 +62,7 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
     return user;
   }
 
-  loadToken: LoadAccountByTokenUseCaseFunction = (token, role) => {
-    return this.users.find(u => u.accessToken === token && u.role === role);
+  loadToken: LoadAccountByTokenUseCaseFunction = (token) => {
+    return this.users.find(u => u.accessToken === token);
   }
 }

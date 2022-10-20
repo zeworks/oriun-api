@@ -2,7 +2,11 @@ import { gql } from 'apollo-server-express'
 
 export default gql`
   scalar DateTime
-  directive @hasRole(role: String!) on FIELD_DEFINITION | FIELD
+  directive @auth on FIELD_DEFINITION | FIELD
+
+  enum ROLE {
+    ADMIN
+  }
   
   type Query {
     _: String

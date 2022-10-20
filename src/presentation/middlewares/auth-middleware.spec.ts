@@ -1,4 +1,4 @@
-import { DEFAULT_JWT_SECRET } from "@/data/constants";
+import { DEFAULT_JWT_SECRET } from "@/config/jwt";
 import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/roles-repository-memory";
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory";
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase";
@@ -12,7 +12,7 @@ import { makeCreateAuthenticationValidation } from "@/main/factories/controllers
 import { makeCreateRoleValidation } from "@/main/factories/controllers/roles/create-role-validation-factory";
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory";
 import { makeAuthMiddlewareValidation } from "@/main/factories/middlewares/auth-middleware-validation";
-import { test } from "vitest";
+import { expect, test } from "vitest";
 import { CreateAuthenticationController } from "../controllers/authentication/create-authentication-controller";
 import { CreateRoleController } from "../controllers/roles/create-role-controller";
 import { CreateAccountController } from "../controllers/users/create-account-controller";
@@ -30,9 +30,9 @@ test("Should have valid accesstoken", async () => {
   const hasGenerator = new BcryptAdapter(12);
   const dbCreateAccount = new DbCreateAccount(uuidAdapter, hasGenerator, usersRepository, usersRepository, usersRepository)
   const createAccount = new CreateAccountController(makeCreateAccountValidation(), dbCreateAccount);
-  const dbLoadAccountByToken = new DbLoadAccountByToken(encrypter, usersRepository, rolesRepository)
+  const dbLoadAccountByToken = new DbLoadAccountByToken(encrypter, usersRepository)
   
-  const authMiddleware = new AuthMiddleware(dbLoadAccountByToken, makeAuthMiddlewareValidation(), "bananas");
+  const authMiddleware = new AuthMiddleware(dbLoadAccountByToken, makeAuthMiddlewareValidation());
 
   const dbCreateRole = new DbCreateRole(rolesRepository, rolesRepository)
   const createRole = new CreateRoleController(uuidAdapter, makeCreateRoleValidation(), dbCreateRole);
@@ -67,6 +67,9 @@ test("Should have valid accesstoken", async () => {
       const result = await authMiddleware.handle({
         accessToken: authentication.data?.accessToken!
       })
+
+      expect(result?.data?.accountId).toEqual(account.data.id);
+      expect(result.data?.accountRole.key).toEqual(`role_key_${account.data.role?.id}`);
     }
   }
 
