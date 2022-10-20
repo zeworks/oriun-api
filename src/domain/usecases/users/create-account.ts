@@ -1,3 +1,4 @@
+import { DepartmentsEntity } from "@/domain/entities/departments";
 import { RolesEntity } from "@/domain/entities/roles";
 
 export type CreateAccountUseCaseFunction = (input: CreateAccountUseCase.Params) => Promise<CreateAccountUseCase.Result>;
@@ -19,7 +20,8 @@ export namespace CreateAccountUseCase {
       firstName: string;
       picture?: string;
       lastName?: string;
-    }
+    },
+    department?: string;
   }
 
   export type Result = {
@@ -34,6 +36,7 @@ export namespace CreateAccountUseCase {
       firstName: string;
       lastName?: string | null;
       picture?: string | null;
-    }
+    },
+    department?: DepartmentsEntity | null;
   } | null;
 }

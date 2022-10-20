@@ -1,5 +1,6 @@
 import { RolesEntity } from "@/domain/entities/roles";
 import { LoadAccountByTokenUseCase } from "@/domain/usecases/users/load-account-by-token";
+import { MissingParamError } from "../errors/missing-param-error";
 import { UnauthorizedError } from "../errors/unauthorized-error";
 import { badRequest, forbidden, ok, serverError } from "../helpers/http";
 import { HttpResponse } from "../protocols/http";
@@ -15,7 +16,7 @@ export class AuthMiddleware implements Middleware {
   async handle(request: AuthMiddleware.Params): Promise<HttpResponse<AuthMiddleware.Result>> {
     const errors = this.validation.validate(request);
 
-    if (errors) return badRequest(errors);
+    if (errors) return badRequest(new MissingParamError("autorization header"));
 
     try {
       const account = await this.loadAccountByToken.loadToken(request.accessToken);

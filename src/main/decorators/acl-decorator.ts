@@ -5,7 +5,7 @@ import { serverError } from "@/presentation/helpers/http";
 import { Controller } from "@/presentation/protocols/controller";
 import { HttpResponse } from "@/presentation/protocols/http";
 
-export class AclResolver implements Controller {
+export class AclDecorator implements Controller {
   constructor(
     private readonly controller: Controller,
     private readonly permission: string

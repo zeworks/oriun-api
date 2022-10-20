@@ -15,6 +15,8 @@ export default gql`
     identificationNumber: String
     profile: UserProfile
     role: Role
+    department: Department
+    accessToken: String
   }
 
   input UserProfileInput {

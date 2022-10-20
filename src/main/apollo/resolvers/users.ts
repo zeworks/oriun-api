@@ -1,10 +1,10 @@
 import { PermissionKey } from "@/config/permissions";
 import { apolloControllerAdapter } from "@/main/adapters/apollo-controller";
-import { AclResolver } from "@/main/decorators/acl-resolver";
+import { AclDecorator } from "@/main/decorators/acl-decorator";
 import { makeCreateAccountController } from "@/main/factories/controllers/users/create-account-controller-factory";
 
 export default {
   Mutation: {
-    createAccount: (_: any, args: any, context: any) => apolloControllerAdapter(new AclResolver(makeCreateAccountController(), PermissionKey.UsersCreate), args, context)
+    createAccount: (_: any, args: any, context: any) => apolloControllerAdapter(new AclDecorator(makeCreateAccountController(), PermissionKey.UsersCreate), args, context)
   }
 }
