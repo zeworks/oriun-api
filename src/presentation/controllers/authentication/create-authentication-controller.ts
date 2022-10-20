@@ -10,14 +10,14 @@ export class CreateAuthenticationController implements Controller {
     private readonly createAuthentication: CreateAuthenticationUseCase
   ) {}
 
-  execute = async (request?: CreateAuthenticationController.Params, context?: any): Promise<HttpResponse<CreateAuthenticationController.Result>> => {
+  execute = async (request: CreateAuthenticationController.Params): Promise<HttpResponse<CreateAuthenticationController.Result>> => {
     const errors = this.validation.validate(request);
 
     if (errors)
       return badRequest(errors);
     
     try {
-      const result = await this.createAuthentication.authenticate(request!);
+      const result = await this.createAuthentication.authenticate(request);
       return ok(result);
     } catch (error: any) {
       return serverError(error)

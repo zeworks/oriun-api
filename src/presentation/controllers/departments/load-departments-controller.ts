@@ -8,7 +8,7 @@ export class LoadDepartmentsController implements Controller {
     private readonly loadDepartments: LoadDepartmentsUseCase
   ) { }
   
-  execute = async (request?: LoadDepartmentsController.Params, context?: any): Promise<HttpResponse<LoadDepartmentsUseCase.Result>> => {
+  execute = async (request?: LoadDepartmentsController.Params): Promise<HttpResponse<LoadDepartmentsUseCase.Result>> => {
     try {
       const result = await this.loadDepartments.loadDepartments(request);
       return ok(result)

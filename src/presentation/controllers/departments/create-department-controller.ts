@@ -10,7 +10,7 @@ export class CreateDepartmentController implements Controller {
     private readonly createDepartment: CreateDepartmentUseCase
   ) {}
 
-  execute = async (request: CreateDepartmentController.Params, context?: any): Promise<HttpResponse<CreateDepartmentController.Result>> => {
+  execute = async (request: CreateDepartmentController.Params): Promise<HttpResponse<CreateDepartmentController.Result>> => {
     const errors = this.validation.validate(request);
 
     if (errors)

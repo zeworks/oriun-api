@@ -11,7 +11,7 @@ export class LoadDepartmentByIdController implements Controller {
     private readonly loadDepartmentById: LoadDepartmentByIdUseCase
   ) {}
 
-  async execute(request: LoadDepartmentByIdController.Params, context?: any): Promise<HttpResponse<LoadDepartmentByIdController.Result>> {
+  async execute(request: LoadDepartmentByIdController.Params): Promise<HttpResponse<LoadDepartmentByIdController.Result>> {
     const errors = this.validation.validate(request);
 
     if (errors) return badRequest(errors);

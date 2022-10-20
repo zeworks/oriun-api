@@ -11,7 +11,7 @@ export class UpdateDepartmentController implements Controller {
     private readonly updateDepartment: UpdateDepartmentUseCase
   ){}
 
-  execute = async (request: UpdateDepartmentController.Params, context?: any): Promise<HttpResponse<UpdateDepartmentController.Result>> => {
+  execute = async (request: UpdateDepartmentController.Params): Promise<HttpResponse<UpdateDepartmentController.Result>> => {
     const errors = this.validation.validate(request);
 
     if (errors)

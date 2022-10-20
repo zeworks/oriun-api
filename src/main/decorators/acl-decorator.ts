@@ -1,4 +1,3 @@
-import { PermissionsEntity } from "@/domain/entities/permissions";
 import { RolesEntity } from "@/domain/entities/roles";
 import { UnauthorizedError } from "@/presentation/errors/unauthorized-error";
 import { serverError } from "@/presentation/helpers/http";

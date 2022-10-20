@@ -1,18 +1,18 @@
 import { CreateRoleUseCase } from "@/domain/usecases/roles/create-role";
 import { UuidAdapter } from "@/infra/cryptography/uuid";
-import { badRequest, noContent, ok, serverError } from "@/presentation/helpers/http";
+import { badRequest, ok, serverError } from "@/presentation/helpers/http";
 import { Controller } from "@/presentation/protocols/controller";
 import { HttpResponse } from "@/presentation/protocols/http";
 import { Validation } from "@/presentation/protocols/validation";
 
-export class CreateRoleController implements Controller<CreateRoleController.Request, CreateRoleController.Result> {
+export class CreateRoleController implements Controller {
   constructor(
     private readonly uuidAdapter: UuidAdapter,
     private readonly validation: Validation,
     private readonly createRole: CreateRoleUseCase
   ){}
   
-  execute = async (request?: CreateRoleController.Request, context?: any): Promise<HttpResponse<CreateRoleController.Result>> => {
+  execute = async (request: CreateRoleController.Request): Promise<HttpResponse<CreateRoleController.Result>> => {
     try {
       const validationError = this.validation.validate(request);
 
@@ -22,7 +22,7 @@ export class CreateRoleController implements Controller<CreateRoleController.Req
       const id = await this.uuidAdapter.generate();
       
       const result = await this.createRole.create({
-        ...request!,
+        ...request,
         id
       });
 

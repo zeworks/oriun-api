@@ -1,4 +1,3 @@
-import { UsersEntity } from "@/domain/entities/users";
 import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
 import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id";
@@ -45,10 +44,13 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
         status: true
       } : null,
     };
-    this.users.push(data);
 
+    this.users.push(data);
+    if (!data)
+      return null;
+    
     return {
-      id: data.id!,
+      id: data.id || "",
       email: data.email,
       username: data.username,
       status: data.status,

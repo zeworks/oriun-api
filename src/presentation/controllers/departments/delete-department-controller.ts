@@ -11,7 +11,7 @@ export class DeleteDepartmentController implements Controller {
     private readonly deleteDepartment: DeleteDepartmentUseCase
   ) {}
 
-  async execute(request: DeleteDepartmentController.Params, context?: any): Promise<HttpResponse<DeleteDepartmentController.Result>> {
+  async execute(request: DeleteDepartmentController.Params): Promise<HttpResponse<DeleteDepartmentController.Result>> {
     const errors = this.validation.validate(request);
 
     if (errors)

@@ -10,7 +10,7 @@ export class CreateAccountController implements Controller {
     private readonly createAccount: CreateAccountUseCase
   ) {}
 
-  async execute(request: CreateAccountController.RequestInput, context?: any): Promise<HttpResponse<CreateAccountController.Result>> {
+  async execute(request: CreateAccountController.RequestInput): Promise<HttpResponse<CreateAccountController.Result>> {
     const errors = this.validation.validate(request.input);
     
     if (errors)

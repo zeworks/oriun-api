@@ -34,3 +34,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run Tests
         run: npm run test
+
+      # Runs a single command using the runners shell
+      - name: Lint Project
+        run: npm run lint

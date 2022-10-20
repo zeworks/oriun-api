@@ -10,7 +10,7 @@ export class LoadRoleByKeyController implements Controller {
     private readonly loadRole: LoadRoleByKeyUseCase
   ) { }
   
-  async execute(request: LoadRoleByKeyController.Params, context?: any): Promise<HttpResponse<LoadRoleByKeyController.Result>> {
+  async execute(request: LoadRoleByKeyController.Params): Promise<HttpResponse<LoadRoleByKeyController.Result>> {
     const errors = this.validation.validate(request);
 
     if (errors)
