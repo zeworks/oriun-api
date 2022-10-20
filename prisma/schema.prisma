@@ -77,4 +77,20 @@ model Contacts {
   postalCode String?   @db.VarChar(50)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
+
+  companies Companies[]
+}
+
+model Companies {
+  id                   String    @id
+  code                 String    @db.VarChar(250)
+  name                 String    @db.VarChar(250)
+  status               Boolean   @default(false)
+  vatNumber            String?   @db.VarChar(150)
+  identificationNumber String?   @db.VarChar(150)
+  fiscalNumber         String?   @db.VarChar(150)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime? @updatedAt
+
+  contacts Contacts[]
 }
