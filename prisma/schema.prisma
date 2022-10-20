@@ -62,5 +62,19 @@ model Departments {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  users     Users[]
+  users Users[]
+}
+
+model Contacts {
+  id         String    @id
+  name       String    @db.VarChar(250)
+  phone      String    @db.VarChar(20)
+  prefix     String    @db.VarChar(20)
+  address    String?   @db.VarChar(250)
+  email      String?   @db.VarChar(150)
+  country    String    @db.VarChar(50)
+  default    Boolean   @default(false)
+  postalCode String?   @db.VarChar(50)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 }
