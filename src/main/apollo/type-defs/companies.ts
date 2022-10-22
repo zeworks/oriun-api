@@ -23,6 +23,14 @@ export default gql`
     contacts: [CreateContactInput]
   }
 
+  input CompaniesFilter {
+    status: Boolean
+  }
+
+  extend type Query {
+    companies(filter: CompaniesFilter): [Companies] @auth
+  }
+
   extend type Mutation {
     createCompany(input: CreateCompanyInput): Companies @auth
   }
