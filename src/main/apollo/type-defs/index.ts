@@ -4,6 +4,8 @@ import roles from "./roles";
 import users from "./users";
 import auth from "./auth";
 import departments from "./departments";
+import companies from "./companies";
+import contacts from "./contacts";
 
 export default [
   base,
@@ -11,5 +13,7 @@ export default [
   roles,
   users,
   auth,
-  departments
+  departments,
+  companies,
+  contacts
 ]
