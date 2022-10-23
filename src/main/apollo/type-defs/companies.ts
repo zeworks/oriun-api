@@ -33,7 +33,7 @@ export default gql`
   }
 
   extend type Query {
-    companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput): [Companies] @auth
+    companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput, search: String): [Companies] @auth
   }
 
   extend type Mutation {
