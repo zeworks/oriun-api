@@ -27,7 +27,24 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
     return PrismaHelper.getCollection("companies").findMany({
       where: {
-        status: params?.filter?.status
+        OR: [
+          {
+            status: params?.filter?.status
+          },
+          {
+            id: params?.search
+          },
+          {
+            code: {
+              contains: params?.search
+            }
+          },
+          {
+            name: {
+              contains: params?.search
+            }
+          }
+        ]
       },
       skip: params?.pagination?.skip,
       take: params?.pagination?.take,

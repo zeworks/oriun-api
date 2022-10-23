@@ -90,3 +90,95 @@ test("Should get 2 companies starting from second of the list", async () => {
   const result = await loadCompanies.loadCompanies({ pagination: { skip: 1, take: 3 } });
   expect(result?.length).toEqual(3);
 })
+
+test("Should return a list of companies that contains the code 'test'", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "code-teste-1",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "code-2",
+    name: "company name 2",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "code-3-test",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ search: "test" });
+  expect(result?.length).toEqual(2);
+})
+
+test("Should return a list of companies that contains the name 'test'", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "code-teste-1",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "code-2",
+    name: "company test",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "code-3-test",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ search: "test" });
+  expect(result?.length).toEqual(3);
+})
+
+test("Should search by id with success", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "code-teste-1",
+    name: "company name 1",
+  })
+
+  const company = await createCompany.create({
+    code: "code-2",
+    name: "company test",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "code-3-test",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ search: company?.id });
+  expect(result?.length).toEqual(1);
+})
+
+test("Should return an empty list with success", async () => {
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  const result = await loadCompanies.loadCompanies();
+  expect(result).toEqual([]);
+})

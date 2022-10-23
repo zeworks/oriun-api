@@ -23,6 +23,9 @@ export class InMemoryCompaniesRepository implements CreateCompanyRepository, Loa
     if (params?.pagination)
       return this.companies.slice(params.pagination.skip, Number(params.pagination.take) + 1);
     
+    if (params?.search)
+      return this.companies.filter(c => c.id === params.search || c.code.includes(params.search || "") || c.name.includes(params.search || ""));
+    
     return this.companies;
   }
 }

@@ -19,6 +19,7 @@ export namespace LoadCompaniesUseCase {
   export type Params = {
     filter?: LoadCompaniesUseCaseFilter;
     pagination?: LoadCompaniesUseCasePagination;
+    search?: string;
   }
   export type Result = Array<CompaniesEntity> | null;
 }
