@@ -19,6 +19,10 @@ export class InMemoryCompaniesRepository implements CreateCompanyRepository, Loa
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
     if (params?.filter?.status !== undefined)
       return this.companies.filter(c => c.status === params?.filter?.status);
+    
+    if (params?.pagination)
+      return this.companies.slice(params.pagination.skip, Number(params.pagination.take) + 1);
+    
     return this.companies;
   }
 }
