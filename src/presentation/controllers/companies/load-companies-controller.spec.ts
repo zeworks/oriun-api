@@ -51,3 +51,64 @@ test("Should return an empty array if no companies created", async () => {
   expect(result.data?.length).toEqual(0);
   expect(result.data).toEqual([]);
 })
+
+test("Should return a list of companies paginated", async () => {
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const contactsRepository = new InMemoryContactsRepository();
+
+  const uuidAdapter = new UuidAdapter()
+  const createContactUseCase = new DbCreateContact(uuidAdapter, contactsRepository);
+
+  const createCompanyUseCase = new DbCreateCompany(uuidAdapter, companiesRepository);
+  const createCompany = new CreateCompanyController(makeCreateCompanyValidation(), makeCreateContactValidation(), createContactUseCase, createCompanyUseCase);
+
+  await createCompany.execute({
+    code: "code-1",
+    name: "company-name",
+    contacts: [{
+      id: "",
+      country: "2",
+      default: true,
+      name: "Contact Name",
+      phone: "91632633",
+      prefix: "+351"
+    }]
+  })
+
+  await createCompany.execute({
+    code: "code-2",
+    name: "company-name",
+    contacts: [{
+      id: "",
+      country: "2",
+      default: true,
+      name: "Contact Name",
+      phone: "91632633",
+      prefix: "+351"
+    }]
+  })
+
+  await createCompany.execute({
+    code: "code-3",
+    name: "company-name",
+    contacts: [{
+      id: "",
+      country: "2",
+      default: true,
+      name: "Contact Name",
+      phone: "91632633",
+      prefix: "+351"
+    }]
+  })
+
+  const loadCompaniesUseCase = new DbLoadCompanies(companiesRepository)
+  const loadCompanies = new LoadCompaniesController(loadCompaniesUseCase);
+  const result = await loadCompanies.execute({
+    pagination: {
+      skip: 1,
+      take: 2
+    }
+  });
+
+  expect(result.data?.length).toEqual(2);
+})

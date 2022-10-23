@@ -54,3 +54,39 @@ test("Should return an empty list with success", async () => {
   const result = await loadCompanies.loadCompanies();
   expect(result).toEqual([]);
 })
+
+test("Should get 2 companies starting from second of the list", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "code-1",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "code-2",
+    name: "company name 2",
+  })
+
+  await createCompany.create({
+    code: "code-3",
+    name: "company name 3",
+  })
+
+  await createCompany.create({
+    code: "code-4",
+    name: "company name 4",
+  })
+
+  await createCompany.create({
+    code: "code-5",
+    name: "company name 5",
+  })
+
+  const result = await loadCompanies.loadCompanies({ pagination: { skip: 1, take: 3 } });
+  expect(result?.length).toEqual(3);
+})

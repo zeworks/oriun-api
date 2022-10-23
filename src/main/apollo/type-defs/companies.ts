@@ -23,12 +23,17 @@ export default gql`
     contacts: [CreateContactInput]
   }
 
-  input CompaniesFilter {
+  input CompaniesFilterInput {
     status: Boolean
   }
 
+  input CompaniesPaginationInput {
+    skip: Int
+    take: Int
+  }
+
   extend type Query {
-    companies(filter: CompaniesFilter): [Companies] @auth
+    companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput): [Companies] @auth
   }
 
   extend type Mutation {

@@ -29,6 +29,8 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
       where: {
         status: params?.filter?.status
       },
+      skip: params?.pagination?.skip,
+      take: params?.pagination?.take,
       include: {
         contacts: true
       }

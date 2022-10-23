@@ -10,9 +10,15 @@ type LoadCompaniesUseCaseFilter = {
   status?: boolean;
 }
 
+type LoadCompaniesUseCasePagination = {
+  skip?: number;
+  take?: number;
+}
+
 export namespace LoadCompaniesUseCase {
   export type Params = {
     filter?: LoadCompaniesUseCaseFilter;
+    pagination?: LoadCompaniesUseCasePagination;
   }
   export type Result = Array<CompaniesEntity> | null;
 }
