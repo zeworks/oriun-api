@@ -32,8 +32,24 @@ export default gql`
     take: Int
   }
 
+  enum CompaniesOrderByKey {
+    ID
+    NAME
+    CODE
+  }
+
+  enum CompaniesOrderBySort {
+    ASC
+    DESC
+  }
+
+  input CompaniesOrderBy {
+    key: CompaniesOrderByKey
+    sort: CompaniesOrderBySort
+  }
+
   extend type Query {
-    companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput, search: String): [Companies] @auth
+    companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput, search: String, orderBy: CompaniesOrderBy): [Companies] @auth
   }
 
   extend type Mutation {

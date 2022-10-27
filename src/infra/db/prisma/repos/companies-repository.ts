@@ -26,13 +26,17 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
 
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
     return PrismaHelper.getCollection("companies").findMany({
-      where: {
+      where: params?.filter || params?.search ? {
         OR: [
           {
-            status: params?.filter?.status
+            status: {
+              equals: params?.filter?.status
+            }
           },
           {
-            id: params?.search
+            id: {
+              equals: params?.search
+            }
           },
           {
             code: {
@@ -45,9 +49,17 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
             }
           }
         ]
-      },
+      } : undefined,
       skip: params?.pagination?.skip,
       take: params?.pagination?.take,
+      orderBy: !!params?.orderBy ? {
+        id: params?.orderBy?.key === "ID" ? params.orderBy.sort?.toLowerCase() as any : undefined,
+        code: params?.orderBy?.key === "CODE" ? params.orderBy.sort?.toLowerCase() as any : undefined,
+        name: params?.orderBy?.key === "NAME" ? params.orderBy.sort?.toLowerCase() as any : undefined,
+        createdAt: params?.orderBy?.key === "CREATEDAT" ? params.orderBy.sort?.toLowerCase() as any : undefined,
+      } : {
+        createdAt: "desc"
+      },
       include: {
         contacts: true
       }

@@ -182,3 +182,121 @@ test("Should return an empty list with success", async () => {
   const result = await loadCompanies.loadCompanies();
   expect(result).toEqual([]);
 })
+
+test("Should order by id with success ASC", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "code-teste-1",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "code-2",
+    name: "company test",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "code-3-test",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ orderBy: { key: "ID", sort: "ASC" } });
+  expect(result?.length).toEqual(3);
+})
+
+test("Should order by CODE with success ASC", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "a",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "c",
+    name: "company test",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "b",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ orderBy: { key: "CODE", sort: "ASC" } });
+  expect(result?.length).toEqual(3);
+})
+
+test("Should order by NAME with success ASC", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "a",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "c",
+    name: "company name 3",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "b",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ orderBy: { key: "NAME", sort: "ASC" } });
+  expect(result?.length).toEqual(3);
+  expect(result?.[0].code).toEqual("a");
+  expect(result?.[1].code).toEqual("b");
+  expect(result?.[2].code).toEqual("c");
+})
+
+test("Should order by NAME with success DESC", async () => {
+  const uuidAdapter = new UuidAdapter();
+  const companiesRepository = new InMemoryCompaniesRepository();
+  const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository);
+
+  const loadCompanies = new DbLoadCompanies(companiesRepository);
+
+  await createCompany.create({
+    code: "a",
+    name: "company name 1",
+  })
+
+  await createCompany.create({
+    code: "c",
+    name: "company name 3",
+    status: false
+  })
+
+  await createCompany.create({
+    code: "b",
+    name: "company name 2",
+    status: false
+  })
+
+  const result = await loadCompanies.loadCompanies({ orderBy: { key: "NAME", sort: "DESC" } });
+  expect(result?.length).toEqual(3);
+  expect(result?.[0].code).toEqual("c");
+  expect(result?.[1].code).toEqual("b");
+  expect(result?.[2].code).toEqual("a");
+})
