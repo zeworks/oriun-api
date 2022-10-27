@@ -26,7 +26,7 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
 
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
     return PrismaHelper.getCollection("companies").findMany({
-      where: {
+      where: params?.filter || params?.search ? {
         OR: [
           {
             status: {
@@ -49,7 +49,7 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
             }
           }
         ]
-      },
+      } : undefined,
       skip: params?.pagination?.skip,
       take: params?.pagination?.take,
       orderBy: !!params?.orderBy ? {
