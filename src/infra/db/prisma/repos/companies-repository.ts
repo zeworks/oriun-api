@@ -1,10 +1,12 @@
 import { CreateCompanyRepository } from "@/data/protocols/repositories/companies/create-company-repository";
 import { LoadCompaniesRepository } from "@/data/protocols/repositories/companies/load-companies-repository";
+import { LoadCompanyByIdRepository } from "@/data/protocols/repositories/companies/load-company-by-id-repository";
 import { CreateCompanyUseCase } from "@/domain/usecases/companies/create-company";
 import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies";
+import { LoadCompanyByIdUseCaseFunction } from "@/domain/usecases/companies/load-company-by-id";
 import { PrismaHelper } from "../prisma-helper";
 
-export class CompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository {
+export class CompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository {
   create = (input: CreateCompanyRepository.Params): Promise<CreateCompanyUseCase.Result> => {
     const contacts = input.contacts || [];
 
@@ -64,5 +66,21 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
         contacts: true
       }
     })
+  }
+
+  loadById: LoadCompanyByIdUseCaseFunction = async (id) => {
+    const result = PrismaHelper.getCollection("companies").findFirst({
+      where: {
+        id
+      },
+      include: {
+        contacts: true
+      }
+    })
+
+    if (!result)
+      return null;
+    
+    return result;
   }
 }
