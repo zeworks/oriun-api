@@ -50,6 +50,7 @@ export default gql`
 
   extend type Query {
     companies(filter: CompaniesFilterInput, pagination: CompaniesPaginationInput, search: String, orderBy: CompaniesOrderBy): [Companies] @auth
+    company(id: String): Companies @auth
   }
 
   extend type Mutation {
