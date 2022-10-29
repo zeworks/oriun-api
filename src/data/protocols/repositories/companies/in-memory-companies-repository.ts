@@ -1,10 +1,12 @@
 import { CompaniesEntity } from "@/domain/entities/companies";
 import { CreateCompanyUseCase } from "@/domain/usecases/companies/create-company";
 import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies";
+import { LoadCompanyByIdUseCaseFunction } from "@/domain/usecases/companies/load-company-by-id";
 import { CreateCompanyRepository } from "./create-company-repository";
 import { LoadCompaniesRepository } from "./load-companies-repository";
+import { LoadCompanyByIdRepository } from "./load-company-by-id-repository";
 
-export class InMemoryCompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository {
+export class InMemoryCompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository {
   private companies: CompaniesEntity[] = [];
 
   create = async (input: CreateCompanyRepository.Params): Promise<CreateCompanyUseCase.Result> => {
@@ -14,6 +16,10 @@ export class InMemoryCompaniesRepository implements CreateCompanyRepository, Loa
     };
     this.companies.push(data);
     return data;
+  }
+
+  loadById: LoadCompanyByIdUseCaseFunction = async id => {
+    return this.companies.find(c => c.id === id) || null;
   }
 
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
