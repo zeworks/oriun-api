@@ -1,8 +1,12 @@
 import { ContactsEntity } from "@/domain/entities/contacts";
 import { CreateContactUseCase } from "@/domain/usecases/contacts/create-contact";
+import { LoadContactByIdUseCaseFunction } from "@/domain/usecases/contacts/load-contact-by-id";
+import { UpdateContactUseCaseFunction } from "@/domain/usecases/contacts/update-contact";
 import { CreateContactRepository } from "./create-contact-repository";
+import { LoadContactByIdRepository } from "./load-contact-by-id-repository";
+import { UpdateContactRepository } from "./update-contact-repository";
 
-export class InMemoryContactsRepository implements CreateContactRepository {
+export class InMemoryContactsRepository implements CreateContactRepository, UpdateContactRepository, LoadContactByIdRepository {
   private contacts: ContactsEntity[] = [];
   
   async create(input: CreateContactRepository.Params): Promise<CreateContactUseCase.Result> {
@@ -12,5 +16,17 @@ export class InMemoryContactsRepository implements CreateContactRepository {
     }
     this.contacts.push(data);
     return data;
+  }
+
+  update: UpdateContactUseCaseFunction = async (input) => {
+    const contact = this.contacts.find(c => c.id === input.id);
+
+    if (!contact) return null;
+
+    return Object.assign({}, contact, input);
+  }
+
+  loadById: LoadContactByIdUseCaseFunction = async (id) => {
+    return this.contacts.find(c => c.id === id) || null;
   }
 }

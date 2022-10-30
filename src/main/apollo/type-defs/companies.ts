@@ -23,6 +23,17 @@ export default gql`
     contacts: [CreateContactInput]
   }
 
+  input UpdateCompanyInput {
+    id: String!
+    code: String
+    name: String
+    status: Boolean
+    vatNumber: String
+    identificationNumber: String
+    fiscalName: String
+    contacts: [UpdateContactInput]
+  }
+
   input CompaniesFilterInput {
     status: Boolean
   }
@@ -55,5 +66,6 @@ export default gql`
 
   extend type Mutation {
     createCompany(input: CreateCompanyInput): Companies @auth
+    updateCompany(input: UpdateCompanyInput): Companies @auth
   }
 `

@@ -24,4 +24,16 @@ export default gql`
     default: Boolean!
     postalCode: String
   }
+
+  input UpdateContactInput {
+    id: String
+    name: String
+    phone: String
+    prefix: String
+    address: String
+    email: String
+    country: String
+    default: Boolean
+    postalCode: String
+  }
 `
