@@ -1,12 +1,16 @@
 import { CompaniesEntity } from "@/domain/entities/companies";
 import { CreateCompanyUseCase } from "@/domain/usecases/companies/create-company";
 import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies";
+import { LoadCompanyByCodeUseCaseFunction } from "@/domain/usecases/companies/load-company-by-code";
 import { LoadCompanyByIdUseCaseFunction } from "@/domain/usecases/companies/load-company-by-id";
+import { UpdateCompanyUseCaseFunction } from "@/domain/usecases/companies/update-company";
 import { CreateCompanyRepository } from "./create-company-repository";
 import { LoadCompaniesRepository } from "./load-companies-repository";
+import { LoadCompanyByCodeRepository } from "./load-company-by-code-repository";
 import { LoadCompanyByIdRepository } from "./load-company-by-id-repository";
+import { UpdateCompanyRepository } from "./update-company-repository";
 
-export class InMemoryCompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository {
+export class InMemoryCompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository, UpdateCompanyRepository, LoadCompanyByCodeRepository {
   private companies: CompaniesEntity[] = [];
 
   create = async (input: CreateCompanyRepository.Params): Promise<CreateCompanyUseCase.Result> => {
@@ -20,6 +24,10 @@ export class InMemoryCompaniesRepository implements CreateCompanyRepository, Loa
 
   loadById: LoadCompanyByIdUseCaseFunction = async id => {
     return this.companies.find(c => c.id === id) || null;
+  }
+
+  loadByCode: LoadCompanyByCodeUseCaseFunction = async code => {
+    return this.companies.find(c => c.code === code) || null;
   }
 
   loadCompanies: LoadCompaniesUseCaseFunction = async (params) => {
@@ -65,5 +73,11 @@ export class InMemoryCompaniesRepository implements CreateCompanyRepository, Loa
       })
 
     return this.companies;
+  }
+
+  update: UpdateCompanyUseCaseFunction = async (input) => {
+    const company = this.companies.find(c => c.id === input.id);
+    const data = Object.assign({}, company, input);
+    return data
   }
 }
