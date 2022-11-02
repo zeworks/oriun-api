@@ -1,16 +1,18 @@
 import { CreateCompanyRepository } from "@/data/protocols/repositories/companies/create-company-repository";
+import { DeleteCompanyRepository } from "@/data/protocols/repositories/companies/delete-company-repository";
 import { LoadCompaniesRepository } from "@/data/protocols/repositories/companies/load-companies-repository";
 import { LoadCompanyByCodeRepository } from "@/data/protocols/repositories/companies/load-company-by-code-repository";
 import { LoadCompanyByIdRepository } from "@/data/protocols/repositories/companies/load-company-by-id-repository";
 import { UpdateCompanyRepository } from "@/data/protocols/repositories/companies/update-company-repository";
 import { CreateCompanyUseCase } from "@/domain/usecases/companies/create-company";
+import { DeleteCompanyUseCaseFunction } from "@/domain/usecases/companies/delete-company";
 import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies";
 import { LoadCompanyByCodeUseCaseFunction } from "@/domain/usecases/companies/load-company-by-code";
 import { LoadCompanyByIdUseCaseFunction } from "@/domain/usecases/companies/load-company-by-id";
 import { UpdateCompanyUseCaseFunction } from "@/domain/usecases/companies/update-company";
 import { PrismaHelper } from "../prisma-helper";
 
-export class CompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository, LoadCompanyByCodeRepository, UpdateCompanyRepository {
+export class CompaniesRepository implements CreateCompanyRepository, LoadCompaniesRepository, LoadCompanyByIdRepository, LoadCompanyByCodeRepository, UpdateCompanyRepository, DeleteCompanyRepository {
   create = (input: CreateCompanyRepository.Params): Promise<CreateCompanyUseCase.Result> => {
     const contacts = input.contacts || [];
 
@@ -84,7 +86,7 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
 
     if (!result)
       return null;
-    
+
     return result;
   }
 
@@ -123,5 +125,15 @@ export class CompaniesRepository implements CreateCompanyRepository, LoadCompani
         contacts: true
       }
     })
+  }
+
+  delete: DeleteCompanyUseCaseFunction = async (id) => {
+    const result = await PrismaHelper.getCollection("companies").delete({
+      where: {
+        id
+      }
+    });
+
+    return !!result;
   }
 }
