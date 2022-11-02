@@ -78,7 +78,8 @@ model Contacts {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
 
-  companies Companies[]
+  company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId String?
 }
 
 model Companies {

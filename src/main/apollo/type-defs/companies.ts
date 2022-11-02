@@ -67,5 +67,6 @@ export default gql`
   extend type Mutation {
     createCompany(input: CreateCompanyInput): Companies @auth
     updateCompany(input: UpdateCompanyInput): Companies @auth
+    deleteCompany(id: String!): Boolean @auth
   }
 `
