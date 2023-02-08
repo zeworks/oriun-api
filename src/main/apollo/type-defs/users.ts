@@ -41,5 +41,6 @@ export default gql`
 
   extend type Query {
     accounts: [User] @auth
+    account(id: String): User @auth
   }
 `
