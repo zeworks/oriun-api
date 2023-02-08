@@ -35,7 +35,7 @@ test('Should return true if key already exists', async () => {
   const createRoleRepository = new DbCreateRole(rolesRepository, rolesRepository);
   const role = await createRoleRepository.create({
     id: faker.datatype.uuid(),
-    key: faker.word.adjective(5),
+    key: faker.word.adjective(6),
     name: faker.name.firstName(),
     status: faker.datatype.boolean()
   })
