@@ -38,4 +38,8 @@ export default gql`
   extend type Mutation {
     createAccount(input: CreateAccount): User @auth
   }
+
+  extend type Query {
+    accounts: [User] @auth
+  }
 `

@@ -10,9 +10,11 @@ import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-acc
 import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
 import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
 import { PrismaHelper } from "../prisma-helper";
+import { LoadAccountsRepository } from "@/data/protocols/repositories/users/load-accounts-repository";
+import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts";
 
 
-export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
+export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, LoadAccountsRepository {
   
   create: CreateAccountUseCaseFunction = async (input) => {
     
@@ -158,5 +160,27 @@ export class UsersRepository implements LoadAccountByEmailRepository, CreateAcco
       }
     
     return null
+  }
+
+  loadAccounts: LoadAccountsUseCaseFunction = async () => {
+    const result = await PrismaHelper.getCollection("users").findMany({
+      include: {
+        department: true,
+        role: {
+          include: {
+            permissions: true
+          }
+        }
+      }
+    })
+
+    return result.map(res => ({
+      ...res,
+      profile: {
+        firstName: res?.firstName,
+        lastName: res?.lastName,
+        picture: res?.picture
+      }
+    }))
   }
 }

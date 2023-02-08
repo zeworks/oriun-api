@@ -9,8 +9,10 @@ import { LoadAccountByIdRepository } from "./load-account-by-id-repository";
 import { LoadAccountByTokenRepository } from "./load-account-by-token-repository";
 import { LoadAccountByUsernameRepository } from "./load-account-by-username-repository";
 import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "./update-token-repository";
+import { LoadAccountsRepository } from "./load-accounts-repository";
+import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts";
 
-export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
+export class InMemoryUsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, UpdateTokenRepository, LoadAccountByUsernameRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, LoadAccountsRepository {
 
   users: any[] = [];
 
@@ -78,5 +80,9 @@ export class InMemoryUsersRepository implements LoadAccountByEmailRepository, Cr
 
   loadById: LoadAccountByIdUseCaseFunction = (id) => {
     return this.users.find(u => u.id === id);
+  }
+
+  loadAccounts: LoadAccountsUseCaseFunction = () => {
+    return this.users as any;
   }
 }
