@@ -32,7 +32,7 @@ test("Should load the account details with success", async () => {
   const loadAccountByIdUseCase = new DbLoadAccountById(usersRepository);
   const loadAccountByIdController = new LoadAccountByIdController(loadAccountByIdUseCase);
 
-  const result = await loadAccountByIdController.execute(null, { accountId: account.data?.id });
+  const result = await loadAccountByIdController.execute(undefined, { accountId: account.data?.id });
 
   expect(result.data?.email).toEqual("test@test.com");
 })
@@ -42,7 +42,7 @@ test("Should throw an error if invalid user id", async () => {
   const loadAccountByIdUseCase = new DbLoadAccountById(usersRepository);
   const loadAccountByIdController = new LoadAccountByIdController(loadAccountByIdUseCase);
 
-  const result = await loadAccountByIdController.execute(null, { accountId: "123" });
+  const result = await loadAccountByIdController.execute(undefined, { accountId: "123" });
   
   expect(result.data).toEqual(new UserInvalidError());
 });
