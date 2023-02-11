@@ -3,21 +3,21 @@ import { UsernameInUseError } from "@/data/errors/username-in-use-error"
 import { Hasher } from "@/data/protocols/cryptography/hasher"
 import { Uuid } from "@/data/protocols/cryptography/uuid"
 import { CreateAccountRepository } from "@/data/protocols/repositories/users/create-account-repository"
-import { LoadAccountByEmailRepository } from "@/data/protocols/repositories/users/load-account-by-email-repository"
-import { LoadAccountByUsernameRepository } from "@/data/protocols/repositories/users/load-account-by-username-repository"
 import {
 	CreateAccountUseCase,
 	CreateAccountUseCaseFunction,
 } from "@/domain/usecases/users/create-account"
+import { DbLoadAccountByEmail } from "./load-account-by-email"
+import { DbLoadAccountByUsername } from "./load-account-by-username"
 
 export class DbCreateAccount implements CreateAccountUseCase {
 	constructor(
 		private readonly uuidAdapter: Uuid,
 		private readonly hashGenerator: Hasher,
-		private readonly loadAccountByEmail: LoadAccountByEmailRepository,
-		private readonly loadAccountByUsername: LoadAccountByUsernameRepository,
+		private readonly loadAccountByEmail: DbLoadAccountByEmail,
+		private readonly loadAccountByUsername: DbLoadAccountByUsername,
 		private readonly createAccount: CreateAccountRepository
-	) {}
+	) { }
 
 	create: CreateAccountUseCaseFunction = async (data) => {
 		try {
