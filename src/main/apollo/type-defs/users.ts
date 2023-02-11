@@ -37,6 +37,7 @@ export default gql`
 
 	extend type Mutation {
 		createAccount(input: CreateAccount): User @auth
+		deleteAccount(id: String!): Boolean @auth
 	}
 
 	extend type Query {

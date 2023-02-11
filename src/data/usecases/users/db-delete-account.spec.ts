@@ -6,16 +6,20 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { DbLoadAccountById } from "./load-account-by-id"
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
+import { DbLoadAccountByEmail } from "./load-account-by-email"
+import { DbLoadAccountByUsername } from "./load-account-by-username"
 
 test("Should delete account with success", async () => {
 	const usersRepository = new InMemoryUsersRepository()
 	const uuidAdapter = new UuidAdapter()
 	const bcrypt = new BcryptAdapter(8)
+	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
 		bcrypt,
-		usersRepository,
-		usersRepository,
+		dbLoadAccountByEmail,
+		dbLoadAccountByUsername,
 		usersRepository
 	)
 

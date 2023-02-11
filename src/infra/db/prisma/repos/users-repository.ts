@@ -15,6 +15,8 @@ import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/lo
 import { PrismaHelper } from "../prisma-helper"
 import { LoadAccountsRepository } from "@/data/protocols/repositories/users/load-accounts-repository"
 import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts"
+import { DeleteAccountRepository } from "@/data/protocols/repositories/users/delete-account-repository"
+import { DeleteAccountUseCaseFn } from "@/domain/usecases/users/delete-account"
 
 export class UsersRepository
 	implements
@@ -24,7 +26,8 @@ export class UsersRepository
 		UpdateTokenRepository,
 		LoadAccountByTokenRepository,
 		LoadAccountByIdRepository,
-		LoadAccountsRepository
+		LoadAccountsRepository,
+		DeleteAccountRepository
 {
 	create: CreateAccountUseCaseFunction = async (input) => {
 		const result = await PrismaHelper.getCollection("users").create({
@@ -191,6 +194,14 @@ export class UsersRepository
 				firstName: res?.firstName,
 				lastName: res?.lastName,
 				picture: res?.picture,
+			},
+		}))
+	}
+
+	deleteAccount: DeleteAccountUseCaseFn = async (id) => {
+		return !!(await PrismaHelper.getCollection("users").delete({
+			where: {
+				id,
 			},
 		}))
 	}

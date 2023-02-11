@@ -7,6 +7,8 @@ import { makeCreateAccountValidation } from "@/main/factories/controllers/users/
 import { DbCreateAccount } from "@/data/usecases/users/create-account"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
+import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
+import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 
 test("Should return an empty list of users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
@@ -24,11 +26,13 @@ test("Should return a list with two users", async () => {
 	const bcrypt = new BcryptAdapter(8)
 
 	const dbLoadAccounts = new DbLoadAccounts(usersRepository)
+	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
 		bcrypt,
-		usersRepository,
-		usersRepository,
+		dbLoadAccountByEmail,
+		dbLoadAccountByUsername,
 		usersRepository
 	)
 

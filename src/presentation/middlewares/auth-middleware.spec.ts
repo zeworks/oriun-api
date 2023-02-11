@@ -17,12 +17,18 @@ import { CreateAuthenticationController } from "../controllers/authentication/cr
 import { CreateRoleController } from "../controllers/roles/create-role-controller"
 import { CreateAccountController } from "../controllers/users/create-account-controller"
 import { AuthMiddleware } from "./auth-middleware"
+import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
+import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 
 test("Should have valid accesstoken", async () => {
 	const rolesRepository = new InMemoryRolesRepository()
 	const usersRepository = new InMemoryUsersRepository()
 	const encrypter = new JwtAdapter(DEFAULT_JWT_SECRET)
 	const hashComparer = new BcryptAdapter(12)
+
+	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
+
 	const createAuthUseCase = new DbCreateAuthentication(
 		usersRepository,
 		hashComparer,
@@ -39,8 +45,8 @@ test("Should have valid accesstoken", async () => {
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
 		hasGenerator,
-		usersRepository,
-		usersRepository,
+		dbLoadAccountByEmail,
+		dbLoadAccountByUsername,
 		usersRepository
 	)
 	const createAccount = new CreateAccountController(

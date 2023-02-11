@@ -4,6 +4,8 @@ import { DbLoadAccounts } from "./db-load-accounts"
 import { DbCreateAccount } from "./create-account"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
+import { DbLoadAccountByEmail } from "./load-account-by-email"
+import { DbLoadAccountByUsername } from "./load-account-by-username"
 
 test("Should return an empty list of users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
@@ -18,13 +20,14 @@ test("Should return a list with two users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
 	const uuidAdapter = new UuidAdapter()
 	const hashGenerator = new BcryptAdapter(8)
-
+	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	// 1. create two users
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
 		hashGenerator,
-		usersRepository,
-		usersRepository,
+		dbLoadAccountByEmail,
+		dbLoadAccountByUsername,
 		usersRepository
 	)
 	await dbCreateAccount.create({

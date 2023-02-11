@@ -9,16 +9,20 @@ import { MissingParamError } from "@/presentation/errors/missing-param-error"
 import { expect, test } from "vitest"
 import { CreateAccountController } from "./create-account-controller"
 import { LoadAccountByIdController } from "./load-account-by-id-controller"
+import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
+import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 
 test("Should load the account details with success", async () => {
 	const usersRepository = new InMemoryUsersRepository()
 	const uuidAdapter = new UuidAdapter()
 	const encrypter = new BcryptAdapter(12)
+	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const createAccountDb = new DbCreateAccount(
 		uuidAdapter,
 		encrypter,
-		usersRepository,
-		usersRepository,
+		dbLoadAccountByEmail,
+		dbLoadAccountByUsername,
 		usersRepository
 	)
 	const createAccountController = new CreateAccountController(
