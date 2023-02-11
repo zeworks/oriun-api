@@ -1,5 +1,5 @@
-import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts";
+import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts"
 
 export interface LoadAccountsRepository {
-  loadAccounts: LoadAccountsUseCaseFunction;
+	loadAccounts: LoadAccountsUseCaseFunction
 }

@@ -1,11 +1,13 @@
-import { ContactsEntity } from "@/domain/entities/contacts";
+import { ContactsEntity } from "@/domain/entities/contacts"
 
 export interface LoadContactByIdUseCase {
-  loadById: LoadContactByIdUseCaseFunction
+	loadById: LoadContactByIdUseCaseFunction
 }
 
-export type LoadContactByIdUseCaseFunction = (id: string) => Promise<LoadContactByIdUseCase.Result>;
+export type LoadContactByIdUseCaseFunction = (
+	id: string
+) => Promise<LoadContactByIdUseCase.Result>
 
 export namespace LoadContactByIdUseCase {
-  export type Result = ContactsEntity | null;
+	export type Result = ContactsEntity | null
 }

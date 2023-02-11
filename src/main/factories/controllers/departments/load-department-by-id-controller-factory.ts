@@ -4,5 +4,8 @@ import { makeLoadDepartmentByIdUseCase } from "../../usecases/departments/load-d
 import { makeLoadDepartmentByIdValidation } from "./load-department-by-id-controller-validation"
 
 export const makeLoadDepartmentByIdController = (): Controller => {
-  return new LoadDepartmentByIdController(makeLoadDepartmentByIdValidation(), makeLoadDepartmentByIdUseCase())
+	return new LoadDepartmentByIdController(
+		makeLoadDepartmentByIdValidation(),
+		makeLoadDepartmentByIdUseCase()
+	)
 }

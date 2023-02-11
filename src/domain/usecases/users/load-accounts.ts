@@ -1,11 +1,12 @@
-import { UsersEntity } from "@/domain/entities/users";
+import { UsersEntity } from "@/domain/entities/users"
 
-export type LoadAccountsUseCaseFunction = () => Promise<LoadAccountsUseCase.Result>;
+export type LoadAccountsUseCaseFunction =
+	() => Promise<LoadAccountsUseCase.Result>
 
 export interface LoadAccountsUseCase {
-  loadAccounts: LoadAccountsUseCaseFunction;
+	loadAccounts: LoadAccountsUseCaseFunction
 }
 
 export namespace LoadAccountsUseCase {
-  export type Result = Array<UsersEntity>
+	export type Result = Array<UsersEntity>
 }

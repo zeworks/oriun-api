@@ -1,13 +1,14 @@
-
-export type LoadAccountByUsernameUseCaseFunction = (username: string) => Promise<LoadAccountByUsernameUseCase.Result>
+export type LoadAccountByUsernameUseCaseFunction = (
+	username: string
+) => Promise<LoadAccountByUsernameUseCase.Result>
 
 export interface LoadAccountByUsernameUseCase {
-  loadByUsername: LoadAccountByUsernameUseCaseFunction
+	loadByUsername: LoadAccountByUsernameUseCaseFunction
 }
 
 export namespace LoadAccountByUsernameUseCase {
-  export type Result = {
-    id: string;
-    username: string;
-  } | null;
+	export type Result = {
+		id: string
+		username: string
+	} | null
 }

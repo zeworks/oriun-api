@@ -1,15 +1,17 @@
-import { CompaniesEntity } from "@/domain/entities/companies";
+import { CompaniesEntity } from "@/domain/entities/companies"
 
 export interface UpdateCompanyUseCase {
-  update: UpdateCompanyUseCaseFunction
+	update: UpdateCompanyUseCaseFunction
 }
 
-export type UpdateCompanyUseCaseFunction = (input: UpdateCompanyUseCase.Params) => Promise<UpdateCompanyUseCase.Result>;
+export type UpdateCompanyUseCaseFunction = (
+	input: UpdateCompanyUseCase.Params
+) => Promise<UpdateCompanyUseCase.Result>
 
 export namespace UpdateCompanyUseCase {
-  export type Params = Partial<CompaniesEntity> & {
-    id: string;
-  };
+	export type Params = Partial<CompaniesEntity> & {
+		id: string
+	}
 
-  export type Result = CompaniesEntity | null;
+	export type Result = CompaniesEntity | null
 }

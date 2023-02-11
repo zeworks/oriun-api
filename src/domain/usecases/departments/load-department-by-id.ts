@@ -1,11 +1,13 @@
-import { DepartmentsEntity } from "@/domain/entities/departments";
+import { DepartmentsEntity } from "@/domain/entities/departments"
 
 export interface LoadDepartmentByIdUseCase {
-  loadById: LoadDepartmentByIdUseCaseFunction
+	loadById: LoadDepartmentByIdUseCaseFunction
 }
 
 export namespace LoadDepartmentByIdUseCase {
-  export type Result = DepartmentsEntity | null;
+	export type Result = DepartmentsEntity | null
 }
 
-export type LoadDepartmentByIdUseCaseFunction = (id: string) => Promise<LoadDepartmentByIdUseCase.Result>;
+export type LoadDepartmentByIdUseCaseFunction = (
+	id: string
+) => Promise<LoadDepartmentByIdUseCase.Result>

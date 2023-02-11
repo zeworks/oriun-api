@@ -1,9 +1,11 @@
 export interface DeleteAccountUseCase {
-  delete: DeleteAccountUseCaseFn
+	delete: DeleteAccountUseCaseFn
 }
 
-export type DeleteAccountUseCaseFn = (user_id: string) => Promise<DeleteAccountUseCase.Result>
+export type DeleteAccountUseCaseFn = (
+	user_id: string
+) => Promise<DeleteAccountUseCase.Result>
 
 export namespace DeleteAccountUseCase {
-  export type Result = boolean | null;
+	export type Result = boolean | null
 }

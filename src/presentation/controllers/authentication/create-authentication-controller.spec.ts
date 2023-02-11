@@ -15,107 +15,115 @@ import { expect, test } from "vitest"
 import { CreateAccountController } from "../users/create-account-controller"
 import { CreateAuthenticationController } from "./create-authentication-controller"
 
-const usersRepository = new InMemoryUsersRepository();
+const usersRepository = new InMemoryUsersRepository()
 
 const makeDbCreateAuthenticationUseCase = () => {
-  const loadByEmail = new DbLoadAccountByEmail(usersRepository);
-  const encrypter = new JwtAdapter(DEFAULT_JWT_SECRET);
-  const hashComparer = new BcryptAdapter(12);
-  return new DbCreateAuthentication(loadByEmail, hashComparer, encrypter, usersRepository)
+	const loadByEmail = new DbLoadAccountByEmail(usersRepository)
+	const encrypter = new JwtAdapter(DEFAULT_JWT_SECRET)
+	const hashComparer = new BcryptAdapter(12)
+	return new DbCreateAuthentication(
+		loadByEmail,
+		hashComparer,
+		encrypter,
+		usersRepository
+	)
 }
 
 const makeCreateAccountController = () => {
-  const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
-  const loadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
-  const uuidAdapter = new UuidAdapter();
-  const encrypter = new BcryptAdapter(12);
-  const createAccount = new DbCreateAccount(uuidAdapter, encrypter, loadAccountByEmail, loadAccountByUsername, usersRepository);
+	const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
+	const loadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
+	const uuidAdapter = new UuidAdapter()
+	const encrypter = new BcryptAdapter(12)
+	const createAccount = new DbCreateAccount(
+		uuidAdapter,
+		encrypter,
+		loadAccountByEmail,
+		loadAccountByUsername,
+		usersRepository
+	)
 
-  return new CreateAccountController(
-    makeCreateAccountValidation(),
-    createAccount
-  )
+	return new CreateAccountController(
+		makeCreateAccountValidation(),
+		createAccount
+	)
 }
 
-test('Should create authentication with success', async () => {
+test("Should create authentication with success", async () => {
+	const user = await makeCreateAccountController().execute({
+		input: {
+			email: "johndoe@mail.com",
+			username: "johndoe",
+			password: "usernovo",
+			status: true,
+			profile: {
+				firstName: "John",
+			},
+		},
+	})
 
-  const user = await makeCreateAccountController().execute({
-    input: {
-      email: "johndoe@mail.com",
-      username: "johndoe",
-      password: "usernovo",
-      status: true,
-      profile: {
-        firstName: "John"
-      }
-    }
-  });
+	const { execute: createAuthentication } = new CreateAuthenticationController(
+		makeCreateAuthenticationValidation(),
+		makeDbCreateAuthenticationUseCase()
+	)
 
-  const { execute: createAuthentication } = new CreateAuthenticationController(
-    makeCreateAuthenticationValidation(),
-    makeDbCreateAuthenticationUseCase()
-  );
+	if (user.data) {
+		const auth = await createAuthentication({
+			email: user.data?.email,
+			password: "usernovo",
+		})
 
-  if (user.data) {
-    const auth = await createAuthentication({
-      email: user.data?.email,
-      password: "usernovo"
-    })
-
-    expect(auth.data?.accessToken).not.toBe(undefined)
-  }
+		expect(auth.data?.accessToken).not.toBe(undefined)
+	}
 })
 
-test('Should not create authentication if user is not active (status as false)', async () => {
+test("Should not create authentication if user is not active (status as false)", async () => {
+	const user = await makeCreateAccountController().execute({
+		input: {
+			email: "johndo2e@mail.com",
+			username: "johndoe2",
+			password: "usernovo",
+			profile: {
+				firstName: "John",
+			},
+		},
+	})
 
-  const user = await makeCreateAccountController().execute({
-    input: {
-      email: "johndo2e@mail.com",
-      username: "johndoe2",
-      password: "usernovo",
-      profile: {
-        firstName: "John"
-      }
-    }
-  });
+	const { execute: createAuthentication } = new CreateAuthenticationController(
+		makeCreateAuthenticationValidation(),
+		makeDbCreateAuthenticationUseCase()
+	)
 
-  const { execute: createAuthentication } = new CreateAuthenticationController(
-    makeCreateAuthenticationValidation(),
-    makeDbCreateAuthenticationUseCase()
-  );
-
-  if (user.data) {
-    const auth = await createAuthentication({
-      email: user.data?.email,
-      password: "usernovo"
-    })
-    expect(auth.data).toEqual(new UserInvalidError())
-  }
+	if (user.data) {
+		const auth = await createAuthentication({
+			email: user.data?.email,
+			password: "usernovo",
+		})
+		expect(auth.data).toEqual(new UserInvalidError())
+	}
 })
 
-test('Should not create authentication if user password is invalid', async () => {
+test("Should not create authentication if user password is invalid", async () => {
+	const user = await makeCreateAccountController().execute({
+		input: {
+			email: "johndo2e2q@mail.com",
+			username: "johndoe2 22",
+			password: "usernovo",
+			profile: {
+				firstName: "John",
+			},
+		},
+	})
 
-  const user = await makeCreateAccountController().execute({
-    input: {
-      email: "johndo2e2q@mail.com",
-      username: "johndoe2 22",
-      password: "usernovo",
-      profile: {
-        firstName: "John"
-      }
-    }
-  });
+	const { execute: createAuthentication } = new CreateAuthenticationController(
+		makeCreateAuthenticationValidation(),
+		makeDbCreateAuthenticationUseCase()
+	)
 
-  const { execute: createAuthentication } = new CreateAuthenticationController(
-    makeCreateAuthenticationValidation(),
-    makeDbCreateAuthenticationUseCase()
-  );
-
-  if (user.data?.email) {
-    const auth = await createAuthentication({
-      email: user.data?.email,
-      password: "usernovoq"
-    })
-    expect(auth.data).toEqual(new UserInvalidError())
-  }
+	if (user.data?.email) {
+		const auth = await createAuthentication({
+			email: user.data?.email,
+			password: "usernovoq",
+		})
+		expect(auth.data).toEqual(new UserInvalidError())
+	}
 })

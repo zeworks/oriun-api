@@ -3,9 +3,9 @@ import { RequiredFieldValidation } from "@/validation/validators/required-field-
 import { ValidationComposite } from "@/validation/validators/validation-composite"
 
 export const makeLoadRoleByKeyValidation = (): ValidationComposite => {
-  const validations: Validation[] = []
-  for (const field of ['key']) {
-    validations.push(new RequiredFieldValidation(field))
-  }
-  return new ValidationComposite(validations)
+	const validations: Validation[] = []
+	for (const field of ["key"]) {
+		validations.push(new RequiredFieldValidation(field))
+	}
+	return new ValidationComposite(validations)
 }

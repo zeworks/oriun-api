@@ -1,5 +1,5 @@
-import { LoadDepartmentsUseCaseFunction } from "@/domain/usecases/departments/load-departments";
+import { LoadDepartmentsUseCaseFunction } from "@/domain/usecases/departments/load-departments"
 
 export interface LoadDepartmentsRepository {
-  loadDepartments: LoadDepartmentsUseCaseFunction
+	loadDepartments: LoadDepartmentsUseCaseFunction
 }

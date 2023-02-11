@@ -1,42 +1,44 @@
-import { DepartmentsEntity } from "@/domain/entities/departments";
-import { RolesEntity } from "@/domain/entities/roles";
+import { DepartmentsEntity } from "@/domain/entities/departments"
+import { RolesEntity } from "@/domain/entities/roles"
 
-export type CreateAccountUseCaseFunction = (input: CreateAccountUseCase.Params) => Promise<CreateAccountUseCase.Result>;
+export type CreateAccountUseCaseFunction = (
+	input: CreateAccountUseCase.Params
+) => Promise<CreateAccountUseCase.Result>
 
 export interface CreateAccountUseCase {
-  create: CreateAccountUseCaseFunction;
+	create: CreateAccountUseCaseFunction
 }
 
 export namespace CreateAccountUseCase {
-  export type Params = {
-    id?: string;
-    username: string;
-    email: string;
-    status?: boolean;
-    password?: string;
-    identificationNumber?: string;
-    role?: string;
-    profile: {
-      firstName: string;
-      picture?: string;
-      lastName?: string;
-    },
-    department?: string;
-  }
+	export type Params = {
+		id?: string
+		username: string
+		email: string
+		status?: boolean
+		password?: string
+		identificationNumber?: string
+		role?: string
+		profile: {
+			firstName: string
+			picture?: string
+			lastName?: string
+		}
+		department?: string
+	}
 
-  export type Result = {
-    id: string;
-    username: string;
-    email: string;
-    status?: boolean;
-    identificationNumber?: string | null;
-    role?: RolesEntity | null;
-    password?: string | null;
-    profile: {
-      firstName: string;
-      lastName?: string | null;
-      picture?: string | null;
-    },
-    department?: DepartmentsEntity | null;
-  } | null;
+	export type Result = {
+		id: string
+		username: string
+		email: string
+		status?: boolean
+		identificationNumber?: string | null
+		role?: RolesEntity | null
+		password?: string | null
+		profile: {
+			firstName: string
+			lastName?: string | null
+			picture?: string | null
+		}
+		department?: DepartmentsEntity | null
+	} | null
 }

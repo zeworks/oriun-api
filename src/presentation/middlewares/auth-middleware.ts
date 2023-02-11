@@ -1,46 +1,50 @@
-import { RolesEntity } from "@/domain/entities/roles";
-import { LoadAccountByTokenUseCase } from "@/domain/usecases/users/load-account-by-token";
-import { MissingParamError } from "../errors/missing-param-error";
-import { UnauthorizedError } from "../errors/unauthorized-error";
-import { badRequest, forbidden, ok, serverError } from "../helpers/http";
-import { HttpResponse } from "../protocols/http";
-import { Middleware } from "../protocols/middleware";
-import { Validation } from "../protocols/validation";
+import { RolesEntity } from "@/domain/entities/roles"
+import { LoadAccountByTokenUseCase } from "@/domain/usecases/users/load-account-by-token"
+import { MissingParamError } from "../errors/missing-param-error"
+import { UnauthorizedError } from "../errors/unauthorized-error"
+import { badRequest, forbidden, ok, serverError } from "../helpers/http"
+import { HttpResponse } from "../protocols/http"
+import { Middleware } from "../protocols/middleware"
+import { Validation } from "../protocols/validation"
 
 export class AuthMiddleware implements Middleware {
-  constructor(
-    private readonly loadAccountByToken: LoadAccountByTokenUseCase,
-    private readonly validation: Validation,
-  ) { }
-  
-  async handle(request: AuthMiddleware.Params): Promise<HttpResponse<AuthMiddleware.Result>> {
-    const errors = this.validation.validate(request);
+	constructor(
+		private readonly loadAccountByToken: LoadAccountByTokenUseCase,
+		private readonly validation: Validation
+	) {}
 
-    if (errors) return badRequest(new MissingParamError("autorization header"));
+	async handle(
+		request: AuthMiddleware.Params
+	): Promise<HttpResponse<AuthMiddleware.Result>> {
+		const errors = this.validation.validate(request)
 
-    try {
-      const account = await this.loadAccountByToken.loadToken(request.accessToken);
+		if (errors) return badRequest(new MissingParamError("autorization header"))
 
-      if (account)
-        return ok({
-          accountId: account.id,
-          accountRole: account.role
-        });
-      
-      return forbidden(new UnauthorizedError());
-    } catch (error: any) {
-      return serverError(error)
-    }
-  }
+		try {
+			const account = await this.loadAccountByToken.loadToken(
+				request.accessToken
+			)
+
+			if (account)
+				return ok({
+					accountId: account.id,
+					accountRole: account.role,
+				})
+
+			return forbidden(new UnauthorizedError())
+		} catch (error: any) {
+			return serverError(error)
+		}
+	}
 }
 
 export namespace AuthMiddleware {
-  export type Params = {
-    accessToken: string;
-  }
-  
-  export type Result = {
-    accountId: string;
-    accountRole: RolesEntity;
-  } | null
+	export type Params = {
+		accessToken: string
+	}
+
+	export type Result = {
+		accountId: string
+		accountRole: RolesEntity
+	} | null
 }
