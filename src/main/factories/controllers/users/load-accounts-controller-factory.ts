@@ -2,5 +2,5 @@ import { LoadAccountsController } from "@/presentation/controllers/users/load-ac
 import { makeDbLoadAccounts } from "../../usecases/users/load-accounts-usecase-factory"
 
 export const makeLoadAccountsController = () => {
-  return new LoadAccountsController(makeDbLoadAccounts())
+	return new LoadAccountsController(makeDbLoadAccounts())
 }

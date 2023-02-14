@@ -1,28 +1,30 @@
-import { AccessTokenInvalidError } from "@/data/errors/accessToken-invalid-error";
-import { Decrypter } from "@/data/protocols/cryptography/decrypter";
-import { LoadAccountByTokenRepository } from "@/data/protocols/repositories/users/load-account-by-token-repository";
-import { LoadAccountByTokenUseCase, LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
+import { AccessTokenInvalidError } from "@/data/errors/accessToken-invalid-error"
+import { Decrypter } from "@/data/protocols/cryptography/decrypter"
+import { LoadAccountByTokenRepository } from "@/data/protocols/repositories/users/load-account-by-token-repository"
+import {
+	LoadAccountByTokenUseCase,
+	LoadAccountByTokenUseCaseFunction,
+} from "@/domain/usecases/users/load-account-by-token"
 
 export class DbLoadAccountByToken implements LoadAccountByTokenUseCase {
+	constructor(
+		private readonly decrypter: Decrypter,
+		private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
+	) {}
 
-  constructor(
-    private readonly decrypter: Decrypter,
-    private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
-  ) { }
+	loadToken: LoadAccountByTokenUseCaseFunction = async (accessToken) => {
+		try {
+			const token = await this.decrypter.decrypt(accessToken)
 
-  loadToken: LoadAccountByTokenUseCaseFunction = async (accessToken) => {
+			if (!token) throw new AccessTokenInvalidError()
 
-    try {
-      const token = await this.decrypter.decrypt(accessToken);
+			const account = await this.loadAccountByTokenRepository.loadToken(
+				accessToken
+			)
 
-      if (!token)
-        throw new AccessTokenInvalidError()
-
-      const account = await this.loadAccountByTokenRepository.loadToken(accessToken);
-
-      return account;
-    } catch (error) {
-      throw error;
-    }
-  };
+			return account
+		} catch (error) {
+			throw error
+		}
+	}
 }

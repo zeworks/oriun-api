@@ -1,5 +1,5 @@
-import { DeleteCompanyUseCaseFunction } from "@/domain/usecases/companies/delete-company";
+import { DeleteCompanyUseCaseFunction } from "@/domain/usecases/companies/delete-company"
 
 export interface DeleteCompanyRepository {
-  delete: DeleteCompanyUseCaseFunction
+	delete: DeleteCompanyUseCaseFunction
 }

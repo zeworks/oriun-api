@@ -1,9 +1,11 @@
 export interface CheckRoleByKeyUseCase {
-  checkByKey: CheckRoleByKeyUseCaseFunction
+	checkByKey: CheckRoleByKeyUseCaseFunction
 }
 
-export type CheckRoleByKeyUseCaseFunction = (key: string) => Promise<CheckRoleByKeyUseCase.Result>;
+export type CheckRoleByKeyUseCaseFunction = (
+	key: string
+) => Promise<CheckRoleByKeyUseCase.Result>
 
 export namespace CheckRoleByKeyUseCase {
-  export type Result = boolean;
+	export type Result = boolean
 }

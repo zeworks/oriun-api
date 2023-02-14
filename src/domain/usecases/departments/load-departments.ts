@@ -1,14 +1,16 @@
-import { DepartmentsEntity } from "@/domain/entities/departments";
+import { DepartmentsEntity } from "@/domain/entities/departments"
 
 export interface LoadDepartmentsUseCase {
-  loadDepartments: LoadDepartmentsUseCaseFunction
+	loadDepartments: LoadDepartmentsUseCaseFunction
 }
 
 export namespace LoadDepartmentsUseCase {
-  export type Params = {
-    status?: boolean;
-  }
-  export type Result = DepartmentsEntity[];
+	export type Params = {
+		status?: boolean
+	}
+	export type Result = DepartmentsEntity[]
 }
 
-export type LoadDepartmentsUseCaseFunction = (params?: LoadDepartmentsUseCase.Params) => Promise<LoadDepartmentsUseCase.Result>;
+export type LoadDepartmentsUseCaseFunction = (
+	params?: LoadDepartmentsUseCase.Params
+) => Promise<LoadDepartmentsUseCase.Result>

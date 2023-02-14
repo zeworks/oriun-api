@@ -1,3 +1,3 @@
 export type Validation = {
-  validate: (input: any) => Error
+	validate: (input: any) => Error
 }

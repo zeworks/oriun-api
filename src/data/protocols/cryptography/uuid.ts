@@ -1,3 +1,3 @@
 export interface Uuid {
-  generate: () => Promise<string>;
+	generate: () => Promise<string>
 }

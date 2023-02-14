@@ -3,8 +3,8 @@ import { makeDbCreateAuthenticationUseCase } from "../../usecases/authentication
 import { makeCreateAuthenticationValidation } from "./create-authentication-controller-validation"
 
 export const makeCreateAuthenticationController = () => {
-  return new CreateAuthenticationController(
-    makeCreateAuthenticationValidation(),
-    makeDbCreateAuthenticationUseCase()
-  )
+	return new CreateAuthenticationController(
+		makeCreateAuthenticationValidation(),
+		makeDbCreateAuthenticationUseCase()
+	)
 }

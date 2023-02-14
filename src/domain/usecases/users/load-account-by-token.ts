@@ -1,11 +1,13 @@
-import { UsersEntity } from "@/domain/entities/users";
+import { UsersEntity } from "@/domain/entities/users"
 
 export interface LoadAccountByTokenUseCase {
-  loadToken: LoadAccountByTokenUseCaseFunction
+	loadToken: LoadAccountByTokenUseCaseFunction
 }
 
-export type LoadAccountByTokenUseCaseFunction = (token: string) => Promise<LoadAccountByTokenUseCase.Result>;
+export type LoadAccountByTokenUseCaseFunction = (
+	token: string
+) => Promise<LoadAccountByTokenUseCase.Result>
 
 export namespace LoadAccountByTokenUseCase {
-  export type Result = UsersEntity | null;
+	export type Result = UsersEntity | null
 }

@@ -1,186 +1,208 @@
-import { CreateAccountRepository } from "@/data/protocols/repositories/users/create-account-repository";
-import { LoadAccountByEmailRepository } from "@/data/protocols/repositories/users/load-account-by-email-repository";
-import { LoadAccountByIdRepository } from "@/data/protocols/repositories/users/load-account-by-id-repository";
-import { LoadAccountByTokenRepository } from "@/data/protocols/repositories/users/load-account-by-token-repository";
-import { LoadAccountByUsernameRepository } from "@/data/protocols/repositories/users/load-account-by-username-repository";
-import { UpdateTokenRepository, UpdateTokenRepositoryFunction } from "@/data/protocols/repositories/users/update-token-repository";
-import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account";
-import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email";
-import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id";
-import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token";
-import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username";
-import { PrismaHelper } from "../prisma-helper";
-import { LoadAccountsRepository } from "@/data/protocols/repositories/users/load-accounts-repository";
-import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts";
+import { CreateAccountRepository } from "@/data/protocols/repositories/users/create-account-repository"
+import { LoadAccountByEmailRepository } from "@/data/protocols/repositories/users/load-account-by-email-repository"
+import { LoadAccountByIdRepository } from "@/data/protocols/repositories/users/load-account-by-id-repository"
+import { LoadAccountByTokenRepository } from "@/data/protocols/repositories/users/load-account-by-token-repository"
+import { LoadAccountByUsernameRepository } from "@/data/protocols/repositories/users/load-account-by-username-repository"
+import {
+	UpdateTokenRepository,
+	UpdateTokenRepositoryFunction,
+} from "@/data/protocols/repositories/users/update-token-repository"
+import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account"
+import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email"
+import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id"
+import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token"
+import { LoadAccountByUsernameUseCaseFunction } from "@/domain/usecases/users/load-account-by-username"
+import { PrismaHelper } from "../prisma-helper"
+import { LoadAccountsRepository } from "@/data/protocols/repositories/users/load-accounts-repository"
+import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts"
+import { DeleteAccountRepository } from "@/data/protocols/repositories/users/delete-account-repository"
+import { DeleteAccountUseCaseFn } from "@/domain/usecases/users/delete-account"
 
+export class UsersRepository
+	implements
+		LoadAccountByEmailRepository,
+		CreateAccountRepository,
+		LoadAccountByUsernameRepository,
+		UpdateTokenRepository,
+		LoadAccountByTokenRepository,
+		LoadAccountByIdRepository,
+		LoadAccountsRepository,
+		DeleteAccountRepository
+{
+	create: CreateAccountUseCaseFunction = async (input) => {
+		const result = await PrismaHelper.getCollection("users").create({
+			data: {
+				email: input.email,
+				id: input.id!,
+				firstName: input.profile.firstName,
+				password: input.password,
+				username: input.username,
+				lastName: input.profile.lastName,
+				status: input.status,
+				picture: input.profile.picture,
+				identificationNumber: input.identificationNumber,
+				department: input.department
+					? {
+							connect: {
+								id: input.department,
+							},
+					  }
+					: undefined,
+				role: input.role
+					? {
+							connect: {
+								id: input.role,
+							},
+					  }
+					: undefined,
+			},
+			include: {
+				department: true,
+				role: {
+					include: {
+						permissions: true,
+					},
+				},
+			},
+		})
 
-export class UsersRepository implements LoadAccountByEmailRepository, CreateAccountRepository, LoadAccountByUsernameRepository, UpdateTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository, LoadAccountsRepository {
-  
-  create: CreateAccountUseCaseFunction = async (input) => {
-    
-    const result = await PrismaHelper.getCollection("users").create({
-      data: {
-        email: input.email,
-        id: input.id!,
-        firstName: input.profile.firstName,
-        password: input.password,
-        username: input.username,
-        lastName: input.profile.lastName,
-        status: input.status,
-        picture: input.profile.picture,
-        identificationNumber: input.identificationNumber,
-        department: input.department ? {
-          connect: {
-            id: input.department
-          }
-        } : undefined,
-        role: input.role ? {
-          connect: {
-            id: input.role
-          }
-        } : undefined
-      },
-      include: {
-        department: true,
-        role: {
-          include: {
-            permissions: true
-          }
-        }
-      }
-    })
+		if (result)
+			return {
+				id: result.id,
+				email: result.email,
+				password: result.password,
+				username: result.username,
+				roleId: result.role,
+				status: result.status,
+				identificationNumber: result.identificationNumber,
+				profile: {
+					firstName: result.firstName,
+					lastName: result.lastName,
+					picture: result.picture,
+				},
+				role: result.role,
+				department: result.department,
+				departmentId: result.department,
+			}
 
-    if (result)
-      return {
-        id: result.id,
-        email: result.email,
-        password: result.password,
-        username: result.username,
-        roleId: result.role,
-        status: result.status,
-        identificationNumber: result.identificationNumber,
-        profile: {
-          firstName: result.firstName,
-          lastName: result.lastName,
-          picture: result.picture
-        },
-        role: result.role,
-        department: result.department,
-        departmentId: result.department
-      }
+		return null
+	}
+	loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
+		return PrismaHelper.getCollection("users").findFirst({
+			where: {
+				email,
+			},
+		})
+	}
 
-    return null
+	loadById: LoadAccountByIdUseCaseFunction = async (id) => {
+		const result = await PrismaHelper.getCollection("users").findFirst({
+			where: {
+				id,
+			},
+			include: {
+				department: true,
+				role: {
+					include: {
+						permissions: true,
+					},
+				},
+			},
+		})
 
-  };
-  loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-    return PrismaHelper.getCollection("users").findFirst({
-      where: {
-        email
-      },
-    })
-  }
+		if (!result) return null
 
-  loadById: LoadAccountByIdUseCaseFunction = async (id) => {
-    const result = await PrismaHelper.getCollection("users").findFirst({
-      where: {
-        id
-      },
-      include: {
-        department: true,
-        role: {
-          include: {
-            permissions: true
-          }
-        }
-      }
-    })
+		return {
+			...result,
+			profile: {
+				firstName: result.firstName,
+				lastName: result.lastName,
+				picture: result.picture,
+			},
+		}
+	}
 
-    if (!result)
-      return null
+	loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
+		return await PrismaHelper.getCollection("users").findFirst({
+			where: {
+				username,
+			},
+		})
+	}
 
-    return {
-      ...result,
-      profile: {
-        firstName: result.firstName,
-        lastName: result.lastName,
-        picture: result.picture
-      }
-    }
-  }
+	updateToken: UpdateTokenRepositoryFunction = async (user_id, token) => {
+		const result = await PrismaHelper.getCollection("users").update({
+			data: {
+				accessToken: token,
+			},
+			where: {
+				id: user_id,
+			},
+		})
 
-  loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
-    return await PrismaHelper.getCollection("users").findFirst({
-      where: {
-        username
-      }
-    })
-  }
+		if (result?.accessToken)
+			return {
+				accessToken: result.accessToken,
+			}
 
-  updateToken: UpdateTokenRepositoryFunction = async (user_id, token) => {
-    const result = await PrismaHelper.getCollection("users").update({
-      data: {
-        accessToken: token
-      },
-      where: {
-        id: user_id
-      }
-    })
+		return null
+	}
 
-    if (result?.accessToken)
-      return {
-        accessToken: result.accessToken
-      }
+	loadToken: LoadAccountByTokenUseCaseFunction = async (token) => {
+		const account = await PrismaHelper.getCollection("users").findFirst({
+			where: {
+				accessToken: token,
+			},
+			include: {
+				department: true,
+				role: {
+					include: {
+						permissions: true,
+					},
+				},
+			},
+		})
 
-    return null
-  }
+		if (account)
+			return {
+				...account,
+				profile: {
+					firstName: account?.firstName,
+					lastName: account?.lastName,
+					picture: account?.picture,
+				},
+			}
 
-  loadToken: LoadAccountByTokenUseCaseFunction = async (token) => {
-    const account = await PrismaHelper.getCollection("users").findFirst({
-      where: {
-        accessToken: token,
-      },
-      include: {
-        department: true,
-        role: {
-          include: {
-            permissions: true
-          }
-        }
-      }
-    })
+		return null
+	}
 
-    if (account)
-      return {
-        ...account,
-        profile: {
-          firstName: account?.firstName,
-          lastName: account?.lastName,
-          picture: account?.picture,
-        }
-      }
-    
-    return null
-  }
+	loadAccounts: LoadAccountsUseCaseFunction = async () => {
+		const result = await PrismaHelper.getCollection("users").findMany({
+			include: {
+				department: true,
+				role: {
+					include: {
+						permissions: true,
+					},
+				},
+			},
+		})
 
-  loadAccounts: LoadAccountsUseCaseFunction = async () => {
-    const result = await PrismaHelper.getCollection("users").findMany({
-      include: {
-        department: true,
-        role: {
-          include: {
-            permissions: true
-          }
-        }
-      }
-    })
+		return result.map((res) => ({
+			...res,
+			profile: {
+				firstName: res?.firstName,
+				lastName: res?.lastName,
+				picture: res?.picture,
+			},
+		}))
+	}
 
-    return result.map(res => ({
-      ...res,
-      profile: {
-        firstName: res?.firstName,
-        lastName: res?.lastName,
-        picture: res?.picture
-      }
-    }))
-  }
+	deleteAccount: DeleteAccountUseCaseFn = async (id) => {
+		return !!(await PrismaHelper.getCollection("users").delete({
+			where: {
+				id,
+			},
+		}))
+	}
 }

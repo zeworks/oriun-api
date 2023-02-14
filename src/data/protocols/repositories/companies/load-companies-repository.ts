@@ -1,5 +1,5 @@
-import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies";
+import { LoadCompaniesUseCaseFunction } from "@/domain/usecases/companies/load-companies"
 
 export interface LoadCompaniesRepository {
-  loadCompanies: LoadCompaniesUseCaseFunction
+	loadCompanies: LoadCompaniesUseCaseFunction
 }

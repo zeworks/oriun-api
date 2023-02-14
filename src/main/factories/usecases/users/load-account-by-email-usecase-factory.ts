@@ -2,6 +2,6 @@ import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-emai
 import { UsersRepository } from "@/infra/db/prisma/repos/users-repository"
 
 export const makeLoadAccountByEmail = () => {
-  const usersRepository = new UsersRepository();
-  return new DbLoadAccountByEmail(usersRepository);
+	const usersRepository = new UsersRepository()
+	return new DbLoadAccountByEmail(usersRepository)
 }
