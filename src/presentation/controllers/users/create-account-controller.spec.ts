@@ -8,7 +8,6 @@ import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-u
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
-import { v4 } from "uuid"
 import { CreateAccountController } from "./create-account-controller"
 
 test("Should create account with success", async () => {
@@ -43,6 +42,7 @@ test("Should create account with success", async () => {
 
 	expect(account.data?.username).toEqual("johndoe")
 	expect(account.data?.email).toEqual("johndoe@mail.com")
+	expect(account.data?.password).not.toBeNull()
 })
 
 test("Should not create account if email exists", async () => {

@@ -33,7 +33,7 @@ export class DbCreateAccount implements CreateAccountUseCase {
 
 			const id = await this.uuidAdapter.generate()
 
-			let password = ""
+			let password = await this.hashGenerator.hash(data.username)
 			if (data.password) password = await this.hashGenerator.hash(data.password)
 
 			const result = await this.createAccount.create({
