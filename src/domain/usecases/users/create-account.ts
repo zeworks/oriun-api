@@ -11,7 +11,6 @@ export interface CreateAccountUseCase {
 
 export namespace CreateAccountUseCase {
 	export type Params = {
-		id?: string
 		username: string
 		email: string
 		status?: boolean

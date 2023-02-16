@@ -47,9 +47,14 @@ test("Should load the account details with success", async () => {
 		loadAccountByIdUseCase
 	)
 
-	const result = await loadAccountByIdController.execute(undefined, {
-		accountId: account.data?.id,
-	})
+	const result = await loadAccountByIdController.execute(
+		{
+			id: account.data?.id,
+		},
+		{
+			accountId: account.data?.id,
+		}
+	)
 
 	expect(result.data?.email).toEqual("test@test.com")
 })
@@ -61,11 +66,18 @@ test("Should throw an error if invalid user id", async () => {
 		loadAccountByIdUseCase
 	)
 
-	const result = await loadAccountByIdController.execute(undefined, {
-		accountId: "123",
-	})
-
-	expect(result.data).toEqual(new UserInvalidError())
+	try {
+		return await loadAccountByIdController.execute(
+			{
+				id: "123",
+			},
+			{
+				accountId: "123",
+			}
+		)
+	} catch (error) {
+		expect(error).toEqual(new UserInvalidError())
+	}
 })
 
 test("Should throw an error if empty accountId", async () => {

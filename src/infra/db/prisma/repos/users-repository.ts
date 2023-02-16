@@ -7,7 +7,6 @@ import {
 	UpdateTokenRepository,
 	UpdateTokenRepositoryFunction,
 } from "@/data/protocols/repositories/users/update-token-repository"
-import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account"
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email"
 import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id"
 import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token"
@@ -17,6 +16,8 @@ import { LoadAccountsRepository } from "@/data/protocols/repositories/users/load
 import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts"
 import { DeleteAccountRepository } from "@/data/protocols/repositories/users/delete-account-repository"
 import { DeleteAccountUseCaseFn } from "@/domain/usecases/users/delete-account"
+import { UpdateAccountRepository } from "@/data/protocols/repositories/users/update-account-repository"
+import { UpdateAccountUseCase } from "@/domain/usecases/users/update-account"
 
 export class UsersRepository
 	implements
@@ -27,9 +28,10 @@ export class UsersRepository
 		LoadAccountByTokenRepository,
 		LoadAccountByIdRepository,
 		LoadAccountsRepository,
-		DeleteAccountRepository
+		DeleteAccountRepository,
+		UpdateAccountRepository
 {
-	create: CreateAccountUseCaseFunction = async (input) => {
+	create = async (input: CreateAccountRepository.Params) => {
 		const result = await PrismaHelper.getCollection("users").create({
 			data: {
 				email: input.email,
@@ -204,5 +206,64 @@ export class UsersRepository
 				id,
 			},
 		}))
+	}
+
+	updateAccount = async (
+		id: string,
+		input: UpdateAccountUseCase.Input
+	): Promise<UpdateAccountUseCase.Result> => {
+		const account = await PrismaHelper.getCollection("users").findFirst({
+			where: {
+				id,
+			},
+		})
+
+		const result = await PrismaHelper.getCollection("users").update({
+			where: {
+				id,
+			},
+			data: {
+				identificationNumber: input.identificationNumber,
+				password: input.password,
+				username: input?.username || account?.username,
+				firstName: input?.profile?.firstName,
+				lastName: input?.profile?.lastName,
+				picture: input?.profile?.picture,
+				department: input?.department
+					? {
+							connect: {
+								id: input?.department,
+							},
+					  }
+					: undefined,
+				role: input?.role
+					? {
+							connect: {
+								id: input?.role,
+							},
+					  }
+					: undefined,
+			},
+			include: {
+				department: true,
+				role: {
+					include: {
+						permissions: true,
+					},
+				},
+			},
+		})
+
+		if (result)
+			return {
+				...result,
+				profile: {
+					firstName: result.firstName,
+					lastName: result.lastName,
+					picture: result.picture,
+				},
+			}
+
+		return null
 	}
 }
