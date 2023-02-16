@@ -1,4 +1,3 @@
-import { CreateAccountUseCaseFunction } from "@/domain/usecases/users/create-account"
 import { LoadAccountByEmailUseCaseFunction } from "@/domain/usecases/users/load-account-by-email"
 import { LoadAccountByIdUseCaseFunction } from "@/domain/usecases/users/load-account-by-id"
 import { LoadAccountByTokenUseCaseFunction } from "@/domain/usecases/users/load-account-by-token"
@@ -16,6 +15,10 @@ import { LoadAccountsRepository } from "./load-accounts-repository"
 import { LoadAccountsUseCaseFunction } from "@/domain/usecases/users/load-accounts"
 import { DeleteAccountRepository } from "./delete-account-repository"
 import { DeleteAccountUseCaseFn } from "@/domain/usecases/users/delete-account"
+import { UpdateAccountRepository } from "./update-account-repository"
+import { UpdateAccountUseCase } from "@/domain/usecases/users/update-account"
+import { UsersEntity } from "@/domain/entities/users"
+import { faker } from "@faker-js/faker"
 
 export class InMemoryUsersRepository
 	implements
@@ -26,7 +29,8 @@ export class InMemoryUsersRepository
 		LoadAccountByTokenRepository,
 		LoadAccountByIdRepository,
 		LoadAccountsRepository,
-		DeleteAccountRepository
+		DeleteAccountRepository,
+		UpdateAccountRepository
 {
 	users: any[] = []
 
@@ -40,7 +44,9 @@ export class InMemoryUsersRepository
 		return user
 	}
 
-	create: CreateAccountUseCaseFunction = async (input) => {
+	create = async (
+		input: CreateAccountRepository.Params
+	): Promise<CreateAccountRepository.Result> => {
 		const data = {
 			...input,
 			profile: {
@@ -112,5 +118,37 @@ export class InMemoryUsersRepository
 		}
 
 		return false
+	}
+
+	async updateAccount(
+		id: string,
+		input: UpdateAccountUseCase.Input
+	): Promise<UpdateAccountUseCase.Result> {
+		const user = this.users.find((u) => u.id === id)
+
+		if (user) {
+			Object.assign<any, UsersEntity>(user, {
+				...user,
+				...input,
+				role: input.role
+					? {
+							id: input.role,
+							key: faker.word.adjective(5),
+							name: faker.word.verb(5),
+					  }
+					: user.role,
+				department: input.department
+					? {
+							id: input.department,
+							key: faker.word.adjective(5),
+							name: faker.word.verb(5),
+					  }
+					: user.department,
+			})
+
+			return user
+		}
+
+		return null
 	}
 }

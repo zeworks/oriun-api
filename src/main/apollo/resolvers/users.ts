@@ -5,6 +5,7 @@ import { makeCreateAccountController } from "@/main/factories/controllers/users/
 import { makeDeleteAccountController } from "@/main/factories/controllers/users/delete-account-controller-factory"
 import { makeLoadAccountByIdController } from "@/main/factories/controllers/users/load-account-by-id-controller-factory"
 import { makeLoadAccountsController } from "@/main/factories/controllers/users/load-accounts-controller-factory"
+import { makeUpdateAccountController } from "@/main/factories/controllers/users/update-account-controller-factory"
 
 export default {
 	Mutation: {
@@ -22,6 +23,15 @@ export default {
 				new AclDecorator(
 					makeDeleteAccountController(),
 					PermissionKey.UsersDelete
+				),
+				args,
+				context
+			),
+		updateAccount: (_: any, args: any, context: any) =>
+			apolloControllerAdapter(
+				new AclDecorator(
+					makeUpdateAccountController(),
+					PermissionKey.UsersUpdate
 				),
 				args,
 				context

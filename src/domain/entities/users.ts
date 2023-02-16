@@ -2,7 +2,7 @@ import { BaseEntity } from "./base"
 import { DepartmentsEntity } from "./departments"
 import { RolesEntity } from "./roles"
 
-type UsersProfileEntity = {
+export type UsersProfileEntity = {
 	firstName: string
 	lastName?: string | null
 	picture?: string | null
@@ -17,4 +17,5 @@ export type UsersEntity = BaseEntity & {
 	accessToken?: string | null
 	identificationNumber?: string | null
 	department?: DepartmentsEntity | null
+	password?: string | null
 }

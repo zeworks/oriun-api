@@ -17,20 +17,19 @@ export class DbCreateAccount implements CreateAccountUseCase {
 		private readonly loadAccountByEmail: DbLoadAccountByEmail,
 		private readonly loadAccountByUsername: DbLoadAccountByUsername,
 		private readonly createAccount: CreateAccountRepository
-	) { }
+	) {}
 
 	create: CreateAccountUseCaseFunction = async (data) => {
 		try {
-			const emailAlreadyExists = await this.loadAccountByEmail.loadByEmail(
-				data.email
+			const emailExists = await this.loadAccountByEmail.loadByEmail(data.email)
+
+			if (emailExists) throw new EmailInUseError()
+
+			const usernameExists = await this.loadAccountByUsername.loadByUsername(
+				data.username
 			)
 
-			if (emailAlreadyExists) throw new EmailInUseError()
-
-			const usernameAlreadyExists =
-				await this.loadAccountByUsername.loadByUsername(data.username)
-
-			if (usernameAlreadyExists) throw new UsernameInUseError()
+			if (usernameExists) throw new UsernameInUseError()
 
 			const id = await this.uuidAdapter.generate()
 

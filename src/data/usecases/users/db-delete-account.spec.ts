@@ -51,6 +51,9 @@ test("Should throw error invalid user", async () => {
 	const usersRepository = new InMemoryUsersRepository()
 	const dbLoadAccount = new DbLoadAccountById(usersRepository)
 	const dbDeleteAccount = new DbDeleteAccount(dbLoadAccount, usersRepository)
-	const result = dbDeleteAccount.delete("123")
-	expect(result).rejects.toThrow(new UserInvalidError().message)
+	try {
+		return await dbDeleteAccount.delete("123")
+	} catch (error) {
+		expect(error).toEqual(new UserInvalidError())
+	}
 })

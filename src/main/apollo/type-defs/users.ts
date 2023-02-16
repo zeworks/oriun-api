@@ -19,8 +19,14 @@ export default gql`
 		accessToken: String
 	}
 
-	input UserProfileInput {
+	input CreateUserProfileInput {
 		firstName: String!
+		lastName: String
+		picture: String
+	}
+
+	input UpdateUserProfileInput {
+		firstName: String
 		lastName: String
 		picture: String
 	}
@@ -31,13 +37,24 @@ export default gql`
 		status: Boolean
 		password: String
 		identificationNumber: String
-		profile: UserProfileInput
+		profile: CreateUserProfileInput
 		role: String
+		department: String
+	}
+
+	input UpdateAccountInput {
+		username: String
+		password: String
+		identificationNumber: String
+		profile: UpdateUserProfileInput
+		role: String
+		department: String
 	}
 
 	extend type Mutation {
 		createAccount(input: CreateAccount): User @auth
 		deleteAccount(id: String!): Boolean @auth
+		updateAccount(id: String!, input: UpdateAccountInput!): User @auth
 	}
 
 	extend type Query {
