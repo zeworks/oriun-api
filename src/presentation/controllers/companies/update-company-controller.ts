@@ -1,7 +1,8 @@
+import { DbUpdateCompany } from "@/data/usecases/companies/db-update-company"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { DbUpdateContact } from "@/data/usecases/contacts/db-update-contact"
 import { ContactsEntity } from "@/domain/entities/contacts"
 import { UpdateCompanyUseCase } from "@/domain/usecases/companies/update-company"
-import { CreateContactUseCase } from "@/domain/usecases/contacts/create-contact"
-import { UpdateContactUseCase } from "@/domain/usecases/contacts/update-contact"
 import { badRequest, ok, serverError } from "@/presentation/helpers/http"
 import {
 	Controller,
@@ -13,9 +14,9 @@ export class UpdateCompanyController implements Controller {
 	constructor(
 		private readonly companyValidation: Validation,
 		private readonly createContactValidation: Validation,
-		private readonly createContactUseCase: CreateContactUseCase,
-		private readonly updateContactUseCase: UpdateContactUseCase,
-		private readonly updateCompanyUseCase: UpdateCompanyUseCase
+		private readonly createContactUseCase: DbCreateContact,
+		private readonly updateContactUseCase: DbUpdateContact,
+		private readonly updateCompanyUseCase: DbUpdateCompany
 	) {}
 
 	execute: ControllerProtocol<
