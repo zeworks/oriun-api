@@ -1,6 +1,6 @@
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
@@ -11,9 +11,13 @@ import { CreateAccountController } from "./create-account-controller"
 import { LoadAccountByIdController } from "./load-account-by-id-controller"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should load the account details with success", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const uuidAdapter = new UuidAdapter()
 	const encrypter = new BcryptAdapter(12)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -25,8 +29,11 @@ test("Should load the account details with success", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountDb
 	)
 

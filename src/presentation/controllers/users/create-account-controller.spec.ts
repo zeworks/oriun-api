@@ -2,16 +2,20 @@ import { expect, test } from "vitest"
 import { EmailInUseError } from "@/data/errors/email-in-use-error"
 import { UsernameInUseError } from "@/data/errors/username-in-use-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
 import { CreateAccountController } from "./create-account-controller"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should create account with success", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
 	const loadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const uuidAdapter = new UuidAdapter()
@@ -24,8 +28,12 @@ test("Should create account with success", async () => {
 		usersRepository
 	)
 
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
+
 	const createAccount = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountUseCase
 	)
 
@@ -47,6 +55,7 @@ test("Should create account with success", async () => {
 
 test("Should not create account if email exists", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
 	const loadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const uuidAdapter = new UuidAdapter()
@@ -59,8 +68,12 @@ test("Should not create account if email exists", async () => {
 		usersRepository
 	)
 
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
+
 	await new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountUseCase
 	).execute({
 		input: {
@@ -74,6 +87,8 @@ test("Should not create account if email exists", async () => {
 
 	const account = await new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountUseCase
 	).execute({
 		input: {
@@ -91,6 +106,7 @@ test("Should not create account if email exists", async () => {
 
 test("Should not create account if username exists", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const loadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
 	const loadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const uuidAdapter = new UuidAdapter()
@@ -103,8 +119,12 @@ test("Should not create account if username exists", async () => {
 		usersRepository
 	)
 
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
+
 	await new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountUseCase
 	).execute({
 		input: {
@@ -118,6 +138,8 @@ test("Should not create account if username exists", async () => {
 
 	const account = await new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		createAccountUseCase
 	).execute({
 		input: {

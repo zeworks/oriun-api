@@ -1,7 +1,7 @@
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { expect, test } from "vitest"
 import { DbLoadAccounts } from "./db-load-accounts"
-import { DbCreateAccount } from "./create-account"
+import { DbCreateAccount } from "./db-create-account"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { DbLoadAccountByEmail } from "./load-account-by-email"

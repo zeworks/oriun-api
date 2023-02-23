@@ -9,7 +9,7 @@ export default gql`
 		vatNumber: String
 		identificationNumber: String
 		fiscalName: String
-		contacts: [Contacts]
+		contacts: [Contact]
 		createdAt: DateTime!
 	}
 

@@ -53,6 +53,9 @@ model Users {
 
   department   Departments? @relation(fields: [departmentId], references: [id])
   departmentId String?
+
+  contact   Contacts? @relation(fields: [contactId], references: [id])
+  contactId String?
 }
 
 model Departments {
@@ -80,6 +83,8 @@ model Contacts {
 
   company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?
+
+  Users Users[]
 }
 
 model Companies {

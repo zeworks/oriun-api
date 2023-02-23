@@ -1,3 +1,4 @@
+import { ContactsEntity } from "@/domain/entities/contacts"
 import { DepartmentsEntity } from "@/domain/entities/departments"
 import { RolesEntity } from "@/domain/entities/roles"
 
@@ -23,6 +24,7 @@ export namespace CreateAccountUseCase {
 			lastName?: string
 		}
 		department?: string
+		contact?: ContactsEntity
 	}
 
 	export type Result = {
@@ -39,5 +41,6 @@ export namespace CreateAccountUseCase {
 			picture?: string | null
 		}
 		department?: DepartmentsEntity | null
+		contact?: ContactsEntity | null
 	} | null
 }

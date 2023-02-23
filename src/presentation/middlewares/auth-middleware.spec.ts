@@ -3,7 +3,7 @@ import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/rol
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountByToken } from "@/data/usecases/users/load-account-by-token"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { JwtAdapter } from "@/infra/cryptography/jwt-adapter"
@@ -19,13 +19,16 @@ import { CreateAccountController } from "../controllers/users/create-account-con
 import { AuthMiddleware } from "./auth-middleware"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should have valid accesstoken", async () => {
 	const rolesRepository = new InMemoryRolesRepository()
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const encrypter = new JwtAdapter(DEFAULT_JWT_SECRET)
 	const hashComparer = new BcryptAdapter(12)
-
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 
@@ -49,8 +52,13 @@ test("Should have valid accesstoken", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
+
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
+
 	const createAccount = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 	const dbLoadAccountByToken = new DbLoadAccountByToken(
