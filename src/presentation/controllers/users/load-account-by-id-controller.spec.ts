@@ -1,6 +1,6 @@
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"

@@ -1,4 +1,4 @@
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { UsersRepository } from "@/infra/db/prisma/repos/users-repository"

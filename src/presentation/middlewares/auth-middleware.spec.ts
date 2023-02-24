@@ -3,7 +3,7 @@ import { InMemoryRolesRepository } from "@/data/protocols/repositories/roles/rol
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
 import { DbCreateRole } from "@/data/usecases/roles/create-role-usecase"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountByToken } from "@/data/usecases/users/load-account-by-token"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { JwtAdapter } from "@/infra/cryptography/jwt-adapter"

@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/use
 import { expect, test } from "vitest"
 import { CreateAccountController } from "./create-account-controller"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"

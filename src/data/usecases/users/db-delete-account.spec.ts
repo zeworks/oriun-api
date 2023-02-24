@@ -1,7 +1,7 @@
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { assertType, expect, expectTypeOf, test } from "vitest"
 import { DbDeleteAccount } from "./db-delete-account"
-import { DbCreateAccount } from "./create-account"
+import { DbCreateAccount } from "./db-create-account"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { DbLoadAccountById } from "./load-account-by-id"

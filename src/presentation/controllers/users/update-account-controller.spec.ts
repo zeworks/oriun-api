@@ -1,7 +1,7 @@
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { UsernameInUseError } from "@/data/errors/username-in-use-error"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
-import { DbCreateAccount } from "@/data/usecases/users/create-account"
+import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbUpdateAccount } from "@/data/usecases/users/db-update-account"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
