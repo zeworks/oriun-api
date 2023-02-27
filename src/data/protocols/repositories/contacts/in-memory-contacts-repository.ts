@@ -30,7 +30,10 @@ export class InMemoryContactsRepository
 
 		if (!contact) return null
 
-		return Object.assign({}, contact, input)
+		return Object.assign({}, contact, {
+			...input,
+			updatedAt: new Date(),
+		})
 	}
 
 	loadById: LoadContactByIdUseCaseFunction = async (id) => {

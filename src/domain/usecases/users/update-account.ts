@@ -1,3 +1,4 @@
+import { ContactsEntity } from "@/domain/entities/contacts"
 import { UsersEntity, UsersProfileEntity } from "@/domain/entities/users"
 
 export interface UpdateAccountUseCase {
@@ -12,6 +13,7 @@ export namespace UpdateAccountUseCase {
 		role?: string | null
 		profile?: Partial<UsersProfileEntity>
 		department?: string | null
+		contact?: ContactsEntity | null
 	}
 	export type Result = UsersEntity | null
 }

@@ -84,7 +84,7 @@ model Contacts {
   company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?
 
-  Users Users[]
+  users Users[]
 }
 
 model Companies {

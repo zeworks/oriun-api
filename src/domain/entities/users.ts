@@ -19,5 +19,5 @@ export type UsersEntity = BaseEntity & {
 	identificationNumber?: string | null
 	department?: DepartmentsEntity | null
 	password?: string | null
-	contact?: ContactsEntity
+	contact?: ContactsEntity | null
 }

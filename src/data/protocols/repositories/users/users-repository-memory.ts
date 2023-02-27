@@ -84,6 +84,7 @@ export class InMemoryUsersRepository
 			profile: data.profile,
 			role: data.role,
 			department: data.department,
+			contact: data.contact,
 		}
 	}
 
