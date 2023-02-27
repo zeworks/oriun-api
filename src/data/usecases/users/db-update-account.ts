@@ -1,9 +1,9 @@
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { UsernameInUseError } from "@/data/errors/username-in-use-error"
 import { Hasher } from "@/data/protocols/cryptography/hasher"
+import { LoadAccountByIdRepository } from "@/data/protocols/repositories/users/load-account-by-id-repository"
+import { LoadAccountByUsernameRepository } from "@/data/protocols/repositories/users/load-account-by-username-repository"
 import { UpdateAccountRepository } from "@/data/protocols/repositories/users/update-account-repository"
-import { LoadAccountByIdUseCase } from "@/domain/usecases/users/load-account-by-id"
-import { LoadAccountByUsernameUseCase } from "@/domain/usecases/users/load-account-by-username"
 import {
 	UpdateAccountUseCase,
 	UpdateAccountUseCaseFn,
@@ -12,8 +12,8 @@ import {
 export class DbUpdateAccount implements UpdateAccountUseCase {
 	constructor(
 		private readonly hashAdapter: Hasher,
-		private readonly loadAccountIdUseCase: LoadAccountByIdUseCase,
-		private readonly loadAccountUsernameUseCase: LoadAccountByUsernameUseCase,
+		private readonly loadAccountIdUseCase: LoadAccountByIdRepository,
+		private readonly loadAccountUsernameUseCase: LoadAccountByUsernameRepository,
 		private readonly updateAccountRepository: UpdateAccountRepository
 	) {}
 

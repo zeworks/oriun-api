@@ -18,6 +18,7 @@ import { DeleteAccountRepository } from "@/data/protocols/repositories/users/del
 import { DeleteAccountUseCaseFn } from "@/domain/usecases/users/delete-account"
 import { UpdateAccountRepository } from "@/data/protocols/repositories/users/update-account-repository"
 import { UpdateAccountUseCase } from "@/domain/usecases/users/update-account"
+import { ContactsEntity } from "@/domain/entities/contacts"
 
 export class UsersRepository
 	implements
@@ -45,7 +46,7 @@ export class UsersRepository
 				identificationNumber: input.identificationNumber,
 				contact: {
 					connect: {
-						id: input.contact?.id,
+						id: (input.contact as ContactsEntity)?.id,
 					},
 				},
 				department: input.department
@@ -111,6 +112,7 @@ export class UsersRepository
 				id,
 			},
 			include: {
+				contact: true,
 				department: true,
 				role: {
 					include: {
@@ -164,6 +166,7 @@ export class UsersRepository
 				accessToken: token,
 			},
 			include: {
+				contact: true,
 				department: true,
 				role: {
 					include: {
@@ -237,6 +240,13 @@ export class UsersRepository
 				firstName: input?.profile?.firstName,
 				lastName: input?.profile?.lastName,
 				picture: input?.profile?.picture,
+				contact: input.contact?.id
+					? {
+							connect: {
+								id: (input.contact as ContactsEntity)?.id,
+							},
+					  }
+					: undefined,
 				department: input?.department
 					? {
 							connect: {
@@ -253,6 +263,7 @@ export class UsersRepository
 					: undefined,
 			},
 			include: {
+				contact: true,
 				department: true,
 				role: {
 					include: {

@@ -51,6 +51,7 @@ export default gql`
 		profile: UpdateUserProfileInput
 		role: String
 		department: String
+		contact: UpdateContactInput
 	}
 
 	extend type Mutation {
