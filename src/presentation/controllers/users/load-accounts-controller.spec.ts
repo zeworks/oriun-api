@@ -9,6 +9,9 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should return an empty list of users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
@@ -22,6 +25,7 @@ test("Should return an empty list of users", async () => {
 
 test("Should return a list with two users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const uuidAdapter = new UuidAdapter()
 	const bcrypt = new BcryptAdapter(8)
 
@@ -35,10 +39,12 @@ test("Should return a list with two users", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
-
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 	const loadAccountsController = new LoadAccountsController(dbLoadAccounts)
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 

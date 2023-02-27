@@ -43,6 +43,11 @@ export class UsersRepository
 				status: input.status,
 				picture: input.profile.picture,
 				identificationNumber: input.identificationNumber,
+				contact: {
+					connect: {
+						id: input.contact?.id,
+					},
+				},
 				department: input.department
 					? {
 							connect: {
@@ -59,6 +64,7 @@ export class UsersRepository
 					: undefined,
 			},
 			include: {
+				contact: true,
 				department: true,
 				role: {
 					include: {
@@ -85,6 +91,8 @@ export class UsersRepository
 				role: result.role,
 				department: result.department,
 				departmentId: result.department,
+				contact: result.contact,
+				contactId: result.contactId,
 			}
 
 		return null

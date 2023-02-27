@@ -17,6 +17,7 @@ export default gql`
 		role: Role
 		department: Department
 		accessToken: String
+		contact: Contact
 	}
 
 	input CreateUserProfileInput {
@@ -40,6 +41,7 @@ export default gql`
 		profile: CreateUserProfileInput
 		role: String
 		department: String
+		contact: CreateContactInput
 	}
 
 	input UpdateAccountInput {

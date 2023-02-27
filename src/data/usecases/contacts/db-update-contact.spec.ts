@@ -2,14 +2,16 @@ import { InMemoryContactsRepository } from "@/data/protocols/repositories/contac
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
 import { DbCreateContact } from "./db-create-contact"
+import { DbLoadContactById } from "./db-load-contact-by-id"
 import { DbUpdateContact } from "./db-update-contact"
 
 test("Should update contact with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const contactsRepository = new InMemoryContactsRepository()
 	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
+	const dbLoadContactById = new DbLoadContactById(contactsRepository)
 	const updateContact = new DbUpdateContact(
-		contactsRepository,
+		dbLoadContactById,
 		contactsRepository
 	)
 

@@ -1,6 +1,9 @@
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { UsernameInUseError } from "@/data/errors/username-in-use-error"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { DbUpdateContact } from "@/data/usecases/contacts/db-update-contact"
 import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbUpdateAccount } from "@/data/usecases/users/db-update-account"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
@@ -8,6 +11,7 @@ import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
 import { faker } from "@faker-js/faker"
 import { expect, test } from "vitest"
@@ -18,6 +22,8 @@ test("Should update first name and password", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
+
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -37,8 +43,12 @@ test("Should update first name and password", async () => {
 		usersRepository
 	)
 
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
+
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
@@ -80,6 +90,7 @@ test("Should update the username", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -98,9 +109,12 @@ test("Should update the username", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
@@ -138,6 +152,7 @@ test("Should throw an error if username is already in use", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -156,9 +171,12 @@ test("Should throw an error if username is already in use", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 

@@ -10,9 +10,13 @@ import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-u
 import { DbDeleteAccount } from "@/data/usecases/users/db-delete-account"
 import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
 import { DeleteAccountController } from "./delete-account-controller"
+import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
+import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
+import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should delete account with success", async () => {
 	const usersRepository = new InMemoryUsersRepository()
+	const contactsRepository = new InMemoryContactsRepository()
 	const uuidAdapter = new UuidAdapter()
 	const bcrypt = new BcryptAdapter(8)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -29,8 +33,11 @@ test("Should delete account with success", async () => {
 		dbLoadAccountById,
 		usersRepository
 	)
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
+		dbCreateContact,
+		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 

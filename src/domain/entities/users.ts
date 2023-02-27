@@ -1,4 +1,5 @@
 import { BaseEntity } from "./base"
+import { ContactsEntity } from "./contacts"
 import { DepartmentsEntity } from "./departments"
 import { RolesEntity } from "./roles"
 
@@ -18,4 +19,5 @@ export type UsersEntity = BaseEntity & {
 	identificationNumber?: string | null
 	department?: DepartmentsEntity | null
 	password?: string | null
+	contact?: ContactsEntity
 }
