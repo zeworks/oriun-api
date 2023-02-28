@@ -86,7 +86,7 @@ model Contacts {
 
   users Users[]
 
-  clients   Clients? @relation(fields: [clientsId], references: [id])
+  clients   Clients? @relation(fields: [clientsId], references: [id], onDelete: Cascade)
   clientsId String?
 }
 
