@@ -9,6 +9,7 @@ interface Collection {
 	departments: typeof db.departments
 	companies: typeof db.companies
 	contacts: typeof db.contacts
+	clients: typeof db.clients
 }
 
 export const PrismaHelper = {
