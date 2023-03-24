@@ -110,7 +110,7 @@ model Clients {
   code                 String    @db.VarChar(250)
   name                 String    @db.VarChar(250)
   identificationNumber String    @db.VarChar(150)
-  status               Boolean   @default(true)
+  status               Boolean?  @default(false)
   picture              String?   @db.LongText()
   createdAt            DateTime  @default(now())
   updatedAt            DateTime? @updatedAt

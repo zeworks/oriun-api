@@ -15,7 +15,7 @@ export namespace CreateClientUseCase {
 		name: string
 		code: string
 		identificationNumber: string
-		status: boolean
+		status?: boolean | null
 		picture?: string | null
 		company?: CompaniesEntity | null
 		contacts?: Array<ContactsEntity> | null

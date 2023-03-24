@@ -17,8 +17,8 @@ type CreateCompanyControllerFunction = (
 
 export class CreateCompanyController implements Controller {
 	constructor(
-		private readonly validation: Validation,
-		private readonly contactsValidation: Validation,
+		private readonly createCompanyValidation: Validation,
+		private readonly createContactsValidation: Validation,
 		private readonly createContact: CreateContactUseCase,
 		private readonly createCompany: CreateCompanyUseCase
 	) {}
@@ -26,11 +26,11 @@ export class CreateCompanyController implements Controller {
 	execute: CreateCompanyControllerFunction = async (request) => {
 		const contacts: Array<ContactsEntity> = []
 
-		const errors = this.validation.validate(request)
+		const errors = this.createCompanyValidation.validate(request)
 		if (errors) return badRequest(errors)
 
 		for (const contact of request.contacts || []) {
-			const contactError = this.contactsValidation.validate(contact)
+			const contactError = this.createContactsValidation.validate(contact)
 
 			if (contactError) return badRequest(contactError)
 
