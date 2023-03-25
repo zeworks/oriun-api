@@ -225,6 +225,6 @@ test("Should create client with assigned company", async () => {
 		})
 
 		expect(result.data?.code).toEqual("CODE-CLIENT")
-		console.log(result)
+		console.log(result) // TODO: remove it
 	}
 })
