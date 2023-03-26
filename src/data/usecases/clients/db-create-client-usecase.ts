@@ -1,3 +1,7 @@
+import {
+	ClientCodeInUseError,
+	ClientIdentificationNumberInUseError,
+} from "@/data/errors/clients-error"
 import { CreateClientRepository } from "@/data/protocols/repositories/clients/create-client-repository"
 import { LoadClientByCodeRepository } from "@/data/protocols/repositories/clients/load-client-by-code-repository"
 import { LoadClientByIdentificationNumberRepository } from "@/data/protocols/repositories/clients/load-client-by-identificationNumber-repository"
@@ -24,16 +28,17 @@ export class DbCreateClientUseCase implements CreateClientUseCase {
 				input.identificationNumber
 			)
 
-		if (clientFoundByCode) throw new Error("this client code already in use")
+		if (clientFoundByCode) throw new ClientCodeInUseError()
 		if (clientFoundByIdentificatioNumber)
-			throw new Error("this client identification number already in use")
+			throw new ClientIdentificationNumberInUseError()
 
 		const id = await this.uuidAdaptar.generate()
 
 		return this.createClientRepository.create({
 			...input,
+			status: input.status ?? false,
+			company: input.company ?? null,
 			id,
-			status: input.status ?? true,
 		})
 	}
 }

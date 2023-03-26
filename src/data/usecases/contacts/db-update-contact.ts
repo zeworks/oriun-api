@@ -1,3 +1,4 @@
+import { ContactInvalidError } from "@/data/errors/contacts-error"
 import { LoadContactByIdRepository } from "@/data/protocols/repositories/contacts/load-contact-by-id-repository"
 import { UpdateContactRepository } from "@/data/protocols/repositories/contacts/update-contact-repository"
 import {
@@ -14,7 +15,7 @@ export class DbUpdateContact implements UpdateContactUseCase {
 	update: UpdateContactUseCaseFunction = async (input) => {
 		const contact = await this.loadContactByIdRepository.loadById(input.id)
 
-		if (!contact) throw new Error("invalid contact id")
+		if (!contact) throw new ContactInvalidError()
 
 		const result = await this.updateContactRepository.update(input)
 		return result
