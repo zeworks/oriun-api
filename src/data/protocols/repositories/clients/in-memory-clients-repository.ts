@@ -9,15 +9,18 @@ import { LoadClientByCodeRepository } from "./load-client-by-code-repository"
 import { LoadClientByIdRepository } from "./load-client-by-id-repository"
 import { LoadClientByIdentificationNumberRepository } from "./load-client-by-identificationNumber-repository"
 import { ClientsEntity } from "@/domain/entities/clients"
+import { UpdateClientRepository } from "./update-client-repository"
+import { UpdateClientUseCaseFn } from "@/domain/usecases/clients/update-client-usecase"
 
 export class InMemoryClientsRepository
 	implements
 		LoadClientByIdRepository,
 		CreateClientRepository,
 		LoadClientByCodeRepository,
-		LoadClientByIdentificationNumberRepository
+		LoadClientByIdentificationNumberRepository,
+		UpdateClientRepository
 {
-	private clients: Array<ClientsEntity> = []
+	clients: Array<ClientsEntity> = []
 
 	loadById: LoadClientByIdUseCaseFn = async (id) =>
 		this.clients.find((c) => c.id === id) || null
@@ -36,4 +39,8 @@ export class InMemoryClientsRepository
 			this.clients.find(
 				(c) => c.identificationNumber === identificationNumber
 			) || null
+	update: UpdateClientUseCaseFn = async (input) => {
+		const client = this.clients.find((c) => c.id === input.id)
+		return Object.assign({}, client, { ...input, updatedAt: new Date() })
+	}
 }
