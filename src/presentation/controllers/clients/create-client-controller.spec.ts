@@ -5,7 +5,7 @@ import {
 import { InMemoryClientsRepository } from "@/data/protocols/repositories/clients/in-memory-clients-repository"
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
-import { DbCreateClientUseCase } from "@/data/usecases/clients/db-create-client-usecase"
+import { DbCreateClient } from "@/data/usecases/clients/db-create-client-usecase"
 import { DbLoadClientByCode } from "@/data/usecases/clients/db-load-client-by-code-usecase"
 import { DbLoadClientByIdentificationNumber } from "@/data/usecases/clients/db-load-client-by-identificationNumber-usecase"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
@@ -33,7 +33,7 @@ test("Should create client with success", async () => {
 
 	const makeCreateClientUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateClientUseCase(
+		return new DbCreateClient(
 			uuidAdapter,
 			makeLoadClientByCodeUseCase(),
 			makeLoadClientByIdentificationNumberUseCase(),
@@ -71,7 +71,7 @@ test("Should throw an error if client code already exists", async () => {
 
 	const makeCreateClientUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateClientUseCase(
+		return new DbCreateClient(
 			uuidAdapter,
 			makeLoadClientByCodeUseCase(),
 			makeLoadClientByIdentificationNumberUseCase(),
@@ -112,7 +112,7 @@ test("Should throw an error if client identification number already exists", asy
 
 	const makeCreateClientUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateClientUseCase(
+		return new DbCreateClient(
 			uuidAdapter,
 			makeLoadClientByCodeUseCase(),
 			makeLoadClientByIdentificationNumberUseCase(),
@@ -154,7 +154,7 @@ test("Should create client with assigned company", async () => {
 
 	const makeCreateClientUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateClientUseCase(
+		return new DbCreateClient(
 			uuidAdapter,
 			makeLoadClientByCodeUseCase(),
 			makeLoadClientByIdentificationNumberUseCase(),
@@ -217,7 +217,7 @@ test("Should create client with two contacts", async () => {
 
 	const makeCreateClientUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateClientUseCase(
+		return new DbCreateClient(
 			uuidAdapter,
 			makeLoadClientByCodeUseCase(),
 			makeLoadClientByIdentificationNumberUseCase(),

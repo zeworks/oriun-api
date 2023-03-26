@@ -9,13 +9,16 @@ import { LoadClientByCodeUseCaseFn } from "@/domain/usecases/clients/load-client
 import { LoadClientByIdUseCaseFn } from "@/domain/usecases/clients/load-client-by-id-usecase"
 import { LoadClientByIdentificationNumberUseCaseFn } from "@/domain/usecases/clients/load-client-by-identificationNumber-usecase"
 import { PrismaHelper } from "../prisma-helper"
+import { UpdateClientRepository } from "@/data/protocols/repositories/clients/update-client-repository"
+import { UpdateClientUseCaseFn } from "@/domain/usecases/clients/update-client-usecase"
 
 export class ClientsRepository
 	implements
 		CreateClientRepository,
 		LoadClientByCodeRepository,
 		LoadClientByIdRepository,
-		LoadClientByIdentificationNumberRepository
+		LoadClientByIdentificationNumberRepository,
+		UpdateClientRepository
 {
 	private clients = PrismaHelper.getCollection("clients")
 
@@ -70,4 +73,27 @@ export class ClientsRepository
 					contacts: true,
 				},
 			})
+	update: UpdateClientUseCaseFn = async (client) =>
+		this.clients.update({
+			where: {
+				id: client.id,
+			},
+			data: {
+				...client,
+				contacts: {
+					connect: client.contacts?.map((contact) => ({
+						id: contact.id,
+					})),
+				},
+				company: {
+					connect: {
+						id: client?.company?.id,
+					},
+				},
+			},
+			include: {
+				company: true,
+				contacts: true,
+			},
+		})
 }

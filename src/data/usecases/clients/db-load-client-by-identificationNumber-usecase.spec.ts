@@ -1,7 +1,7 @@
 import { InMemoryClientsRepository } from "@/data/protocols/repositories/clients/in-memory-clients-repository"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
-import { DbCreateClientUseCase } from "./db-create-client-usecase"
+import { DbCreateClient } from "./db-create-client-usecase"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
 import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identificationNumber-usecase"
 
@@ -12,7 +12,7 @@ test("Should load client by Identification Number with success", async () => {
 	const dbLoadClientByCode = new DbLoadClientByCode(clientsRepository)
 	const dbLoadClientByIdentificationNumber =
 		new DbLoadClientByIdentificationNumber(clientsRepository)
-	const dbCreateClient = new DbCreateClientUseCase(
+	const dbCreateClient = new DbCreateClient(
 		uuidAdapter,
 		dbLoadClientByCode,
 		dbLoadClientByIdentificationNumber,

@@ -13,3 +13,11 @@ export class ClientIdentificationNumberInUseError extends Error {
 		this.message = `this client identification number already in use`
 	}
 }
+
+export class ClientInvalidError extends Error {
+	constructor() {
+		super("client invalid")
+		this.name = "ClientInvalidError"
+		this.message = "client invalid"
+	}
+}
