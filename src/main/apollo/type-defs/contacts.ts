@@ -16,8 +16,8 @@ export default gql`
 
 	input CreateContactInput {
 		name: String!
-		phone: String!
-		prefix: String!
+		phone: String
+		prefix: String
 		address: String
 		email: String
 		country: String!
@@ -26,7 +26,7 @@ export default gql`
 	}
 
 	input UpdateContactInput {
-		id: String
+		id: String!
 		name: String
 		phone: String
 		prefix: String

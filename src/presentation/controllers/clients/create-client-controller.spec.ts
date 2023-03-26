@@ -11,13 +11,14 @@ import { DbLoadClientByIdentificationNumber } from "@/data/usecases/clients/db-l
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
 import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
-import { makeCreateClientValidation } from "@/main/factories/controllers/clients/create-client-validation-factory"
+import { makeCreateClientControllerValidation } from "@/main/factories/controllers/clients/create-client-controller-validation"
 import { makeCreateCompanyValidation } from "@/main/factories/controllers/companies/create-company-controller-validation"
 import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 import { HttpStatusCode } from "@/presentation/protocols/http"
 import { test, expect } from "vitest"
 import { CreateCompanyController } from "../companies/create-company-controller"
 import { CreateClientController } from "./create-client-controller"
+import { CreateContactController } from "../contacts/create-contact-controller"
 
 test("Should create client with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -40,17 +41,9 @@ test("Should create client with success", async () => {
 		)
 	}
 
-	const makeCreateContactUseCase = () => {
-		const uuidAdapter = new UuidAdapter()
-		const contactsRepository = new InMemoryContactsRepository()
-		return new DbCreateContact(uuidAdapter, contactsRepository)
-	}
-
 	const createClientController = new CreateClientController(
 		makeCreateClientUseCase(),
-		makeCreateClientValidation(),
-		makeCreateContactUseCase(),
-		makeCreateContactValidation()
+		makeCreateClientControllerValidation()
 	)
 
 	const result = await createClientController.execute({
@@ -86,17 +79,9 @@ test("Should throw an error if client code already exists", async () => {
 		)
 	}
 
-	const makeCreateContactUseCase = () => {
-		const uuidAdapter = new UuidAdapter()
-		const contactsRepository = new InMemoryContactsRepository()
-		return new DbCreateContact(uuidAdapter, contactsRepository)
-	}
-
 	const createClientController = new CreateClientController(
 		makeCreateClientUseCase(),
-		makeCreateClientValidation(),
-		makeCreateContactUseCase(),
-		makeCreateContactValidation()
+		makeCreateClientControllerValidation()
 	)
 
 	await createClientController.execute({
@@ -135,17 +120,9 @@ test("Should throw an error if client identification number already exists", asy
 		)
 	}
 
-	const makeCreateContactUseCase = () => {
-		const uuidAdapter = new UuidAdapter()
-		const contactsRepository = new InMemoryContactsRepository()
-		return new DbCreateContact(uuidAdapter, contactsRepository)
-	}
-
 	const createClientController = new CreateClientController(
 		makeCreateClientUseCase(),
-		makeCreateClientValidation(),
-		makeCreateContactUseCase(),
-		makeCreateContactValidation()
+		makeCreateClientControllerValidation()
 	)
 
 	await createClientController.execute({
@@ -205,9 +182,7 @@ test("Should create client with assigned company", async () => {
 
 	const createClientController = new CreateClientController(
 		makeCreateClientUseCase(),
-		makeCreateClientValidation(),
-		makeCreateContactUseCase(),
-		makeCreateContactValidation()
+		makeCreateClientControllerValidation()
 	)
 
 	const company = await createCompanyController.execute({
@@ -225,6 +200,68 @@ test("Should create client with assigned company", async () => {
 		})
 
 		expect(result.data?.code).toEqual("CODE-CLIENT")
-		console.log(result) // TODO: remove it
+		expect(result.data?.company).toStrictEqual(company.data)
 	}
+})
+
+test("Should create client with two contacts", async () => {
+	const clientsRepository = new InMemoryClientsRepository()
+
+	const makeLoadClientByCodeUseCase = () => {
+		return new DbLoadClientByCode(clientsRepository)
+	}
+
+	const makeLoadClientByIdentificationNumberUseCase = () => {
+		return new DbLoadClientByIdentificationNumber(clientsRepository)
+	}
+
+	const makeCreateClientUseCase = () => {
+		const uuidAdapter = new UuidAdapter()
+		return new DbCreateClientUseCase(
+			uuidAdapter,
+			makeLoadClientByCodeUseCase(),
+			makeLoadClientByIdentificationNumberUseCase(),
+			clientsRepository
+		)
+	}
+
+	const makeCreateContactUseCase = () => {
+		const uuidAdapter = new UuidAdapter()
+		const contactsRepository = new InMemoryContactsRepository()
+		return new DbCreateContact(uuidAdapter, contactsRepository)
+	}
+
+	const createClientController = new CreateClientController(
+		makeCreateClientUseCase(),
+		makeCreateClientControllerValidation()
+	)
+
+	const createContactController = new CreateContactController(
+		makeCreateContactUseCase(),
+		makeCreateContactValidation()
+	)
+
+	const firstContact = await createContactController.execute({
+		country: "Portugal",
+		default: false,
+		name: "Email contact",
+		email: "teste@email.com",
+	})
+
+	const secondContact = await createContactController.execute({
+		country: "Portugal",
+		default: true,
+		name: "Phone contact",
+		phone: "917263333",
+		prefix: "+351",
+	})
+
+	const result = await createClientController.execute({
+		code: "CODE-CLIENT",
+		identificationNumber: "1232",
+		name: "Client Name",
+		contacts: [firstContact.data!, secondContact.data!],
+	})
+
+	expect(result.data?.code).toEqual("CODE-CLIENT")
 })

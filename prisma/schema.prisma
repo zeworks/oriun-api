@@ -71,8 +71,8 @@ model Departments {
 model Contacts {
   id         String    @id
   name       String    @db.VarChar(250)
-  phone      String    @db.VarChar(20)
-  prefix     String    @db.VarChar(20)
+  phone      String?   @db.VarChar(20)
+  prefix     String?   @db.VarChar(20)
   address    String?   @db.VarChar(250)
   email      String?   @db.VarChar(150)
   country    String    @db.VarChar(50)

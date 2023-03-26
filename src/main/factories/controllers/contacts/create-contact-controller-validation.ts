@@ -4,7 +4,7 @@ import { ValidationComposite } from "@/validation/validators/validation-composit
 
 export const makeCreateContactValidation = (): ValidationComposite => {
 	const validations: Validation[] = []
-	for (const field of ["name", "phone", "prefix", "country", "default"]) {
+	for (const field of ["name", "country", "default"]) {
 		validations.push(new RequiredFieldValidation(field))
 	}
 	return new ValidationComposite(validations)
