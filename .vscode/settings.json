@@ -7,6 +7,9 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "src/**/*.js": true,
+    "dist": true,
+    "coverage": true,
+    "node_modules": true,
   },
   "editor.formatOnSave": true,
   "editor.formatOnType": true

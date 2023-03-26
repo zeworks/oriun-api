@@ -6,13 +6,12 @@ Oriun is a timesheet manager, where the users with different type of roles, can 
 That's cool for companies that needs to have a full report of there departments.
 
 ### How to setup:
+
 ---
+
 ### How to run:
 
 - run `npm install`;
 - run `npm run start`;
-
-### Docs:
-- Read the [docs](./docs/docs.md)
 
 Notes: Make sure you have the NodeJS installed `>=16`;
