@@ -15,18 +15,18 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - ${DATABASE_PORT:-3306}:${DATABASE_PORT:-3306}
-  prisma-mysql-api:
-    environment:
-      - PRODUCTION_PORT=${PRODUCTION_PORT}
-    stdin_open: true
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: prisma-mysql-api
-    depends_on:
-      - oriundb
-    ports:
-      -  ${PRODUCTION_PORT:-4000}:${PRODUCTION_PORT:-4000}
-    restart: always
+  # prisma-mysql-api:
+  #   environment:
+  #     - PRODUCTION_PORT=${PRODUCTION_PORT}
+  #   stdin_open: true
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: prisma-mysql-api
+  #   depends_on:
+  #     - oriundb
+  #   ports:
+  #     -  ${PRODUCTION_PORT:-4000}:${PRODUCTION_PORT:-4000}
+  #   restart: always
 volumes:
   db_data:
