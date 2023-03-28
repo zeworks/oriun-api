@@ -16,8 +16,8 @@ export class ClientIdentificationNumberInUseError extends Error {
 
 export class ClientInvalidError extends Error {
 	constructor() {
-		super("client invalid")
+		super("Invalid Client")
 		this.name = "ClientInvalidError"
-		this.message = "client invalid"
+		this.message = "Invalid Client"
 	}
 }

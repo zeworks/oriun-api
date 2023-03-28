@@ -11,6 +11,7 @@ import { LoadClientByIdentificationNumberRepository } from "./load-client-by-ide
 import { ClientsEntity } from "@/domain/entities/clients"
 import { UpdateClientRepository } from "./update-client-repository"
 import { UpdateClientUseCaseFn } from "@/domain/usecases/clients/update-client-usecase"
+import { DeleteClientRepository } from "./delete-client-repository"
 
 export class InMemoryClientsRepository
 	implements
@@ -18,7 +19,8 @@ export class InMemoryClientsRepository
 		CreateClientRepository,
 		LoadClientByCodeRepository,
 		LoadClientByIdentificationNumberRepository,
-		UpdateClientRepository
+		UpdateClientRepository,
+		DeleteClientRepository
 {
 	clients: Array<ClientsEntity> = []
 
@@ -42,5 +44,15 @@ export class InMemoryClientsRepository
 	update: UpdateClientUseCaseFn = async (input) => {
 		const client = this.clients.find((c) => c.id === input.id)
 		return Object.assign({}, client, { ...input, updatedAt: new Date() })
+	}
+	delete = async (id: string): Promise<boolean | null> => {
+		const client = this.clients.find((c) => c.id === id)
+
+		if (client) {
+			this.clients = this.clients.filter((c) => c.id !== id)
+			return true
+		}
+
+		return false
 	}
 }
