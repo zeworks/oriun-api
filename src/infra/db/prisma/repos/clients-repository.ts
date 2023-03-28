@@ -11,6 +11,8 @@ import { LoadClientByIdentificationNumberUseCaseFn } from "@/domain/usecases/cli
 import { PrismaHelper } from "../prisma-helper"
 import { UpdateClientRepository } from "@/data/protocols/repositories/clients/update-client-repository"
 import { UpdateClientUseCaseFn } from "@/domain/usecases/clients/update-client-usecase"
+import { DeleteClientRepository } from "@/data/protocols/repositories/clients/delete-client-repository"
+import { DeleteClientUseCaseFn } from "@/domain/usecases/clients/delete-client-usecase"
 
 export class ClientsRepository
 	implements
@@ -18,7 +20,8 @@ export class ClientsRepository
 		LoadClientByCodeRepository,
 		LoadClientByIdRepository,
 		LoadClientByIdentificationNumberRepository,
-		UpdateClientRepository
+		UpdateClientRepository,
+		DeleteClientRepository
 {
 	private clients = PrismaHelper.getCollection("clients")
 
@@ -96,4 +99,7 @@ export class ClientsRepository
 				contacts: true,
 			},
 		})
+
+	delete: DeleteClientUseCaseFn = async (id) =>
+		!!this.clients.delete({ where: { id } })
 }
