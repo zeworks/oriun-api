@@ -1,3 +1,4 @@
+import { AccountContext } from "@/config/account-context"
 import { CreateClientUseCase } from "@/domain/usecases/clients/create-client-usecase"
 
 export type CreateClientRepository = {
@@ -5,7 +6,8 @@ export type CreateClientRepository = {
 }
 
 export type CreateClientRepositoryFn = (
-	input: CreateClientRepository.Input
+	input: CreateClientRepository.Input,
+	context: AccountContext
 ) => Promise<CreateClientRepository.Output>
 
 export namespace CreateClientRepository {

@@ -19,7 +19,7 @@ export class DbCreateClient implements CreateClientUseCase {
 		private readonly createClientRepository: CreateClientRepository
 	) {}
 
-	create: CreateClientUseCaseFn = async (input) => {
+	create: CreateClientUseCaseFn = async (input, context) => {
 		const clientFoundByCode = await this.loadClientByCodeRepository.loadByCode(
 			input.code
 		)
@@ -34,12 +34,15 @@ export class DbCreateClient implements CreateClientUseCase {
 
 		const id = await this.uuidAdapter.generate()
 
-		return this.createClientRepository.create({
-			...input,
-			status: input.status ?? false,
-			company: input.company ?? null,
-			contacts: input.contacts ?? [],
-			id,
-		})
+		return this.createClientRepository.create(
+			{
+				...input,
+				status: input.status ?? false,
+				company: input.company ?? null,
+				contacts: input.contacts ?? [],
+				id,
+			},
+			context
+		)
 	}
 }

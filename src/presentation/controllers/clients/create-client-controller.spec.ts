@@ -20,6 +20,9 @@ import { CreateCompanyController } from "../companies/create-company-controller"
 import { CreateClientController } from "./create-client-controller"
 import { CreateContactController } from "../contacts/create-contact-controller"
 import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
+import crypto from "crypto"
+
+const accountId = crypto.randomUUID()
 
 test("Should create client with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -47,11 +50,14 @@ test("Should create client with success", async () => {
 		makeCreateClientControllerValidation()
 	)
 
-	const result = await createClientController.execute({
-		code: "CODE-1",
-		name: "PTC",
-		identificationNumber: "PTC_1",
-	})
+	const result = await createClientController.execute(
+		{
+			code: "CODE-1",
+			name: "PTC",
+			identificationNumber: "PTC_1",
+		},
+		{ accountId }
+	)
 
 	expect(result.statusCode).toEqual(HttpStatusCode.OK)
 	expect(result.data?.code).toEqual("CODE-1")
@@ -85,17 +91,23 @@ test("Should throw an error if client code already exists", async () => {
 		makeCreateClientControllerValidation()
 	)
 
-	await createClientController.execute({
-		code: "CODE-1",
-		name: "PTC",
-		identificationNumber: "PTC_1",
-	})
+	await createClientController.execute(
+		{
+			code: "CODE-1",
+			name: "PTC",
+			identificationNumber: "PTC_1",
+		},
+		{ accountId }
+	)
 
-	const result = await createClientController.execute({
-		code: "CODE-1",
-		name: "PTC",
-		identificationNumber: "PTC_1",
-	})
+	const result = await createClientController.execute(
+		{
+			code: "CODE-1",
+			name: "PTC",
+			identificationNumber: "PTC_1",
+		},
+		{ accountId }
+	)
 
 	expect(result.data).toEqual(new ClientCodeInUseError())
 })
@@ -126,17 +138,23 @@ test("Should throw an error if client identification number already exists", asy
 		makeCreateClientControllerValidation()
 	)
 
-	await createClientController.execute({
-		code: "CODE-1",
-		name: "PTC",
-		identificationNumber: "PTC_1",
-	})
+	await createClientController.execute(
+		{
+			code: "CODE-1",
+			name: "PTC",
+			identificationNumber: "PTC_1",
+		},
+		{ accountId }
+	)
 
-	const result = await createClientController.execute({
-		code: "CODE-2",
-		name: "PTC",
-		identificationNumber: "PTC_1",
-	})
+	const result = await createClientController.execute(
+		{
+			code: "CODE-2",
+			name: "PTC",
+			identificationNumber: "PTC_1",
+		},
+		{ accountId }
+	)
 
 	expect(result.data).toEqual(new ClientIdentificationNumberInUseError())
 })
@@ -196,12 +214,15 @@ test("Should create client with assigned company", async () => {
 	})
 
 	if (company) {
-		const result = await createClientController.execute({
-			code: "CODE-CLIENT",
-			identificationNumber: "1232",
-			name: "Client Name",
-			company: company.data,
-		})
+		const result = await createClientController.execute(
+			{
+				code: "CODE-CLIENT",
+				identificationNumber: "1232",
+				name: "Client Name",
+				company: company.data,
+			},
+			{ accountId }
+		)
 
 		expect(result.data?.code).toEqual("CODE-CLIENT")
 		expect(result.data?.company).toStrictEqual(company.data)
@@ -260,12 +281,15 @@ test("Should create client with two contacts", async () => {
 		prefix: "+351",
 	})
 
-	const result = await createClientController.execute({
-		code: "CODE-CLIENT",
-		identificationNumber: "1232",
-		name: "Client Name",
-		contacts: [firstContact.data!, secondContact.data!],
-	})
+	const result = await createClientController.execute(
+		{
+			code: "CODE-CLIENT",
+			identificationNumber: "1232",
+			name: "Client Name",
+			contacts: [firstContact.data!, secondContact.data!],
+		},
+		{ accountId }
+	)
 
 	expect(result.data?.code).toEqual("CODE-CLIENT")
 })

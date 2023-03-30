@@ -1,3 +1,4 @@
+import { AccountContext } from "@/config/account-context"
 import { CreateClientUseCase } from "@/domain/usecases/clients/create-client-usecase"
 import {
 	badRequest,
@@ -15,12 +16,12 @@ export class CreateClientController implements Controller {
 		private readonly createClientValidation: Validation
 	) {}
 
-	execute: CreateClientControllerExecute = async (request) => {
+	execute: CreateClientControllerExecute = async (request, context) => {
 		const errors = this.createClientValidation.validate(request)
 		if (errors) return badRequest(errors)
 
 		try {
-			const result = await this.createClientUseCase.create(request)
+			const result = await this.createClientUseCase.create(request, context)
 
 			if (result) return ok(result)
 			return noContent()
@@ -36,5 +37,6 @@ export namespace CreateClientController {
 }
 
 type CreateClientControllerExecute = (
-	request: CreateClientController.Request
+	request: CreateClientController.Request,
+	context: AccountContext
 ) => Promise<HttpResponse<CreateClientController.Result>>

@@ -5,6 +5,9 @@ import { DbCreateClient } from "./db-create-client-usecase"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
 import { DbLoadClientById } from "./db-load-client-by-id-usecase"
 import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identificationNumber-usecase"
+import crypto from "crypto"
+
+const accountId = crypto.randomUUID()
 
 test("Should load client by ID with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -21,12 +24,15 @@ test("Should load client by ID with success", async () => {
 		clientsRepository
 	)
 
-	const client = await dbCreateClient.create({
-		code: "000",
-		identificationNumber: "12345",
-		name: "Client name",
-		status: true,
-	})
+	const client = await dbCreateClient.create(
+		{
+			code: "000",
+			identificationNumber: "12345",
+			name: "Client name",
+			status: true,
+		},
+		{ accountId }
+	)
 
 	if (client) {
 		const result = await dbLoadClientById.loadById(client.id)

@@ -7,12 +7,14 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
 import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identificationNumber-usecase"
 import { ClientInvalidError } from "@/data/errors/clients-error"
+import crypto from "crypto"
 
 const CLIENT_DATA = {
 	code: "CLIENT_CODE",
 	name: "CLIENT NAME",
 	identificationNumber: "CLIENT IDENTIFICATION",
 }
+const userId = crypto.randomUUID()
 
 test("Should update client with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -31,7 +33,7 @@ test("Should update client with success", async () => {
 		clientsRepository
 	)
 
-	const client = await dbCreateClient.create(CLIENT_DATA)
+	const client = await dbCreateClient.create(CLIENT_DATA, { accountId: userId })
 
 	if (client) {
 		const result = await dbUpdateClient.update({

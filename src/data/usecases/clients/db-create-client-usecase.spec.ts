@@ -9,6 +9,9 @@ import { DbCreateContact } from "../contacts/db-create-contact"
 import { DbCreateClient } from "./db-create-client-usecase"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
 import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identificationNumber-usecase"
+import crypto from "crypto"
+
+const accountId = crypto.randomUUID()
 
 test("Should create client with company with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -24,12 +27,17 @@ test("Should create client with company with success", async () => {
 		clientsRepository
 	)
 
-	const result = await dbCreateClient.create({
-		code: "000",
-		identificationNumber: "12345",
-		name: "Client name",
-		status: true,
-	})
+	const result = await dbCreateClient.create(
+		{
+			code: "000",
+			identificationNumber: "12345",
+			name: "Client name",
+			status: true,
+		},
+		{
+			accountId,
+		}
+	)
 
 	expect(result?.code).toEqual("000")
 	expect(result?.identificationNumber).toEqual("12345")
@@ -50,13 +58,16 @@ test("Should create client with company with success", async () => {
 		status: true,
 	})
 
-	const resultWithCompany = await dbCreateClient.create({
-		code: "0000",
-		identificationNumber: "123456",
-		name: "Client name",
-		status: true,
-		company,
-	})
+	const resultWithCompany = await dbCreateClient.create(
+		{
+			code: "0000",
+			identificationNumber: "123456",
+			name: "Client name",
+			status: true,
+			company,
+		},
+		{ accountId }
+	)
 
 	expect(resultWithCompany?.code).toEqual("0000")
 	expect(resultWithCompany?.identificationNumber).toEqual("123456")
@@ -99,13 +110,16 @@ test("Should create client with two contacts with success", async () => {
 	})
 
 	if (firstContact && secondContact) {
-		const result = await dbCreateClient.create({
-			code: "000",
-			identificationNumber: "12345",
-			name: "Client name",
-			status: true,
-			contacts: [firstContact, secondContact],
-		})
+		const result = await dbCreateClient.create(
+			{
+				code: "000",
+				identificationNumber: "12345",
+				name: "Client name",
+				status: true,
+				contacts: [firstContact, secondContact],
+			},
+			{ accountId }
+		)
 
 		expect(result?.code).toEqual("000")
 		expect(result?.identificationNumber).toEqual("12345")
