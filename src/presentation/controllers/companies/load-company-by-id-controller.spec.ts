@@ -1,6 +1,7 @@
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
+import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
 import { DbLoadCompanyById } from "@/data/usecases/companies/db-load-company-by-id"
 import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
@@ -17,12 +18,15 @@ test("Should load company by id with success", async () => {
 	const contactsRepository = new InMemoryContactsRepository()
 
 	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
 		createCompany
 	)
 

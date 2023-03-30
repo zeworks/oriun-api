@@ -1,3 +1,4 @@
+import { CompanyIdInvalidError } from "@/data/errors/companies-error"
 import { LoadCompanyByIdRepository } from "@/data/protocols/repositories/companies/load-company-by-id-repository"
 import { UpdateCompanyRepository } from "@/data/protocols/repositories/companies/update-company-repository"
 import {
@@ -14,7 +15,7 @@ export class DbUpdateCompany implements UpdateCompanyUseCase {
 	update: UpdateCompanyUseCaseFunction = async (input) => {
 		const company = await this.loadCompanyByIdRepository.loadById(input.id)
 
-		if (!company) throw new Error("invalid id")
+		if (!company) throw new CompanyIdInvalidError()
 
 		return this.updateCompanyRepository.update(input)
 	}

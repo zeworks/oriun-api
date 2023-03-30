@@ -1,6 +1,7 @@
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
+import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
 import { DbUpdateCompany } from "@/data/usecases/companies/db-update-company"
 import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { DbUpdateContact } from "@/data/usecases/contacts/db-update-contact"
@@ -15,13 +16,12 @@ import { UpdateCompanyController } from "./update-company-controller"
 test("Should update company with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
-	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
-	const updateContactUseCase = new DbUpdateContact(
-		contactsRepository,
-		contactsRepository
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
 	)
 	const updateCompanyUseCase = new DbUpdateCompany(
 		companiesRepository,
@@ -30,15 +30,10 @@ test("Should update company with success", async () => {
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
 		createCompany
 	)
 	const updateCompanyController = new UpdateCompanyController(
 		makeUpdateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
-		updateContactUseCase,
 		updateCompanyUseCase
 	)
 
@@ -80,13 +75,11 @@ test("Should update company with success", async () => {
 test("Should update company contact country with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
-
-	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
-	const updateContactUseCase = new DbUpdateContact(
-		contactsRepository,
-		contactsRepository
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
 	)
 	const updateCompanyUseCase = new DbUpdateCompany(
 		companiesRepository,
@@ -95,15 +88,10 @@ test("Should update company contact country with success", async () => {
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
 		createCompany
 	)
 	const updateCompanyController = new UpdateCompanyController(
 		makeUpdateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
-		updateContactUseCase,
 		updateCompanyUseCase
 	)
 
@@ -141,14 +129,13 @@ test("Should update company contact country with success", async () => {
 test("Should update company cleaning the contacts with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
-
-	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
-	const updateContactUseCase = new DbUpdateContact(
-		contactsRepository,
-		contactsRepository
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
 	)
+
 	const updateCompanyUseCase = new DbUpdateCompany(
 		companiesRepository,
 		companiesRepository
@@ -156,15 +143,10 @@ test("Should update company cleaning the contacts with success", async () => {
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
 		createCompany
 	)
 	const updateCompanyController = new UpdateCompanyController(
 		makeUpdateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
-		updateContactUseCase,
 		updateCompanyUseCase
 	)
 

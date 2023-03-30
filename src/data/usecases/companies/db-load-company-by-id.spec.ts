@@ -1,13 +1,20 @@
+import { CompanyIdInvalidError } from "@/data/errors/companies-error"
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
 import { DbCreateCompany } from "./db-create-company"
+import { DbLoadCompanyByCode } from "./db-load-company-by-code"
 import { DbLoadCompanyById } from "./db-load-company-by-id"
 
 test("Should load company by id with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 	const loadCompany = new DbLoadCompanyById(companiesRepository)
 
 	const company = await createCompany.create({
@@ -30,6 +37,6 @@ test("Should throw an error if invalid id", async () => {
 	try {
 		await loadCompany.loadById("123")
 	} catch (error) {
-		expect(error).toEqual(new Error("invalid id"))
+		expect(error).toEqual(new CompanyIdInvalidError())
 	}
 })

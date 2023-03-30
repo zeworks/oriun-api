@@ -1,3 +1,4 @@
+import { CompanyCodeInvalidError } from "@/data/errors/companies-error"
 import { LoadCompanyByCodeUseCase } from "@/domain/usecases/companies/load-company-by-code"
 import { badRequest, ok, serverError } from "@/presentation/helpers/http"
 import {
@@ -24,6 +25,9 @@ export class LoadCompanyByCodeController implements Controller {
 			const result = await this.loadCompanyByCodeUseCase.loadByCode(
 				request!.code
 			)
+
+			if (!result) throw new CompanyCodeInvalidError()
+
 			return ok(result)
 		} catch (error: any) {
 			return serverError(error)

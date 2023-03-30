@@ -1,6 +1,4 @@
-import { ContactsEntity } from "@/domain/entities/contacts"
 import { CreateCompanyUseCase } from "@/domain/usecases/companies/create-company"
-import { CreateContactUseCase } from "@/domain/usecases/contacts/create-contact"
 import { badRequest, ok, serverError } from "@/presentation/helpers/http"
 import { Controller } from "@/presentation/protocols/controller"
 import { HttpResponse } from "@/presentation/protocols/http"
@@ -18,32 +16,15 @@ type CreateCompanyControllerFunction = (
 export class CreateCompanyController implements Controller {
 	constructor(
 		private readonly createCompanyValidation: Validation,
-		private readonly createContactsValidation: Validation,
-		private readonly createContact: CreateContactUseCase,
 		private readonly createCompany: CreateCompanyUseCase
 	) {}
 
 	execute: CreateCompanyControllerFunction = async (request) => {
-		const contacts: Array<ContactsEntity> = []
-
 		const errors = this.createCompanyValidation.validate(request)
 		if (errors) return badRequest(errors)
 
-		for (const contact of request.contacts || []) {
-			const contactError = this.createContactsValidation.validate(contact)
-
-			if (contactError) return badRequest(contactError)
-
-			const result = await this.createContact.create(contact)
-
-			if (result) contacts.push(result)
-		}
-
 		try {
-			const result = await this.createCompany.create({
-				...request,
-				contacts,
-			})
+			const result = await this.createCompany.create(request)
 			return ok(result)
 		} catch (error: any) {
 			return serverError(error)

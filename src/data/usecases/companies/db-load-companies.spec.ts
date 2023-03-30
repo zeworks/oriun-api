@@ -3,11 +3,17 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
 import { DbCreateCompany } from "./db-create-company"
 import { DbLoadCompanies } from "./db-load-companies"
+import { DbLoadCompanyByCode } from "./db-load-company-by-code"
 
 test("Should return a list of companies with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -28,7 +34,12 @@ test("Should return a list of companies with success", async () => {
 test("Should return a list of companies that are active (status as true) with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -58,7 +69,12 @@ test("Should return an empty list with success", async () => {
 test("Should get 2 companies starting from second of the list", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -96,7 +112,12 @@ test("Should get 2 companies starting from second of the list", async () => {
 test("Should return a list of companies that contains the code 'test'", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -124,7 +145,12 @@ test("Should return a list of companies that contains the code 'test'", async ()
 test("Should return a list of companies that contains the name 'test'", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -152,7 +178,12 @@ test("Should return a list of companies that contains the name 'test'", async ()
 test("Should search by id with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -188,7 +219,12 @@ test("Should return an empty list with success", async () => {
 test("Should order by id with success ASC", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -218,7 +254,12 @@ test("Should order by id with success ASC", async () => {
 test("Should order by CODE with success ASC", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -248,7 +289,12 @@ test("Should order by CODE with success ASC", async () => {
 test("Should order by NAME with success ASC", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 
@@ -281,7 +327,12 @@ test("Should order by NAME with success ASC", async () => {
 test("Should order by NAME with success DESC", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 
 	const loadCompanies = new DbLoadCompanies(companiesRepository)
 

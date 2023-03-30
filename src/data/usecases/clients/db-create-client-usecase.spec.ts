@@ -4,6 +4,7 @@ import { InMemoryContactsRepository } from "@/data/protocols/repositories/contac
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
 import { DbCreateCompany } from "../companies/db-create-company"
+import { DbLoadCompanyByCode } from "../companies/db-load-company-by-code"
 import { DbCreateContact } from "../contacts/db-create-contact"
 import { DbCreateClient } from "./db-create-client-usecase"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
@@ -11,13 +12,13 @@ import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identifi
 
 test("Should create client with company with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
-	const uuidAdaptar = new UuidAdapter()
+	const uuidAdapter = new UuidAdapter()
 
 	const dbLoadClientByCode = new DbLoadClientByCode(clientsRepository)
 	const dbLoadClientByIdentificationNumber =
 		new DbLoadClientByIdentificationNumber(clientsRepository)
 	const dbCreateClient = new DbCreateClient(
-		uuidAdaptar,
+		uuidAdapter,
 		dbLoadClientByCode,
 		dbLoadClientByIdentificationNumber,
 		clientsRepository
@@ -37,7 +38,12 @@ test("Should create client with company with success", async () => {
 
 	// create company and assign it
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const dbCreateCompany = new DbCreateCompany(uuidAdaptar, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const dbCreateCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 	const company = await dbCreateCompany.create({
 		code: "123",
 		name: "Company name",
@@ -63,18 +69,18 @@ test("Should create client with company with success", async () => {
 test("Should create client with two contacts with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
 	const contactsRepository = new InMemoryContactsRepository()
-	const uuidAdaptar = new UuidAdapter()
+	const uuidAdapter = new UuidAdapter()
 
 	const dbLoadClientByCode = new DbLoadClientByCode(clientsRepository)
 	const dbLoadClientByIdentificationNumber =
 		new DbLoadClientByIdentificationNumber(clientsRepository)
 	const dbCreateClient = new DbCreateClient(
-		uuidAdaptar,
+		uuidAdapter,
 		dbLoadClientByCode,
 		dbLoadClientByIdentificationNumber,
 		clientsRepository
 	)
-	const dbCreateContact = new DbCreateContact(uuidAdaptar, contactsRepository)
+	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 
 	const firstContact = await dbCreateContact.create({
 		country: "Portugal",

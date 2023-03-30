@@ -1,7 +1,10 @@
+import { CompanyIdInvalidError } from "@/data/errors/companies-error"
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
 import { DbDeleteCompany } from "@/data/usecases/companies/db-delete-company"
+import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
+import { DbLoadCompanyById } from "@/data/usecases/companies/db-load-company-by-id"
 import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateCompanyValidation } from "@/main/factories/controllers/companies/create-company-controller-validation"
@@ -14,10 +17,12 @@ import { DeleteCompanyController } from "./delete-company-controller"
 test("Should delete company with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
-
-	const createContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 	const deleteCompany = new DbDeleteCompany(
 		companiesRepository,
 		companiesRepository
@@ -25,8 +30,6 @@ test("Should delete company with success", async () => {
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContact,
 		createCompany
 	)
 	const deleteCompanyController = new DeleteCompanyController(
@@ -59,7 +62,7 @@ test("Should delete company with success", async () => {
 test("Should throw an error if invalid company id", async () => {
 	const companiesRepository = new InMemoryCompaniesRepository()
 	const deleteCompany = new DbDeleteCompany(
-		companiesRepository,
+		new DbLoadCompanyById(companiesRepository),
 		companiesRepository
 	)
 
@@ -72,5 +75,5 @@ test("Should throw an error if invalid company id", async () => {
 		id: "123",
 	})
 
-	expect(result.data).toEqual(new Error("invalid company id"))
+	expect(result.data).toEqual(new CompanyIdInvalidError())
 })
