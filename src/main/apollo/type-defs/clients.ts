@@ -43,7 +43,38 @@ export default gql`
 		contacts: [ClientContact]
 	}
 
+	input ClientsFilterInput {
+		status: Boolean
+	}
+
+	input ClientsPaginationInput {
+		skip: Int
+		take: Int
+	}
+
+	enum ClientsOrderByKey {
+		ID
+		NAME
+		CODE
+	}
+
+	enum ClientsOrderBySort {
+		ASC
+		DESC
+	}
+
+	input ClientsOrderBy {
+		key: ClientsOrderByKey
+		sort: ClientsOrderBySort
+	}
+
 	extend type Query {
+		clients(
+			filter: ClientsFilterInput
+			pagination: ClientsPaginationInput
+			search: String
+			orderBy: ClientsOrderBy
+		): [Client] @auth
 		client(id: String!): Client @auth
 	}
 

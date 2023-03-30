@@ -1,3 +1,4 @@
+import { AccountContext } from "@/config/account-context"
 import { ClientsEntity } from "@/domain/entities/clients"
 import { CompaniesEntity } from "@/domain/entities/companies"
 import { ContactsEntity } from "@/domain/entities/contacts"
@@ -7,7 +8,8 @@ export interface CreateClientUseCase {
 }
 
 export type CreateClientUseCaseFn = (
-	input: CreateClientUseCase.Input
+	input: CreateClientUseCase.Input,
+	context: AccountContext
 ) => Promise<CreateClientUseCase.Output>
 
 export namespace CreateClientUseCase {

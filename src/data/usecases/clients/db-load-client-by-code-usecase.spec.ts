@@ -4,6 +4,9 @@ import { expect, test } from "vitest"
 import { DbCreateClient } from "./db-create-client-usecase"
 import { DbLoadClientByCode } from "./db-load-client-by-code-usecase"
 import { DbLoadClientByIdentificationNumber } from "./db-load-client-by-identificationNumber-usecase"
+import crypto from "crypto"
+
+const userId = crypto.randomUUID()
 
 test("Should create and load client by code with sucess", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -18,12 +21,15 @@ test("Should create and load client by code with sucess", async () => {
 		clientsRepository
 	)
 
-	const client = await dbCreateClient.create({
-		code: "000",
-		identificationNumber: "12345",
-		name: "Client name",
-		status: true,
-	})
+	const client = await dbCreateClient.create(
+		{
+			code: "000",
+			identificationNumber: "12345",
+			name: "Client name",
+			status: true,
+		},
+		{ accountId: userId }
+	)
 
 	if (client) {
 		const result = await dbLoadClientByCode.loadByCode(client?.code)

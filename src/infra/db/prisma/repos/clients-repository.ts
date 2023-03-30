@@ -13,6 +13,9 @@ import { UpdateClientRepository } from "@/data/protocols/repositories/clients/up
 import { UpdateClientUseCaseFn } from "@/domain/usecases/clients/update-client-usecase"
 import { DeleteClientRepository } from "@/data/protocols/repositories/clients/delete-client-repository"
 import { DeleteClientUseCaseFn } from "@/domain/usecases/clients/delete-client-usecase"
+import { LoadClientsRepository } from "@/data/protocols/repositories/clients/load-clients-repository"
+import { LoadClientsUseCaseFn } from "@/domain/usecases/clients/load-clients-usecase"
+import { roleValidation } from "@/validation/role-validation"
 
 export class ClientsRepository
 	implements
@@ -21,11 +24,12 @@ export class ClientsRepository
 		LoadClientByIdRepository,
 		LoadClientByIdentificationNumberRepository,
 		UpdateClientRepository,
-		DeleteClientRepository
+		DeleteClientRepository,
+		LoadClientsRepository
 {
 	private clients = PrismaHelper.getCollection("clients")
 
-	create: CreateClientRepositoryFn = async (input) =>
+	create: CreateClientRepositoryFn = async (input, context) =>
 		this.clients.create({
 			data: {
 				...input,
@@ -34,9 +38,16 @@ export class ClientsRepository
 						id: contact.id,
 					})),
 				},
-				company: {
+				company: input?.company?.id
+					? {
+							connect: {
+								id: input?.company?.id,
+							},
+					  }
+					: undefined,
+				users: {
 					connect: {
-						id: input?.company?.id,
+						id: context.accountId,
 					},
 				},
 			},
@@ -102,4 +113,74 @@ export class ClientsRepository
 
 	delete: DeleteClientUseCaseFn = async (id) =>
 		!!this.clients.delete({ where: { id } })
+
+	loadClients: LoadClientsUseCaseFn = async (params, context) => {
+		const isAdminAccount = roleValidation(context?.accountRole?.key!, "admin")
+
+		return this.clients.findMany({
+			where:
+				params?.filter || params?.search
+					? {
+							OR: [
+								{
+									status: {
+										equals: params?.filter?.status,
+									},
+								},
+								{
+									id: {
+										equals: params?.search,
+									},
+								},
+								{
+									code: {
+										contains: params?.search,
+									},
+								},
+								{
+									name: {
+										contains: params?.search,
+									},
+								},
+							],
+					  }
+					: context?.accountId && !isAdminAccount
+					? {
+							users: {
+								some: {
+									id: context?.accountId,
+								},
+							},
+					  }
+					: undefined,
+			skip: params?.pagination?.skip,
+			take: params?.pagination?.take,
+			orderBy: !!params?.orderBy
+				? {
+						id:
+							params?.orderBy?.key === "ID"
+								? (params.orderBy.sort?.toLowerCase() as any)
+								: undefined,
+						code:
+							params?.orderBy?.key === "CODE"
+								? (params.orderBy.sort?.toLowerCase() as any)
+								: undefined,
+						name:
+							params?.orderBy?.key === "NAME"
+								? (params.orderBy.sort?.toLowerCase() as any)
+								: undefined,
+						createdAt:
+							params?.orderBy?.key === "CREATEDAT"
+								? (params.orderBy.sort?.toLowerCase() as any)
+								: undefined,
+				  }
+				: {
+						createdAt: "desc",
+				  },
+			include: {
+				users: true,
+				company: true,
+			},
+		})
+	}
 }

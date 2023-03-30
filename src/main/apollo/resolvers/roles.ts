@@ -8,7 +8,7 @@ export default {
 		createRole: (_: any, args: any, context: any) =>
 			apolloControllerAdapter(
 				new AclDecorator(makeCreateRoleController(), PermissionKey.RolesCreate),
-				args,
+				args.input,
 				context
 			),
 	},

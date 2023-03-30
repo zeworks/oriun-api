@@ -27,15 +27,19 @@ jobs:
       # Runs a single command using the runners shell
       - name: Install Dependencies
         run: npm install
+        continue-on-error: false
 
       # Runs a single command using the runners shell
       - name: Build Project
         run: npm run build
+        continue-on-error: false
 
       # Runs a single command using the runners shell
       - name: Run Tests
         run: npm run test
+        continue-on-error: false
 
       # Runs a single command using the runners shell
       - name: Lint Project
         run: npm run lint
+        continue-on-error: false
