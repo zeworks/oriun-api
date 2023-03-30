@@ -56,6 +56,8 @@ model Users {
 
   contact   Contacts? @relation(fields: [contactId], references: [id])
   contactId String?
+
+  clients Clients[]
 }
 
 model Departments {
@@ -119,4 +121,5 @@ model Clients {
   companyId String?
 
   contacts Contacts[]
+  users    Users[]
 }
