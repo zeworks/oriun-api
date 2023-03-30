@@ -1,3 +1,4 @@
+import { CompanyCodeInvalidError } from "@/data/errors/companies-error"
 import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/companies/in-memory-companies-repository"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
@@ -14,21 +15,15 @@ import { LoadCompanyByCodeController } from "./load-company-by-code-controller"
 test("Should load the company by code with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 
-	const contactsRepository = new InMemoryContactsRepository()
-	const createContactUseCase = new DbCreateContact(
-		uuidAdapter,
-		contactsRepository
-	)
-
 	const companiesRepository = new InMemoryCompaniesRepository()
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
 	const createCompanyUseCase = new DbCreateCompany(
 		uuidAdapter,
+		dbLoadCompanyByCode,
 		companiesRepository
 	)
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContactUseCase,
 		createCompanyUseCase
 	)
 
@@ -48,4 +43,19 @@ test("Should load the company by code with success", async () => {
 	})
 
 	expect(result.data?.code).toEqual("123")
+})
+
+test("Should throw an error if invalid company code", async () => {
+	const companiesRepository = new InMemoryCompaniesRepository()
+	const loadCompanyByCodeUseCase = new DbLoadCompanyByCode(companiesRepository)
+	const loadCompanyByCodeController = new LoadCompanyByCodeController(
+		makeLoadCompanyByCodeValidation(),
+		loadCompanyByCodeUseCase
+	)
+
+	const result = await loadCompanyByCodeController.execute({
+		code: "123",
+	})
+
+	expect(result.data).toEqual(new CompanyCodeInvalidError())
 })

@@ -3,11 +3,17 @@ import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { expect, test } from "vitest"
 import { DbCreateCompany } from "./db-create-company"
 import { DbDeleteCompany } from "./db-delete-company"
+import { DbLoadCompanyByCode } from "./db-load-company-by-code"
 
 test("Should delete company with success", async () => {
 	const uuidAdapter = new UuidAdapter()
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const createCompany = new DbCreateCompany(uuidAdapter, companiesRepository)
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
+	const createCompany = new DbCreateCompany(
+		uuidAdapter,
+		dbLoadCompanyByCode,
+		companiesRepository
+	)
 	const deleteCompany = new DbDeleteCompany(
 		companiesRepository,
 		companiesRepository

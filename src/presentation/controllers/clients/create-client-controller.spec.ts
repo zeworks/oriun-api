@@ -19,6 +19,7 @@ import { test, expect } from "vitest"
 import { CreateCompanyController } from "../companies/create-company-controller"
 import { CreateClientController } from "./create-client-controller"
 import { CreateContactController } from "../contacts/create-contact-controller"
+import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
 
 test("Should create client with success", async () => {
 	const clientsRepository = new InMemoryClientsRepository()
@@ -170,13 +171,16 @@ test("Should create client with assigned company", async () => {
 
 	const makeCreateCompanyUseCase = () => {
 		const uuidAdapter = new UuidAdapter()
-		return new DbCreateCompany(uuidAdapter, companiesRepository)
+		const dbLoadClientByCode = new DbLoadCompanyByCode(companiesRepository)
+		return new DbCreateCompany(
+			uuidAdapter,
+			dbLoadClientByCode,
+			companiesRepository
+		)
 	}
 
 	const createCompanyController = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		makeCreateContactUseCase(),
 		makeCreateCompanyUseCase()
 	)
 

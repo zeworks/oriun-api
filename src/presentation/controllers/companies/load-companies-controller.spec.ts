@@ -2,6 +2,7 @@ import { InMemoryCompaniesRepository } from "@/data/protocols/repositories/compa
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { DbCreateCompany } from "@/data/usecases/companies/db-create-company"
 import { DbLoadCompanies } from "@/data/usecases/companies/db-load-companies"
+import { DbLoadCompanyByCode } from "@/data/usecases/companies/db-load-company-by-code"
 import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateCompanyValidation } from "@/main/factories/controllers/companies/create-company-controller-validation"
@@ -12,22 +13,15 @@ import { LoadCompaniesController } from "./load-companies-controller"
 
 test("Should return a list of companies with success", async () => {
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
-
 	const uuidAdapter = new UuidAdapter()
-	const createContactUseCase = new DbCreateContact(
-		uuidAdapter,
-		contactsRepository
-	)
-
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
 	const createCompanyUseCase = new DbCreateCompany(
 		uuidAdapter,
+		dbLoadCompanyByCode,
 		companiesRepository
 	)
 	const createCompany = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContactUseCase,
 		createCompanyUseCase
 	)
 
@@ -66,22 +60,16 @@ test("Should return an empty array if no companies created", async () => {
 
 test("Should return a list of companies paginated", async () => {
 	const companiesRepository = new InMemoryCompaniesRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
 	const uuidAdapter = new UuidAdapter()
-	const createContactUseCase = new DbCreateContact(
-		uuidAdapter,
-		contactsRepository
-	)
-
+	const dbLoadCompanyByCode = new DbLoadCompanyByCode(companiesRepository)
 	const createCompanyUseCase = new DbCreateCompany(
 		uuidAdapter,
+		dbLoadCompanyByCode,
 		companiesRepository
 	)
 	const createCompany = new CreateCompanyController(
 		makeCreateCompanyValidation(),
-		makeCreateContactValidation(),
-		createContactUseCase,
 		createCompanyUseCase
 	)
 

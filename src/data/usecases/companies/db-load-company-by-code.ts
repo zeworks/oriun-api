@@ -10,10 +10,6 @@ export class DbLoadCompanyByCode implements LoadCompanyByCodeUseCase {
 	) {}
 
 	loadByCode: LoadCompanyByCodeUseCaseFunction = async (code) => {
-		const result = await this.loadCompanyByCodeRepository.loadByCode(code)
-
-		if (!result) throw new Error("invalid code")
-
-		return result
+		return this.loadCompanyByCodeRepository.loadByCode(code)
 	}
 }

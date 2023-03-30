@@ -44,9 +44,6 @@
 	"prisma": {
 		"seed": "ts-node prisma/seed.ts"
 	},
-	"engines": {
-		"node": "16.x"
-	},
 	"_moduleAliases": {
 		"@": "dist"
 	}
