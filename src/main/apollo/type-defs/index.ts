@@ -6,6 +6,7 @@ import auth from "./auth"
 import departments from "./departments"
 import companies from "./companies"
 import contacts from "./contacts"
+import clients from "./clients"
 
 export default [
 	base,
@@ -16,4 +17,5 @@ export default [
 	departments,
 	companies,
 	contacts,
+	clients,
 ]

@@ -14,14 +14,22 @@ export default gql`
 		contacts: [Contact]
 	}
 
+	input ClientCompany {
+		id: String
+	}
+
+	input ClientContact {
+		id: String
+	}
+
 	input ClientCreate {
 		name: String!
 		code: String!
 		identificationNumber: String!
 		picture: String
 		status: Boolean
-		company: Companies
-		contacts: [Contact]
+		company: ClientCompany
+		contacts: [ClientContact]
 	}
 
 	input ClientUpdate {
@@ -31,8 +39,8 @@ export default gql`
 		identificationNumber: String
 		picture: String
 		status: Boolean
-		company: Companies
-		contacts: [Contact]
+		company: ClientCompany
+		contacts: [ClientContact]
 	}
 
 	extend type Query {
@@ -42,5 +50,6 @@ export default gql`
 	extend type Mutation {
 		createClient(input: ClientCreate): Client @auth
 		updateClient(input: ClientUpdate): Client @auth
+		deleteClient(id: String!): Boolean @auth
 	}
 `
