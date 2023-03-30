@@ -3,6 +3,7 @@ import UsersResolver from "./users"
 import AuthResolver from "./auth"
 import DepartmentsResolver from "./departments"
 import CompaniesResolver from "./companies"
+import ClientsResolver from "./client"
 
 export default [
 	RolesResolver,
@@ -10,4 +11,5 @@ export default [
 	AuthResolver,
 	DepartmentsResolver,
 	CompaniesResolver,
+	ClientsResolver,
 ]
