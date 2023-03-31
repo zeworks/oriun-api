@@ -115,7 +115,8 @@ export class ClientsRepository
 		!!this.clients.delete({ where: { id } })
 
 	loadClients: LoadClientsUseCaseFn = async (params, context) => {
-		const isAdminAccount = roleValidation(context?.accountRole?.key!, "admin")
+		const isAdminAccount =
+			context?.accountId && roleValidation(context?.accountRole?.key!, "admin")
 
 		return this.clients.findMany({
 			where:
@@ -144,7 +145,7 @@ export class ClientsRepository
 								},
 							],
 					  }
-					: context?.accountId && !isAdminAccount
+					: !isAdminAccount
 					? {
 							users: {
 								some: {
