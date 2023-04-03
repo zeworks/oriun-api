@@ -2,7 +2,7 @@ import { UpdateAuthenticationTokenUseCase } from "@/domain/usecases/authenticati
 
 export type UpdateTokenRepositoryFunction = (
 	user_id: string,
-	token: string
+	token?: string | null
 ) => Promise<UpdateAuthenticationTokenUseCase.Result>
 
 export interface UpdateTokenRepository {

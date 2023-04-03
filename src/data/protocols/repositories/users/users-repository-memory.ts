@@ -32,16 +32,16 @@ export class InMemoryUsersRepository
 		DeleteAccountRepository,
 		UpdateAccountRepository
 {
-	users: any[] = []
+	users: UsersEntity[] = []
 
 	loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
 		const user = this.users.find((user) => user.email === email)
-		return user
+		return user || null
 	}
 
 	loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
 		const user = this.users.find((user) => user.username === username)
-		return user
+		return user || null
 	}
 
 	create = async (
@@ -88,22 +88,27 @@ export class InMemoryUsersRepository
 		}
 	}
 
-	updateToken: UpdateTokenRepositoryFunction = (userId, token) => {
+	updateToken: UpdateTokenRepositoryFunction = async (
+		userId,
+		token
+	): Promise<any> => {
 		const user = this.users.find((u) => u.id === userId)
+
+		if (!user) return null
 
 		Object.assign(user, {
 			accessToken: token,
 		})
 
-		return user
+		return { accessToken: user.accessToken }
 	}
 
-	loadToken: LoadAccountByTokenUseCaseFunction = (token) => {
-		return this.users.find((u) => u.accessToken === token)
+	loadToken: LoadAccountByTokenUseCaseFunction = async (token) => {
+		return this.users.find((u) => u.accessToken === token) || null
 	}
 
-	loadById: LoadAccountByIdUseCaseFunction = (id) => {
-		return this.users.find((u) => u.id === id)
+	loadById: LoadAccountByIdUseCaseFunction = async (id) => {
+		return this.users.find((u) => u.id === id) || null
 	}
 
 	loadAccounts: LoadAccountsUseCaseFunction = () => {
@@ -126,11 +131,15 @@ export class InMemoryUsersRepository
 		input: UpdateAccountUseCase.Input
 	): Promise<UpdateAccountUseCase.Result> {
 		const user = this.users.find((u) => u.id === id)
-
 		if (user) {
-			Object.assign<any, UsersEntity>(user, {
+			return Object.assign<any, UsersEntity>(user, {
 				...user,
 				...input,
+				username: input.username ?? user.username,
+				profile: {
+					...user.profile,
+					...input.profile,
+				},
 				role: input.role
 					? {
 							id: input.role,
@@ -141,13 +150,11 @@ export class InMemoryUsersRepository
 				department: input.department
 					? {
 							id: input.department,
-							key: faker.word.adjective(5),
+							status: false,
 							name: faker.word.verb(5),
 					  }
 					: user.department,
 			})
-
-			return user
 		}
 
 		return null
