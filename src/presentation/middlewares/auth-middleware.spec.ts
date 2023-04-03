@@ -19,9 +19,7 @@ import { CreateAccountController } from "../controllers/users/create-account-con
 import { AuthMiddleware } from "./auth-middleware"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
-import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
-import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 
 test("Should have valid accesstoken", async () => {
 	const rolesRepository = new InMemoryRolesRepository()
@@ -53,12 +51,8 @@ test("Should have valid accesstoken", async () => {
 		usersRepository
 	)
 
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-
 	const createAccount = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 	const dbLoadAccountByToken = new DbLoadAccountByToken(

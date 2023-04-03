@@ -1,9 +1,7 @@
 import { DEFAULT_JWT_SECRET } from "@/config/jwt"
 import { UserInvalidError } from "@/data/errors/user-invalid-error"
-import { InMemoryContactsRepository } from "@/data/protocols/repositories/contacts/in-memory-contacts-repository"
 import { InMemoryUsersRepository } from "@/data/protocols/repositories/users/users-repository-memory"
 import { DbCreateAuthentication } from "@/data/usecases/authentication/create-authentication-usecase"
-import { DbCreateContact } from "@/data/usecases/contacts/db-create-contact"
 import { DbCreateAccount } from "@/data/usecases/users/db-create-account"
 import { DbLoadAccountByEmail } from "@/data/usecases/users/load-account-by-email"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
@@ -11,15 +9,12 @@ import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { JwtAdapter } from "@/infra/cryptography/jwt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
 import { makeCreateAuthenticationValidation } from "@/main/factories/controllers/authentication/create-authentication-controller-validation"
-import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
-import { v4 } from "uuid"
 import { expect, test } from "vitest"
 import { CreateAccountController } from "../users/create-account-controller"
 import { CreateAuthenticationController } from "./create-authentication-controller"
 
 const usersRepository = new InMemoryUsersRepository()
-const contactsRepository = new InMemoryContactsRepository()
 
 const makeDbCreateAuthenticationUseCase = () => {
 	const loadByEmail = new DbLoadAccountByEmail(usersRepository)
@@ -46,12 +41,8 @@ const makeCreateAccountController = () => {
 		usersRepository
 	)
 
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-
 	return new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		createAccount
 	)
 }

@@ -12,8 +12,6 @@ import { DbLoadAccountById } from "@/data/usecases/users/load-account-by-id"
 import { DbLoadAccountByUsername } from "@/data/usecases/users/load-account-by-username"
 import { BcryptAdapter } from "@/infra/cryptography/bcrypt-adapter"
 import { UuidAdapter } from "@/infra/cryptography/uuid"
-import { makeCreateContactValidation } from "@/main/factories/controllers/contacts/create-contact-controller-validation"
-import { makeUpdateContactValidation } from "@/main/factories/controllers/contacts/update-contact-controller-validation"
 import { makeCreateAccountValidation } from "@/main/factories/controllers/users/create-account-validation-factory"
 import { faker } from "@faker-js/faker"
 import { expect, test } from "vitest"
@@ -24,12 +22,10 @@ test("Should update first name and password", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
-	const dbLoadContactByIdRepository = new DbLoadContactById(contactsRepository)
 
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
@@ -46,27 +42,12 @@ test("Should update first name and password", async () => {
 		usersRepository
 	)
 
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
-	const dbUpdateContact = new DbUpdateContact(
-		dbLoadContactByIdRepository,
-		contactsRepository
-	)
-
-	const updateAccountController = new UpdateAccountController(
-		dbUpdateAccount,
-		dbCreateContact,
-		makeCreateContactValidation(),
-		dbUpdateContact,
-		makeUpdateContactValidation()
-	)
+	const updateAccountController = new UpdateAccountController(dbUpdateAccount)
 
 	const account = await createAccountController.execute({
 		input: {
@@ -104,12 +85,10 @@ test("Should update the username", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
-	const dbLoadContactByIdRepository = new DbLoadContactById(contactsRepository)
 
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
@@ -126,26 +105,12 @@ test("Should update the username", async () => {
 		usersRepository
 	)
 
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const dbUpdateContact = new DbUpdateContact(
-		dbLoadContactByIdRepository,
-		contactsRepository
-	)
-
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
-	const updateAccountController = new UpdateAccountController(
-		dbUpdateAccount,
-		dbCreateContact,
-		makeCreateContactValidation(),
-		dbUpdateContact,
-		makeUpdateContactValidation()
-	)
+	const updateAccountController = new UpdateAccountController(dbUpdateAccount)
 
 	const account = await createAccountController.execute({
 		input: {
@@ -179,12 +144,10 @@ test("Should throw an error if username is already in use", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
-	const dbLoadContactByIdRepository = new DbLoadContactById(contactsRepository)
 
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
@@ -200,26 +163,13 @@ test("Should throw an error if username is already in use", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-	const dbUpdateContact = new DbUpdateContact(
-		dbLoadContactByIdRepository,
-		contactsRepository
-	)
 
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
-	const updateAccountController = new UpdateAccountController(
-		dbUpdateAccount,
-		dbCreateContact,
-		makeCreateContactValidation(),
-		dbUpdateContact,
-		makeUpdateContactValidation()
-	)
+	const updateAccountController = new UpdateAccountController(dbUpdateAccount)
 
 	const oldAccount = await createAccountController.execute({
 		input: {
@@ -262,14 +212,9 @@ test("Should throw an error if username is already in use", async () => {
 
 test("Should throw an error if id invalid", async () => {
 	const hashAdapter = new BcryptAdapter(8)
-	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
-	const dbLoadContactByIdRepository = new DbLoadContactById(contactsRepository)
-
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 
 	const dbUpdateAccount = new DbUpdateAccount(
 		hashAdapter,
@@ -278,18 +223,7 @@ test("Should throw an error if id invalid", async () => {
 		usersRepository
 	)
 
-	const dbUpdateContact = new DbUpdateContact(
-		dbLoadContactByIdRepository,
-		contactsRepository
-	)
-
-	const updateAccountController = new UpdateAccountController(
-		dbUpdateAccount,
-		dbCreateContact,
-		makeCreateContactValidation(),
-		dbUpdateContact,
-		makeUpdateContactValidation()
-	)
+	const updateAccountController = new UpdateAccountController(dbUpdateAccount)
 
 	const result = await updateAccountController.execute({
 		id: "123",
@@ -303,12 +237,10 @@ test("Should update contact email", async () => {
 	const hashAdapter = new BcryptAdapter(8)
 	const uuidAdapter = new UuidAdapter()
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 
 	const dbLoadAccountById = new DbLoadAccountById(usersRepository)
 	const dbLoadAccountByUsername = new DbLoadAccountByUsername(usersRepository)
 	const dbLoadAccountByEmail = new DbLoadAccountByEmail(usersRepository)
-	const dbLoadContactByIdRepository = new DbLoadContactById(contactsRepository)
 
 	const dbCreateAccount = new DbCreateAccount(
 		uuidAdapter,
@@ -325,27 +257,12 @@ test("Should update contact email", async () => {
 		usersRepository
 	)
 
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
-
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
-	const dbUpdateContact = new DbUpdateContact(
-		dbLoadContactByIdRepository,
-		contactsRepository
-	)
-
-	const updateAccountController = new UpdateAccountController(
-		dbUpdateAccount,
-		dbCreateContact,
-		makeCreateContactValidation(),
-		dbUpdateContact,
-		makeUpdateContactValidation()
-	)
+	const updateAccountController = new UpdateAccountController(dbUpdateAccount)
 
 	const account = await createAccountController.execute({
 		input: {
