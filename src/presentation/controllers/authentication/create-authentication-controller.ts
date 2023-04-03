@@ -1,3 +1,4 @@
+import { UserInvalidError } from "@/data/errors/user-invalid-error"
 import { CreateAuthenticationUseCase } from "@/domain/usecases/authentication/create-authentication"
 import { badRequest, ok, serverError } from "@/presentation/helpers/http"
 import { Controller } from "@/presentation/protocols/controller"
@@ -19,6 +20,8 @@ export class CreateAuthenticationController implements Controller {
 
 		try {
 			const result = await this.createAuthentication.authenticate(request)
+			if (!result) return badRequest(new UserInvalidError())
+
 			return ok(result)
 		} catch (error: any) {
 			return serverError(error)
