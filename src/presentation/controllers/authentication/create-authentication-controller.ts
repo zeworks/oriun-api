@@ -15,7 +15,6 @@ export class CreateAuthenticationController implements Controller {
 		request: CreateAuthenticationController.Params
 	): Promise<HttpResponse<CreateAuthenticationController.Result>> => {
 		const errors = this.validation.validate(request)
-
 		if (errors) return badRequest(errors)
 
 		try {

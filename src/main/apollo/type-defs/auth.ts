@@ -11,5 +11,6 @@ export default gql`
 
 	extend type Mutation {
 		createAuthentication(email: String, password: String): Authentication
+		deleteAuthentication: Boolean @auth
 	}
 `
