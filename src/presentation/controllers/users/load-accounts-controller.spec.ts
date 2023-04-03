@@ -25,7 +25,6 @@ test("Should return an empty list of users", async () => {
 
 test("Should return a list with two users", async () => {
 	const usersRepository = new InMemoryUsersRepository()
-	const contactsRepository = new InMemoryContactsRepository()
 	const uuidAdapter = new UuidAdapter()
 	const bcrypt = new BcryptAdapter(8)
 
@@ -39,12 +38,9 @@ test("Should return a list with two users", async () => {
 		dbLoadAccountByUsername,
 		usersRepository
 	)
-	const dbCreateContact = new DbCreateContact(uuidAdapter, contactsRepository)
 	const loadAccountsController = new LoadAccountsController(dbLoadAccounts)
 	const createAccountController = new CreateAccountController(
 		makeCreateAccountValidation(),
-		dbCreateContact,
-		makeCreateContactValidation(),
 		dbCreateAccount
 	)
 
