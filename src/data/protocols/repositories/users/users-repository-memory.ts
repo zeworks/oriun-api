@@ -47,7 +47,7 @@ export class InMemoryUsersRepository
 	create = async (
 		input: CreateAccountRepository.Params
 	): Promise<CreateAccountRepository.Result> => {
-		const data = {
+		const data: CreateAccountRepository.Result = {
 			...input,
 			profile: {
 				firstName: input?.profile?.firstName,
@@ -69,6 +69,12 @@ export class InMemoryUsersRepository
 						status: true,
 				  }
 				: null,
+			clients: input.clients?.map((c) => ({
+				code: `CODE_${c.id}`,
+				id: c.id,
+				identificationNumber: `ID_NUMBER_${c.id}`,
+				name: `NAME_${c.id}`,
+			})),
 		}
 
 		this.users.push(data)
@@ -85,6 +91,7 @@ export class InMemoryUsersRepository
 			role: data.role,
 			department: data.department,
 			contact: data.contact,
+			clients: data.clients,
 		}
 	}
 
@@ -154,6 +161,7 @@ export class InMemoryUsersRepository
 							name: faker.word.verb(5),
 					  }
 					: user.department,
+				clients: user.clients,
 			})
 		}
 

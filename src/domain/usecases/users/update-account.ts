@@ -1,3 +1,4 @@
+import { ClientsEntity } from "@/domain/entities/clients"
 import { ContactsEntity } from "@/domain/entities/contacts"
 import { UsersEntity, UsersProfileEntity } from "@/domain/entities/users"
 
@@ -14,6 +15,7 @@ export namespace UpdateAccountUseCase {
 		profile?: Partial<UsersProfileEntity>
 		department?: string | null
 		contact?: ContactsEntity | null
+		clients?: Array<ClientsEntity>
 	}
 	export type Result = UsersEntity | null
 }

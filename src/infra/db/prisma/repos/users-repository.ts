@@ -44,11 +44,13 @@ export class UsersRepository
 				status: input.status,
 				picture: input.profile.picture,
 				identificationNumber: input.identificationNumber,
-				contact: {
-					connect: {
-						id: (input.contact as ContactsEntity)?.id,
-					},
-				},
+				contact: input.contact?.id
+					? {
+							connect: {
+								id: (input.contact as ContactsEntity)?.id,
+							},
+					  }
+					: undefined,
 				department: input.department
 					? {
 							connect: {
@@ -67,6 +69,12 @@ export class UsersRepository
 			include: {
 				contact: true,
 				department: true,
+				clients: {
+					include: {
+						company: true,
+						contacts: true,
+					},
+				},
 				role: {
 					include: {
 						permissions: true,
@@ -99,7 +107,7 @@ export class UsersRepository
 		return null
 	}
 	loadByEmail: LoadAccountByEmailUseCaseFunction = async (email) => {
-		return PrismaHelper.getCollection("users").findFirst({
+		return PrismaHelper.getCollection("users").findUnique({
 			where: {
 				email,
 			},
@@ -107,13 +115,19 @@ export class UsersRepository
 	}
 
 	loadById: LoadAccountByIdUseCaseFunction = async (id) => {
-		const result = await PrismaHelper.getCollection("users").findFirst({
+		const result = await PrismaHelper.getCollection("users").findUnique({
 			where: {
 				id,
 			},
 			include: {
 				contact: true,
 				department: true,
+				clients: {
+					include: {
+						company: true,
+						contacts: true,
+					},
+				},
 				role: {
 					include: {
 						permissions: true,
@@ -135,7 +149,7 @@ export class UsersRepository
 	}
 
 	loadByUsername: LoadAccountByUsernameUseCaseFunction = async (username) => {
-		return await PrismaHelper.getCollection("users").findFirst({
+		return await PrismaHelper.getCollection("users").findUnique({
 			where: {
 				username,
 			},
@@ -223,20 +237,12 @@ export class UsersRepository
 		id: string,
 		input: UpdateAccountUseCase.Input
 	): Promise<UpdateAccountUseCase.Result> => {
-		const account = await PrismaHelper.getCollection("users").findFirst({
-			where: {
-				id,
-			},
-		})
-
 		const result = await PrismaHelper.getCollection("users").update({
 			where: {
 				id,
 			},
 			data: {
-				identificationNumber: input.identificationNumber,
-				password: input.password,
-				username: input?.username || account?.username,
+				...(input as any),
 				firstName: input?.profile?.firstName,
 				lastName: input?.profile?.lastName,
 				picture: input?.profile?.picture,
@@ -261,10 +267,23 @@ export class UsersRepository
 							},
 					  }
 					: undefined,
+				clients: !!input.clients?.length
+					? {
+							connect: input?.clients?.map((c) => ({
+								id: c.id,
+							})),
+					  }
+					: undefined,
 			},
 			include: {
 				contact: true,
 				department: true,
+				clients: {
+					include: {
+						company: true,
+						contacts: true,
+					},
+				},
 				role: {
 					include: {
 						permissions: true,

@@ -1,6 +1,6 @@
+import { ClientsEntity } from "@/domain/entities/clients"
 import { ContactsEntity } from "@/domain/entities/contacts"
-import { DepartmentsEntity } from "@/domain/entities/departments"
-import { RolesEntity } from "@/domain/entities/roles"
+import { UsersEntity } from "@/domain/entities/users"
 
 export type CreateAccountUseCaseFunction = (
 	input: CreateAccountUseCase.Params
@@ -25,22 +25,8 @@ export namespace CreateAccountUseCase {
 		}
 		department?: string
 		contact?: ContactsEntity
+		clients?: Array<ClientsEntity>
 	}
 
-	export type Result = {
-		id: string
-		username: string
-		email: string
-		status?: boolean
-		identificationNumber?: string | null
-		role?: RolesEntity | null
-		password?: string | null
-		profile: {
-			firstName: string
-			lastName?: string | null
-			picture?: string | null
-		}
-		department?: DepartmentsEntity | null
-		contact?: ContactsEntity | null
-	} | null
+	export type Result = UsersEntity | null
 }

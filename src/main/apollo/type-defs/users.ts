@@ -18,6 +18,7 @@ export default gql`
 		department: Department
 		accessToken: String
 		contact: Contact
+		clients: [Client]
 	}
 
 	input CreateUserProfileInput {
@@ -32,6 +33,10 @@ export default gql`
 		picture: String
 	}
 
+	input ClientID {
+		id: String!
+	}
+
 	input CreateAccount {
 		username: String!
 		email: String!
@@ -42,6 +47,10 @@ export default gql`
 		role: String
 		department: String
 		contact: CreateContactInput
+		"""
+		client ids
+		"""
+		clients: [ClientID]
 	}
 
 	input UpdateAccountInput {
@@ -52,6 +61,10 @@ export default gql`
 		role: String
 		department: String
 		contact: UpdateContactInput
+		"""
+		client ids
+		"""
+		clients: [ClientID]
 	}
 
 	extend type Mutation {
