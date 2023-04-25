@@ -60,16 +60,18 @@ export class InMemoryClientsRepository
 	}
 	loadClients: LoadClientsUseCaseFn = async (params) => {
 		if (params?.filter?.status !== undefined)
-			return this.clients.filter((c) => c.status === params?.filter?.status)
+			this.clients = this.clients.filter(
+				(c) => c.status === params?.filter?.status
+			)
 
 		if (params?.pagination)
-			return this.clients.slice(
+			this.clients = this.clients.slice(
 				params.pagination.skip,
 				Number(params.pagination.take) + 1
 			)
 
 		if (params?.search)
-			return this.clients.filter(
+			this.clients = this.clients.filter(
 				(c) =>
 					c.id === params.search ||
 					c.code.includes(params.search || "") ||
@@ -77,7 +79,7 @@ export class InMemoryClientsRepository
 			)
 
 		if (params?.orderBy)
-			return this.clients.sort((a, b) => {
+			this.clients = this.clients.sort((a, b) => {
 				if (params.orderBy?.key === "ID") {
 					if (params.orderBy.sort === "ASC") return a.id < b.id ? -1 : 1
 					return b.id < a.id ? -1 : 1
@@ -104,6 +106,9 @@ export class InMemoryClientsRepository
 				return 0
 			})
 
-		return this.clients
+		return {
+			total: this.clients.length,
+			data: this.clients,
+		}
 	}
 }

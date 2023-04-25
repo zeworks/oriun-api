@@ -1,5 +1,6 @@
 import { AccountContext } from "@/config/account-context"
 import { ClientsEntity } from "@/domain/entities/clients"
+import { Datatable } from "@/domain/types/datatable"
 
 export interface LoadClientsUseCase {
 	loadClients: LoadClientsUseCaseFn
@@ -31,5 +32,5 @@ export namespace LoadClientsUseCase {
 		search?: string
 		orderBy?: LoadClientsUseCaseOrderBy
 	}
-	export type Result = Array<ClientsEntity> | null
+	export type Result = Datatable<ClientsEntity> | null
 }

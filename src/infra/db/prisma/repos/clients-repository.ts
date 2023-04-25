@@ -118,7 +118,7 @@ export class ClientsRepository
 		const isAdminAccount =
 			context?.accountId && roleValidation(context?.accountRole?.key!, "admin")
 
-		return this.clients.findMany({
+		const result = await this.clients.findMany({
 			where:
 				params?.filter || params?.search
 					? {
@@ -183,5 +183,10 @@ export class ClientsRepository
 				company: true,
 			},
 		})
+
+		return {
+			total: result.length,
+			data: result,
+		}
 	}
 }
