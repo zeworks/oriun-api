@@ -43,7 +43,7 @@ test("Should return a list of clients with success", async () => {
 	)
 
 	const result = await loadClients.loadClients()
-	expect(result?.length).toEqual(2)
+	expect(result?.total).toEqual(2)
 })
 
 test("Should return a list of clients that are active (status as true) with success", async () => {
@@ -82,7 +82,7 @@ test("Should return a list of clients that are active (status as true) with succ
 	)
 
 	const result = await loadClients.loadClients({ filter: { status: true } })
-	expect(result?.length).toEqual(1)
+	expect(result?.total).toEqual(1)
 })
 
 test("Should return an empty list with success", async () => {
@@ -90,7 +90,7 @@ test("Should return an empty list with success", async () => {
 	const loadClients = new DbLoadClients(clientsRepository)
 
 	const result = await loadClients.loadClients()
-	expect(result).toEqual([])
+	expect(result?.data).toEqual([])
 })
 
 test("Should get 3 clients starting from second of the list", async () => {
@@ -156,7 +156,7 @@ test("Should get 3 clients starting from second of the list", async () => {
 	const result = await loadClients.loadClients({
 		pagination: { skip: 1, take: 3 },
 	})
-	expect(result?.length).toEqual(3)
+	expect(result?.total).toEqual(3)
 })
 
 test("Should return a list of clients that contains the code 'test'", async () => {
@@ -204,7 +204,7 @@ test("Should return a list of clients that contains the code 'test'", async () =
 	)
 
 	const result = await loadClients.loadClients({ search: "test" })
-	expect(result?.length).toEqual(2)
+	expect(result?.total).toEqual(2)
 })
 
 test("Should return a list of clients that contains the name 'test'", async () => {
@@ -252,7 +252,7 @@ test("Should return a list of clients that contains the name 'test'", async () =
 	)
 
 	const result = await loadClients.loadClients({ search: "test" })
-	expect(result?.length).toEqual(3)
+	expect(result?.total).toEqual(3)
 })
 
 test("Should search by id with success", async () => {
@@ -300,7 +300,7 @@ test("Should search by id with success", async () => {
 	)
 
 	const result = await loadClients.loadClients({ search: company?.id })
-	expect(result?.length).toEqual(1)
+	expect(result?.total).toEqual(1)
 })
 
 test("Should return an empty list with success", async () => {
@@ -308,7 +308,7 @@ test("Should return an empty list with success", async () => {
 	const loadClients = new DbLoadClients(clientsRepository)
 
 	const result = await loadClients.loadClients()
-	expect(result).toEqual([])
+	expect(result?.data).toEqual([])
 })
 
 test("Should order by id with success ASC", async () => {
@@ -358,7 +358,7 @@ test("Should order by id with success ASC", async () => {
 	const result = await loadClients.loadClients({
 		orderBy: { key: "ID", sort: "ASC" },
 	})
-	expect(result?.length).toEqual(3)
+	expect(result?.total).toEqual(3)
 })
 
 test("Should order by CODE with success ASC", async () => {
@@ -408,7 +408,7 @@ test("Should order by CODE with success ASC", async () => {
 	const result = await loadClients.loadClients({
 		orderBy: { key: "CODE", sort: "ASC" },
 	})
-	expect(result?.length).toEqual(3)
+	expect(result?.total).toEqual(3)
 })
 
 test("Should order by NAME with success ASC", async () => {
@@ -458,10 +458,10 @@ test("Should order by NAME with success ASC", async () => {
 	const result = await loadClients.loadClients({
 		orderBy: { key: "NAME", sort: "ASC" },
 	})
-	expect(result?.length).toEqual(3)
-	expect(result?.[0].code).toEqual("a")
-	expect(result?.[1].code).toEqual("b")
-	expect(result?.[2].code).toEqual("c")
+	expect(result?.total).toEqual(3)
+	expect(result?.data?.[0].code).toEqual("a")
+	expect(result?.data?.[1].code).toEqual("b")
+	expect(result?.data?.[2].code).toEqual("c")
 })
 
 test("Should order by NAME with success DESC", async () => {
@@ -511,8 +511,8 @@ test("Should order by NAME with success DESC", async () => {
 	const result = await loadClients.loadClients({
 		orderBy: { key: "NAME", sort: "DESC" },
 	})
-	expect(result?.length).toEqual(3)
-	expect(result?.[0].code).toEqual("c")
-	expect(result?.[1].code).toEqual("b")
-	expect(result?.[2].code).toEqual("a")
+	expect(result?.total).toEqual(3)
+	expect(result?.data?.[0].code).toEqual("c")
+	expect(result?.data?.[1].code).toEqual("b")
+	expect(result?.data?.[2].code).toEqual("a")
 })

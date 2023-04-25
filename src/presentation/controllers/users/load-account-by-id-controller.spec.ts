@@ -80,7 +80,7 @@ test("Should throw an error if invalid user id", async () => {
 	}
 })
 
-test("Should throw an error if empty accountId", async () => {
+test("Should throw an error if empty account id", async () => {
 	const usersRepository = new InMemoryUsersRepository()
 	const loadAccountByIdUseCase = new DbLoadAccountById(usersRepository)
 	const loadAccountByIdController = new LoadAccountByIdController(
@@ -89,5 +89,5 @@ test("Should throw an error if empty accountId", async () => {
 
 	const result = await loadAccountByIdController.execute()
 
-	expect(result.data).toEqual(new MissingParamError("authorization"))
+	expect(result.data).toEqual(new MissingParamError("id"))
 })

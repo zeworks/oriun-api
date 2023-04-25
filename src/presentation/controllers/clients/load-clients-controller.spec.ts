@@ -44,7 +44,7 @@ test("It should return a list of clients", async () => {
 	const loadClientsController = new LoadClientsController(dbLoadClients)
 
 	const clients = await loadClientsController.execute()
-	expect(clients.data?.length).toEqual(1)
+	expect(clients.data?.total).toEqual(1)
 })
 
 test("It should return a list of clients", async () => {
@@ -53,8 +53,8 @@ test("It should return a list of clients", async () => {
 	const loadClientsController = new LoadClientsController(dbLoadClients)
 
 	const clients = await loadClientsController.execute()
-	expect(clients.data?.length).toEqual(0)
-	expect(clients.data).toEqual([])
+	expect(clients.data?.total).toEqual(0)
+	expect(clients.data?.data).toEqual([])
 })
 
 test("It should return a list clients paginated", async () => {
@@ -122,5 +122,5 @@ test("It should return a list clients paginated", async () => {
 		},
 	})
 
-	expect(result.data?.length).toEqual(2)
+	expect(result.data?.total).toEqual(2)
 })

@@ -68,13 +68,18 @@ export default gql`
 		sort: ClientsOrderBySort
 	}
 
+	type ClientsDatatable {
+		total: Int
+		data: [Client]
+	}
+
 	extend type Query {
 		clients(
 			filter: ClientsFilterInput
 			pagination: ClientsPaginationInput
 			search: String
 			orderBy: ClientsOrderBy
-		): [Client] @auth
+		): ClientsDatatable @auth
 		client(id: String!): Client @auth
 	}
 
