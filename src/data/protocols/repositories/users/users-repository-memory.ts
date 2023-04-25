@@ -119,7 +119,10 @@ export class InMemoryUsersRepository
 	}
 
 	loadAccounts: LoadAccountsUseCaseFunction = () => {
-		return this.users as any
+		return Promise.resolve({
+			data: this.users as any,
+			total: this.users.length,
+		})
 	}
 
 	deleteAccount: DeleteAccountUseCaseFn = async (id) => {

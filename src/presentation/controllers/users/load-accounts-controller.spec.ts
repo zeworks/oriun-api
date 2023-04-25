@@ -20,7 +20,7 @@ test("Should return an empty list of users", async () => {
 	const loadAccountsController = new LoadAccountsController(dbLoadAccounts)
 
 	const result = await loadAccountsController.execute()
-	expect(result.data.length).toEqual(0)
+	expect(result.data.total).toEqual(0)
 })
 
 test("Should return a list with two users", async () => {
@@ -65,5 +65,5 @@ test("Should return a list with two users", async () => {
 	})
 
 	const result = await loadAccountsController.execute()
-	expect(result.data.length).toEqual(2)
+	expect(result.data.total).toEqual(2)
 })

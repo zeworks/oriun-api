@@ -13,14 +13,11 @@ export class LoadAccountByIdController implements Controller {
 		Partial<{ id?: string }>,
 		LoadAccountByIdUseCase.Result,
 		any
-	> = async (req, context) => {
-		if (!context?.accountId && !req?.id)
-			return badRequest(new MissingParamError("authorization"))
+	> = async (req) => {
+		if (!req?.id) return badRequest(new MissingParamError("id"))
 
 		try {
-			const result = await this.loadAccountById.loadById(
-				req?.id || context?.accountId
-			)
+			const result = await this.loadAccountById.loadById(req?.id)
 
 			return ok(result)
 		} catch (error: any) {

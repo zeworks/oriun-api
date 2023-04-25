@@ -1,4 +1,5 @@
 import { UsersEntity } from "@/domain/entities/users"
+import { Datatable } from "@/domain/types/datatable"
 
 export type LoadAccountsUseCaseFunction =
 	() => Promise<LoadAccountsUseCase.Result>
@@ -8,5 +9,5 @@ export interface LoadAccountsUseCase {
 }
 
 export namespace LoadAccountsUseCase {
-	export type Result = Array<UsersEntity>
+	export type Result = Datatable<UsersEntity>
 }

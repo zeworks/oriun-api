@@ -215,14 +215,17 @@ export class UsersRepository
 			},
 		})
 
-		return result.map((res) => ({
-			...res,
-			profile: {
-				firstName: res?.firstName,
-				lastName: res?.lastName,
-				picture: res?.picture,
-			},
-		}))
+		return {
+			total: result.length,
+			data: result.map((res) => ({
+				...res,
+				profile: {
+					firstName: res?.firstName,
+					lastName: res?.lastName,
+					picture: res?.picture,
+				},
+			})),
+		}
 	}
 
 	deleteAccount: DeleteAccountUseCaseFn = async (id) => {

@@ -67,6 +67,11 @@ export default gql`
 		clients: [ClientID]
 	}
 
+	type UsersDatatable {
+		total: Int
+		data: [User]
+	}
+
 	extend type Mutation {
 		createAccount(input: CreateAccount): User @auth
 		deleteAccount(id: String!): Boolean @auth
@@ -74,7 +79,7 @@ export default gql`
 	}
 
 	extend type Query {
-		accounts: [User] @auth
-		account(id: String): User @auth
+		accounts: UsersDatatable @auth
+		account(id: String!): User @auth
 	}
 `

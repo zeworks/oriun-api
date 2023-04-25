@@ -13,7 +13,7 @@ test("Should return an empty list of users", async () => {
 	const accounts = await dbLoadAccounts.loadAccounts()
 
 	// expect an empty list/empty array
-	expect(accounts.length).toEqual(0)
+	expect(accounts.total).toEqual(0)
 })
 
 test("Should return a list with two users", async () => {
@@ -51,5 +51,5 @@ test("Should return a list with two users", async () => {
 	const users = await dbLoadAccounts.loadAccounts()
 
 	// 3. result
-	expect(users.length).toEqual(2)
+	expect(users.total).toEqual(2)
 })
