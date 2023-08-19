@@ -1,8 +1,7 @@
 import { RolesEntity } from "@/domain/entities/roles"
 import { LoadAccountByTokenUseCase } from "@/domain/usecases/users/load-account-by-token"
 import { MissingParamError } from "../errors/missing-param-error"
-import { UnauthorizedError } from "../errors/unauthorized-error"
-import { badRequest, forbidden, ok, serverError } from "../helpers/http"
+import { badRequest, ok, serverError, unauthorized } from "../helpers/http"
 import { HttpResponse } from "../protocols/http"
 import { Middleware } from "../protocols/middleware"
 import { Validation } from "../protocols/validation"
@@ -31,7 +30,7 @@ export class AuthMiddleware implements Middleware {
 					accountRole: account.role,
 				})
 
-			return forbidden(new UnauthorizedError())
+			return unauthorized()
 		} catch (error: any) {
 			return serverError(error)
 		}
